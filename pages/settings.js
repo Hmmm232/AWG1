@@ -33,21 +33,24 @@ export default function Settings() {
     setSaved(false);
     setError('');
 
-    const { error: updateError } = await supabase
-      .from('profiles')
-      .update({
-        display_name: displayName.trim(),
-        bio: bio.trim(),
-      })
-      .eq('id', user.id);
+    try {
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          display_name: displayName.trim(),
+          bio: bio.trim(),
+        })
+        .eq('id', user.id);
 
-    if (updateError) {
-      setError(updateError.message);
-    } else {
-      setSaved(true);
-      refreshProfile();
-      // Clear the "Saved" message after a few seconds
-      setTimeout(() => setSaved(false), 3000);
+      if (updateError) {
+        setError(updateError.message);
+      } else {
+        setSaved(true);
+        refreshProfile();
+        setTimeout(() => setSaved(false), 3000);
+      }
+    } catch (err) {
+      setError('Failed to save. Please try again.');
     }
 
     setSaving(false);

@@ -1,8 +1,9 @@
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import styles from '@/styles/Home.module.css';
 
-export default function Home() {
+export default function Home({ gardens }) {
   const { user, profile } = useAuth();
 
   return (
@@ -31,6 +32,26 @@ export default function Home() {
         </div>
       </section>
 
+      {gardens && gardens.length > 0 && (
+        <>
+          <div className={styles.divider} />
+          <section className={styles.gardens}>
+            <h2>Gardens</h2>
+            <ul className={styles.gardenList}>
+              {gardens.map((g) => (
+                <li key={g.id} className={styles.gardenItem}>
+                  <Link href={`/${g.handle}`} className={styles.gardenLink}>
+                    <span className={styles.gardenName}>{g.display_name || g.handle}</span>
+                    <span className={styles.gardenHandle}>@{g.handle}</span>
+                    {g.bio && <span className={styles.gardenBio}>{g.bio}</span>}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
+
       <div className={styles.divider} />
 
       <section className={styles.about}>
@@ -47,4 +68,20 @@ export default function Home() {
       </section>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  // Fetch profiles that have at least some content, ordered by most recently active
+  // We get all profiles for now — with a small site this is fine
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, handle, display_name, bio')
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  return {
+    props: {
+      gardens: profiles || [],
+    },
+  };
 }
