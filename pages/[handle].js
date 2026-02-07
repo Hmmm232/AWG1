@@ -3,11 +3,12 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
+import GardenTab from '@/components/GardenTab';
 import styles from '@/styles/Profile.module.css';
 
 const TABS = ['Garden', 'Quotes', 'Re-recs', 'Following'];
 
-export default function ProfilePage({ profile: initialProfile, followerCount: initialFollowerCount, followingCount: initialFollowingCount }) {
+export default function ProfilePage({ profile: initialProfile, followerCount: initialFollowerCount, followingCount: initialFollowingCount, categories: initialCategories, works: initialWorks }) {
   const router = useRouter();
   const { user, profile: myProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('Garden');
@@ -106,11 +107,12 @@ export default function ProfilePage({ profile: initialProfile, followerCount: in
 
       <div className={styles.tabContent}>
         {activeTab === 'Garden' && (
-          <p className={styles.emptyState}>
-            {isOwner
-              ? 'Your garden is empty. Start by adding a category in the next update.'
-              : 'This garden is empty.'}
-          </p>
+          <GardenTab
+            userId={profile.id}
+            isOwner={isOwner}
+            initialCategories={initialCategories || []}
+            initialWorks={initialWorks || []}
+          />
         )}
         {activeTab === 'Quotes' && (
           <p className={styles.emptyState}>
@@ -162,11 +164,26 @@ export async function getServerSideProps({ params }) {
     .select('*', { count: 'exact', head: true })
     .eq('follower_id', profile.id);
 
+  // Get categories and works for the garden
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('user_id', profile.id)
+    .order('sort_order', { ascending: true });
+
+  const { data: works } = await supabase
+    .from('works')
+    .select('*')
+    .eq('user_id', profile.id)
+    .order('sort_order', { ascending: true });
+
   return {
     props: {
       profile,
       followerCount: followerCount || 0,
       followingCount: followingCount || 0,
+      categories: categories || [],
+      works: works || [],
     },
   };
 }

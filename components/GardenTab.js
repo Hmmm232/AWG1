@@ -1,0 +1,401 @@
+import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import styles from '@/styles/Garden.module.css';
+
+// ─── Category Form ──────────────────────────────────────────────
+function CategoryForm({ initial, onSave, onCancel }) {
+  const [name, setName] = useState(initial?.name || '');
+  const [introduction, setIntroduction] = useState(initial?.introduction || '');
+  const [saving, setSaving] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!name.trim()) return;
+    setSaving(true);
+    await onSave({ name: name.trim(), introduction: introduction.trim() });
+    setSaving(false);
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <p className={styles.formTitle}>{initial ? 'Edit category' : 'New category'}</p>
+      <div className={styles.field}>
+        <label htmlFor="catName">Name</label>
+        <input
+          id="catName"
+          type="text"
+          placeholder='e.g. "Best Books About Rome"'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+      </div>
+      <div className={styles.field}>
+        <label htmlFor="catIntro">Introduction (optional)</label>
+        <textarea
+          id="catIntro"
+          placeholder="A few words about this category..."
+          value={introduction}
+          onChange={(e) => setIntroduction(e.target.value)}
+          rows={3}
+        />
+      </div>
+      <div className={styles.formActions}>
+        <button type="submit" className="btn btn-primary btn-small" disabled={saving}>
+          {saving ? 'Saving...' : initial ? 'Save' : 'Add category'}
+        </button>
+        <button type="button" className={styles.cancelBtn} onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+}
+
+// ─── Work Form ──────────────────────────────────────────────────
+function WorkForm({ initial, onSave, onCancel }) {
+  const [title, setTitle] = useState(initial?.title || '');
+  const [commentary, setCommentary] = useState(initial?.commentary || '');
+  const [saving, setSaving] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!title.trim()) return;
+    setSaving(true);
+    await onSave({ title: title.trim(), commentary: commentary.trim() });
+    setSaving(false);
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <p className={styles.formTitle}>{initial ? 'Edit work' : 'Add a work'}</p>
+      <div className={styles.field}>
+        <label htmlFor="workTitle">Title</label>
+        <input
+          id="workTitle"
+          type="text"
+          placeholder='e.g. "Plutarch — Lives"'
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+      </div>
+      <div className={styles.field}>
+        <label htmlFor="workComm">Commentary (optional)</label>
+        <textarea
+          id="workComm"
+          placeholder="Why does this work matter to you?"
+          value={commentary}
+          onChange={(e) => setCommentary(e.target.value)}
+          rows={3}
+        />
+      </div>
+      <div className={styles.formActions}>
+        <button type="submit" className="btn btn-primary btn-small" disabled={saving}>
+          {saving ? 'Saving...' : initial ? 'Save' : 'Add work'}
+        </button>
+        <button type="button" className={styles.cancelBtn} onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+}
+
+// ─── Main GardenTab ─────────────────────────────────────────────
+export default function GardenTab({ userId, isOwner, initialCategories, initialWorks }) {
+  const [categories, setCategories] = useState(initialCategories || []);
+  const [worksByCategory, setWorksByCategory] = useState(() => {
+    const grouped = {};
+    for (const cat of (initialCategories || [])) {
+      grouped[cat.id] = (initialWorks || [])
+        .filter((w) => w.category_id === cat.id)
+        .sort((a, b) => a.sort_order - b.sort_order);
+    }
+    return grouped;
+  });
+
+  // UI state
+  const [showNewCategory, setShowNewCategory] = useState(false);
+  const [editingCategoryId, setEditingCategoryId] = useState(null);
+  const [addingWorkToCategoryId, setAddingWorkToCategoryId] = useState(null);
+  const [editingWorkId, setEditingWorkId] = useState(null);
+  const [error, setError] = useState('');
+
+  // ─── Category CRUD ──────────────────────────────────────────
+
+  async function addCategory({ name, introduction }) {
+    setError('');
+    const sortOrder = categories.length;
+    const { data, error: err } = await supabase
+      .from('categories')
+      .insert({ user_id: userId, name, introduction, sort_order: sortOrder })
+      .select()
+      .single();
+    if (err) { setError(err.message); return; }
+    setCategories([...categories, data]);
+    setWorksByCategory({ ...worksByCategory, [data.id]: [] });
+    setShowNewCategory(false);
+  }
+
+  async function updateCategory(id, { name, introduction }) {
+    setError('');
+    const { error: err } = await supabase
+      .from('categories')
+      .update({ name, introduction })
+      .eq('id', id);
+    if (err) { setError(err.message); return; }
+    setCategories(categories.map((c) => c.id === id ? { ...c, name, introduction } : c));
+    setEditingCategoryId(null);
+  }
+
+  async function deleteCategory(id) {
+    if (!window.confirm('Delete this category and all its works?')) return;
+    setError('');
+    const { error: err } = await supabase
+      .from('categories')
+      .delete()
+      .eq('id', id);
+    if (err) { setError(err.message); return; }
+    setCategories(categories.filter((c) => c.id !== id));
+    const newWorks = { ...worksByCategory };
+    delete newWorks[id];
+    setWorksByCategory(newWorks);
+  }
+
+  async function reorderCategory(index, direction) {
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= categories.length) return;
+
+    const newCategories = [...categories];
+    const [moved] = newCategories.splice(index, 1);
+    newCategories.splice(newIndex, 0, moved);
+
+    // Update sort_order for both swapped items
+    const updates = newCategories.map((cat, i) => ({ ...cat, sort_order: i }));
+    setCategories(updates);
+
+    // Persist
+    for (const cat of updates) {
+      await supabase
+        .from('categories')
+        .update({ sort_order: cat.sort_order })
+        .eq('id', cat.id);
+    }
+  }
+
+  // ─── Work CRUD ────────────────────────────────────────────────
+
+  async function addWork(categoryId, { title, commentary }) {
+    setError('');
+    const existingWorks = worksByCategory[categoryId] || [];
+    const sortOrder = existingWorks.length;
+    const { data, error: err } = await supabase
+      .from('works')
+      .insert({ category_id: categoryId, user_id: userId, title, commentary, sort_order: sortOrder })
+      .select()
+      .single();
+    if (err) { setError(err.message); return; }
+    setWorksByCategory({
+      ...worksByCategory,
+      [categoryId]: [...existingWorks, data],
+    });
+    setAddingWorkToCategoryId(null);
+  }
+
+  async function updateWork(categoryId, workId, { title, commentary }) {
+    setError('');
+    const { error: err } = await supabase
+      .from('works')
+      .update({ title, commentary })
+      .eq('id', workId);
+    if (err) { setError(err.message); return; }
+    setWorksByCategory({
+      ...worksByCategory,
+      [categoryId]: worksByCategory[categoryId].map((w) =>
+        w.id === workId ? { ...w, title, commentary } : w
+      ),
+    });
+    setEditingWorkId(null);
+  }
+
+  async function deleteWork(categoryId, workId) {
+    if (!window.confirm('Delete this work?')) return;
+    setError('');
+    const { error: err } = await supabase
+      .from('works')
+      .delete()
+      .eq('id', workId);
+    if (err) { setError(err.message); return; }
+    setWorksByCategory({
+      ...worksByCategory,
+      [categoryId]: worksByCategory[categoryId].filter((w) => w.id !== workId),
+    });
+  }
+
+  async function reorderWork(categoryId, index, direction) {
+    const works = worksByCategory[categoryId];
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= works.length) return;
+
+    const newWorks = [...works];
+    const [moved] = newWorks.splice(index, 1);
+    newWorks.splice(newIndex, 0, moved);
+
+    const updates = newWorks.map((w, i) => ({ ...w, sort_order: i }));
+    setWorksByCategory({ ...worksByCategory, [categoryId]: updates });
+
+    for (const w of updates) {
+      await supabase
+        .from('works')
+        .update({ sort_order: w.sort_order })
+        .eq('id', w.id);
+    }
+  }
+
+  // ─── Render ───────────────────────────────────────────────────
+
+  if (categories.length === 0 && !isOwner) {
+    return <p className="emptyState" style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--color-ink-faint)', fontStyle: 'italic' }}>This garden is empty.</p>;
+  }
+
+  return (
+    <div>
+      {error && <p className={styles.error}>{error}</p>}
+
+      {/* Owner: Add category button / form */}
+      {isOwner && !showNewCategory && (
+        <button className={`${styles.addBtn} ${styles.addCategoryBtn}`} onClick={() => setShowNewCategory(true)}>
+          + Add a category
+        </button>
+      )}
+      {isOwner && showNewCategory && (
+        <CategoryForm onSave={addCategory} onCancel={() => setShowNewCategory(false)} />
+      )}
+
+      {/* Empty state for owner */}
+      {categories.length === 0 && isOwner && !showNewCategory && (
+        <p style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--color-ink-faint)', fontStyle: 'italic' }}>
+          Your garden is empty. Start by adding a category.
+        </p>
+      )}
+
+      {/* Categories */}
+      {categories.map((category, catIndex) => (
+        <div key={category.id} className={styles.category}>
+          {editingCategoryId === category.id ? (
+            <CategoryForm
+              initial={category}
+              onSave={(data) => updateCategory(category.id, data)}
+              onCancel={() => setEditingCategoryId(null)}
+            />
+          ) : (
+            <>
+              <div className={styles.categoryHeader}>
+                <h2 className={styles.categoryName}>{category.name}</h2>
+                {isOwner && (
+                  <div className={styles.actions}>
+                    <div className={styles.reorderGroup}>
+                      <button
+                        className={styles.reorderBtn}
+                        onClick={() => reorderCategory(catIndex, -1)}
+                        disabled={catIndex === 0}
+                        title="Move up"
+                      >&#9650;</button>
+                      <button
+                        className={styles.reorderBtn}
+                        onClick={() => reorderCategory(catIndex, 1)}
+                        disabled={catIndex === categories.length - 1}
+                        title="Move down"
+                      >&#9660;</button>
+                    </div>
+                    <button className={styles.iconBtn} onClick={() => setEditingCategoryId(category.id)} title="Edit">
+                      Edit
+                    </button>
+                    <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteCategory(category.id)} title="Delete">
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+              {category.introduction && (
+                <p className={styles.categoryIntro}>{category.introduction}</p>
+              )}
+            </>
+          )}
+
+          {/* Works list */}
+          {(worksByCategory[category.id] || []).length > 0 ? (
+            <ul className={styles.worksList}>
+              {(worksByCategory[category.id] || []).map((work, workIndex) => (
+                <li key={work.id} className={styles.work}>
+                  {editingWorkId === work.id ? (
+                    <WorkForm
+                      initial={work}
+                      onSave={(data) => updateWork(category.id, work.id, data)}
+                      onCancel={() => setEditingWorkId(null)}
+                    />
+                  ) : (
+                    <>
+                      <div className={styles.workHeader}>
+                        <div>
+                          <p className={styles.workTitle}>{work.title}</p>
+                          {work.commentary && (
+                            <p className={styles.workCommentary}>{work.commentary}</p>
+                          )}
+                        </div>
+                        {isOwner && (
+                          <div className={styles.actions}>
+                            <div className={styles.reorderGroup}>
+                              <button
+                                className={styles.reorderBtn}
+                                onClick={() => reorderWork(category.id, workIndex, -1)}
+                                disabled={workIndex === 0}
+                                title="Move up"
+                              >&#9650;</button>
+                              <button
+                                className={styles.reorderBtn}
+                                onClick={() => reorderWork(category.id, workIndex, 1)}
+                                disabled={workIndex === worksByCategory[category.id].length - 1}
+                                title="Move down"
+                              >&#9660;</button>
+                            </div>
+                            <button className={styles.iconBtn} onClick={() => setEditingWorkId(work.id)} title="Edit">
+                              Edit
+                            </button>
+                            <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteWork(category.id, work.id)} title="Delete">
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            isOwner && (
+              <p className={styles.emptyWorks}>No works in this category yet.</p>
+            )
+          )}
+
+          {/* Owner: Add work button / form */}
+          {isOwner && addingWorkToCategoryId === category.id ? (
+            <WorkForm
+              onSave={(data) => addWork(category.id, data)}
+              onCancel={() => setAddingWorkToCategoryId(null)}
+            />
+          ) : isOwner && editingCategoryId !== category.id ? (
+            <button
+              className={`${styles.addBtn} ${styles.addWorkBtn}`}
+              onClick={() => setAddingWorkToCategoryId(category.id)}
+            >
+              + Add a work
+            </button>
+          ) : null}
+        </div>
+      ))}
+    </div>
+  );
+}

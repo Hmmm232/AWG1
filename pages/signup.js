@@ -18,16 +18,16 @@ export default function SignUp() {
     setError('');
     setLoading(true);
 
-    // Validate handle: lowercase letters, numbers, hyphens only
+    // Validate handle: lowercase letters, numbers, hyphens only, 2-30 chars
     const cleanHandle = handle.toLowerCase().trim();
-    if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(cleanHandle) && cleanHandle.length > 1) {
-      setError('Handle must contain only lowercase letters, numbers, and hyphens.');
+    if (cleanHandle.length < 2 || cleanHandle.length > 30) {
+      setError('Handle must be between 2 and 30 characters.');
       setLoading(false);
       return;
     }
 
-    if (cleanHandle.length < 2 || cleanHandle.length > 30) {
-      setError('Handle must be between 2 and 30 characters.');
+    if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(cleanHandle)) {
+      setError('Handle must start and end with a letter or number, and contain only lowercase letters, numbers, and hyphens.');
       setLoading(false);
       return;
     }

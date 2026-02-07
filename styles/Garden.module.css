@@ -1,0 +1,211 @@
+/* Garden Tab */
+
+/* Category */
+.category {
+  margin-bottom: var(--space-2xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.category:last-child {
+  border-bottom: none;
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.categoryName {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.categoryIntro {
+  color: var(--color-ink-light);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-lg);
+}
+
+/* Works within a category */
+.worksList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-md) 0;
+}
+
+.work {
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.work:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.workHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.workTitle {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+}
+
+.workCommentary {
+  color: var(--color-ink-light);
+  font-size: 0.95rem;
+}
+
+/* Action buttons (edit, delete, reorder) */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.iconBtn {
+  background: none;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  padding: 0.25rem 0.45rem;
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  line-height: 1;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.iconBtn:hover {
+  color: var(--color-ink);
+  border-color: var(--color-border);
+}
+
+.iconBtnDanger:hover {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+/* Forms */
+.form {
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: 6px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.formTitle {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  color: var(--color-ink);
+}
+
+.field {
+  margin-bottom: var(--space-md);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.cancelBtn {
+  background: none;
+  border: none;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.cancelBtn:hover {
+  color: var(--color-ink);
+}
+
+/* Add buttons */
+.addBtn {
+  background: none;
+  border: 1px dashed var(--color-border);
+  border-radius: 6px;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  padding: var(--space-sm) var(--space-md);
+  width: 100%;
+  text-align: center;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.addBtn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.addCategoryBtn {
+  margin-bottom: var(--space-xl);
+}
+
+.addWorkBtn {
+  margin-top: var(--space-sm);
+}
+
+/* Empty state within a category */
+.emptyWorks {
+  color: var(--color-ink-faint);
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: var(--space-sm) 0;
+}
+
+/* Error message */
+.error {
+  color: var(--color-error);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  margin-top: var(--space-sm);
+}
+
+/* Reorder arrows */
+.reorderGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.reorderBtn {
+  background: none;
+  border: 1px solid var(--color-border-light);
+  border-radius: 3px;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.7rem;
+  line-height: 1;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.reorderBtn:hover {
+  color: var(--color-ink);
+  border-color: var(--color-border);
+}
+
+.reorderBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
