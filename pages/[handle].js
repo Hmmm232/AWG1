@@ -4,13 +4,25 @@ import Head from 'next/head';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import GardenTab from '@/components/GardenTab';
+import QuotesTab from '@/components/QuotesTab';
+import ReRecsTab from '@/components/ReRecsTab';
+import FollowingTab from '@/components/FollowingTab';
 import styles from '@/styles/Profile.module.css';
 
 const TABS = ['Garden', 'Quotes', 'Re-recs', 'Following'];
 
-export default function ProfilePage({ profile: initialProfile, followerCount: initialFollowerCount, followingCount: initialFollowingCount, categories: initialCategories, works: initialWorks }) {
+export default function ProfilePage({
+  profile: initialProfile,
+  followerCount: initialFollowerCount,
+  followingCount: initialFollowingCount,
+  categories: initialCategories,
+  works: initialWorks,
+  quotes: initialQuotes,
+  rerecs: initialReRecs,
+  following: initialFollowing,
+}) {
   const router = useRouter();
-  const { user, profile: myProfile } = useAuth();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('Garden');
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerCount, setFollowerCount] = useState(initialFollowerCount || 0);
@@ -115,25 +127,25 @@ export default function ProfilePage({ profile: initialProfile, followerCount: in
           />
         )}
         {activeTab === 'Quotes' && (
-          <p className={styles.emptyState}>
-            {isOwner
-              ? 'No quotes yet. You\'ll be able to add quotes soon.'
-              : 'No quotes yet.'}
-          </p>
+          <QuotesTab
+            userId={profile.id}
+            isOwner={isOwner}
+            initialQuotes={initialQuotes || []}
+          />
         )}
         {activeTab === 'Re-recs' && (
-          <p className={styles.emptyState}>
-            {isOwner
-              ? 'No re-recs yet. You\'ll be able to share recommendations soon.'
-              : 'No re-recs yet.'}
-          </p>
+          <ReRecsTab
+            userId={profile.id}
+            isOwner={isOwner}
+            initialReRecs={initialReRecs || []}
+          />
         )}
         {activeTab === 'Following' && (
-          <p className={styles.emptyState}>
-            {isOwner
-              ? 'You\'re not following anyone yet.'
-              : `${profile.display_name || profile.handle} isn't following anyone yet.`}
-          </p>
+          <FollowingTab
+            isOwner={isOwner}
+            following={initialFollowing || []}
+            profileName={profile.display_name || profile.handle}
+          />
         )}
       </div>
     </>
@@ -177,6 +189,36 @@ export async function getServerSideProps({ params }) {
     .eq('user_id', profile.id)
     .order('sort_order', { ascending: true });
 
+  // Get quotes
+  const { data: quotes } = await supabase
+    .from('quotes')
+    .select('*')
+    .eq('user_id', profile.id)
+    .order('sort_order', { ascending: true });
+
+  // Get rerecs
+  const { data: rerecs } = await supabase
+    .from('rerecs')
+    .select('*')
+    .eq('user_id', profile.id)
+    .order('sort_order', { ascending: true });
+
+  // Get following profiles (who this user follows)
+  const { data: followRows } = await supabase
+    .from('follows')
+    .select('following_id')
+    .eq('follower_id', profile.id);
+
+  let following = [];
+  if (followRows && followRows.length > 0) {
+    const followingIds = followRows.map((f) => f.following_id);
+    const { data: followingProfiles } = await supabase
+      .from('profiles')
+      .select('id, handle, display_name, bio')
+      .in('id', followingIds);
+    following = followingProfiles || [];
+  }
+
   return {
     props: {
       profile,
@@ -184,6 +226,9 @@ export async function getServerSideProps({ params }) {
       followingCount: followingCount || 0,
       categories: categories || [],
       works: works || [],
+      quotes: quotes || [],
+      rerecs: rerecs || [],
+      following,
     },
   };
 }
