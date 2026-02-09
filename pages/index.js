@@ -55,7 +55,7 @@ export default function Home({ gardens }) {
       <div className={styles.divider} />
 
       <section className={styles.about}>
-        <h2>What is this?</h2>
+        <h2>What is  wherererer this?</h2>
         <p>
           Everyone has a personal canon — the works that changed how they think,
           the quotes they return to, the recommendations they trust. A Walled Garden
