@@ -81,3 +81,18 @@
   color: var(--color-ink-faint);
   font-style: italic;
 }
+
+@media (max-width: 600px) {
+  .displayName {
+    font-size: 1.4rem;
+  }
+
+  .tab {
+    font-size: 0.8rem;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .tabs {
+    margin-bottom: var(--space-lg);
+  }
+}

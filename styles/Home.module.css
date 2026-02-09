@@ -106,3 +106,21 @@
   color: var(--color-ink-light);
   font-size: 0.95rem;
 }
+
+@media (max-width: 600px) {
+  .hero {
+    padding: var(--space-2xl) 0;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .divider {
+    margin: var(--space-2xl) auto;
+  }
+}

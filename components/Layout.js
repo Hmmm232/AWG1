@@ -22,7 +22,7 @@ export default function Layout({ children }) {
               <Link href="/settings" className={styles.navLink}>
                 Settings
               </Link>
-              <button onClick={signOut} className={`${styles.navLink} btn-small`} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+              <button onClick={signOut} className={styles.signOutBtn}>
                 Sign out
               </button>
             </>

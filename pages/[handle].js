@@ -76,7 +76,12 @@ export default function ProfilePage({
     <>
       <Head>
         <title>{profile.display_name || profile.handle} — A Walled Garden</title>
-        <meta name="description" content={profile.bio || `${profile.display_name}'s garden`} />
+        <meta name="description" content={profile.bio || `${profile.display_name || profile.handle}'s garden on A Walled Garden`} />
+        <meta property="og:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
+        <meta property="og:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />
+        <meta property="og:type" content="profile" />
+        <meta name="twitter:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
+        <meta name="twitter:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />
       </Head>
 
       <div className={styles.header}>
