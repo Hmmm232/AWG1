@@ -1,23 +1,26 @@
 /* A Walled Garden — Global Styles */
 
-/* Fonts: using system serif + a clean sans-serif for UI elements */
+/* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  /* Colour palette — light, warm, garden green */
-  --color-cream: #faf9f7;
-  --color-cream-dark: #f2f0ec;
-  --color-parchment: #e9e6e0;
+  /* Colour palette */
+  --color-bg: #ffffff;
+  --color-surface: #f7f7f5;
+  --color-surface-hover: #f0efed;
   --color-ink: #1a1a1a;
   --color-ink-light: #4a4a4a;
-  --color-ink-faint: #7a7a7a;
-  --color-accent: #2d6a2d;
-  --color-accent-hover: #245424;
-  --color-border: #d4d1cc;
-  --color-border-light: #e6e4e0;
+  --color-ink-faint: #888888;
+  --color-accent: #388e3c;
+  --color-accent-hover: #2e7d32;
+  --color-accent-light: #e8f5e9;
+  --color-border: #e0e0e0;
+  --color-border-light: #eeeeee;
   --color-white: #ffffff;
-  --color-error: #a63d2f;
-  --color-success: #2d6a2d;
+  --color-error: #c62828;
+  --color-error-bg: #fce4ec;
+  --color-success: #2e7d32;
+  --color-success-bg: #e8f5e9;
 
   /* Typography */
   --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
@@ -33,8 +36,8 @@
   --space-3xl: 4rem;
 
   /* Layout */
-  --max-width: 640px;
-  --nav-height: 60px;
+  --max-width: 800px;
+  --nav-height: 56px;
 }
 
 *, *::before, *::after {
@@ -52,7 +55,7 @@ html {
 body {
   font-family: var(--font-serif);
   color: var(--color-ink);
-  background-color: var(--color-cream);
+  background-color: var(--color-bg);
   line-height: 1.7;
   min-height: 100vh;
 }
@@ -73,17 +76,9 @@ h1, h2, h3, h4 {
   line-height: 1.3;
 }
 
-h1 {
-  font-size: 1.75rem;
-}
-
-h2 {
-  font-size: 1.35rem;
-}
-
-h3 {
-  font-size: 1.15rem;
-}
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.15rem; }
 
 p {
   margin-bottom: var(--space-md);
@@ -104,14 +99,14 @@ input[type="email"],
 input[type="password"],
 textarea {
   width: 100%;
-  padding: 0.6rem 0.75rem;
+  padding: 0.6rem 0.85rem;
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: 8px;
   background: var(--color-white);
   color: var(--color-ink);
   font-size: 0.95rem;
   line-height: 1.5;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 input[type="text"]:focus,
@@ -120,6 +115,7 @@ input[type="password"]:focus,
 textarea:focus {
   outline: none;
   border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-light);
 }
 
 textarea {
@@ -146,8 +142,9 @@ button, .btn {
   border-radius: 100px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: all 0.15s ease;
   text-align: center;
+  line-height: 1.4;
 }
 
 .btn-primary {
@@ -160,15 +157,13 @@ button, .btn {
 }
 
 .btn-secondary {
-  background-color: var(--color-cream-dark);
+  background-color: var(--color-white);
   color: var(--color-accent);
   border: 1.5px solid var(--color-accent);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-cream);
-  border-color: var(--color-accent-hover);
-  color: var(--color-accent-hover);
+  background-color: var(--color-accent-light);
 }
 
 .btn-small {
@@ -178,7 +173,7 @@ button, .btn {
 
 button:disabled,
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
@@ -195,14 +190,9 @@ button:disabled,
 }
 
 /* Responsive */
-@media (max-width: 600px) {
-  h1 {
-    font-size: 1.4rem;
-  }
-
-  h2 {
-    font-size: 1.15rem;
-  }
+@media (max-width: 640px) {
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.15rem; }
 
   button, .btn {
     font-size: 0.85rem;

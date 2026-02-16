@@ -36,10 +36,12 @@ export default function Home({ gardens }) {
         <>
           <div className={styles.divider} />
           <section className={styles.gardens}>
-            <h2>Gardens</h2>
-            <ul className={styles.gardenList}>
+            <div className={styles.gardensHeader}>
+              <h2>Gardens</h2>
+            </div>
+            <ul className={styles.gardenGrid}>
               {gardens.map((g) => (
-                <li key={g.id} className={styles.gardenItem}>
+                <li key={g.id} className={styles.gardenCard}>
                   <Link href={`/${g.handle}`} className={styles.gardenLink}>
                     <span className={styles.gardenName}>{g.display_name || g.handle}</span>
                     <span className={styles.gardenHandle}>@{g.handle}</span>
@@ -55,7 +57,7 @@ export default function Home({ gardens }) {
       <div className={styles.divider} />
 
       <section className={styles.about}>
-        <h2>What is  wherererer this?</h2>
+        <h2>What is this?</h2>
         <p>
           Everyone has a personal canon — the works that changed how they think,
           the quotes they return to, the recommendations they trust. A Walled Garden
@@ -71,8 +73,6 @@ export default function Home({ gardens }) {
 }
 
 export async function getServerSideProps() {
-  // Fetch profiles that have at least some content, ordered by most recently active
-  // We get all profiles for now — with a small site this is fine
   const { data: profiles } = await supabase
     .from('profiles')
     .select('id, handle, display_name, bio')

@@ -46,23 +46,23 @@
 }
 
 .error {
-  background-color: #fdf2f0;
-  border: 1px solid #e8c4bf;
+  background-color: var(--color-error-bg);
+  border: 1px solid #f5c6cb;
   color: var(--color-error);
   font-family: var(--font-sans);
   font-size: 0.85rem;
-  padding: 0.6rem 0.75rem;
-  border-radius: 4px;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
   margin-bottom: var(--space-lg);
 }
 
 .success {
-  background-color: #f0f7f2;
-  border: 1px solid #bfd9c7;
+  background-color: var(--color-success-bg);
+  border: 1px solid #c8e6c9;
   color: var(--color-success);
   font-family: var(--font-sans);
   font-size: 0.85rem;
-  padding: 0.6rem 0.75rem;
-  border-radius: 4px;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
   margin-bottom: var(--space-lg);
 }

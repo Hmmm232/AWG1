@@ -15,13 +15,14 @@
 
 .link {
   display: block;
-  padding: var(--space-md) 0;
+  padding: var(--space-md) var(--space-sm);
   color: var(--color-ink);
-  transition: opacity 0.15s ease;
+  border-radius: 8px;
+  transition: background 0.15s ease;
 }
 
 .link:hover {
-  opacity: 0.8;
+  background: var(--color-surface);
   color: var(--color-ink);
 }
 

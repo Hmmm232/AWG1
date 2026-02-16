@@ -5,20 +5,21 @@
 
 .displayName {
   font-size: 1.75rem;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.1rem;
 }
 
 .handle {
   font-family: var(--font-sans);
   font-size: 0.9rem;
   color: var(--color-ink-faint);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .bio {
   color: var(--color-ink-light);
   font-size: 1rem;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
+  max-width: 560px;
 }
 
 .stats {
@@ -59,6 +60,7 @@
   border-bottom: 2px solid transparent;
   transition: color 0.15s ease, border-color 0.15s ease;
   margin-bottom: -1px;
+  border-radius: 0;
 }
 
 .tab:hover {
@@ -77,12 +79,12 @@
 
 .emptyState {
   text-align: center;
-  padding: var(--space-3xl) var(--space-lg);
+  padding: var(--space-2xl) var(--space-lg);
   color: var(--color-ink-faint);
   font-style: italic;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .displayName {
     font-size: 1.4rem;
   }

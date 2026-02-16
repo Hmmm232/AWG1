@@ -2,7 +2,7 @@
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 var(--space-xl);
 }
 
 /* Navigation */
@@ -12,12 +12,12 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--color-border-light);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .logo {
   font-family: var(--font-serif);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--color-ink);
   letter-spacing: -0.01em;
@@ -37,6 +37,7 @@
   font-family: var(--font-sans);
   font-size: 0.85rem;
   color: var(--color-ink-light);
+  transition: color 0.15s ease;
 }
 
 .navLink:hover {
@@ -46,12 +47,13 @@
 .signOutBtn {
   font-family: var(--font-sans);
   font-size: 0.85rem;
-  color: var(--color-ink-light);
+  color: var(--color-ink-faint);
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   border-radius: 0;
+  transition: color 0.15s ease;
 }
 
 .signOutBtn:hover {
@@ -65,16 +67,18 @@
 
 /* Footer */
 .footer {
-  margin-top: var(--space-3xl);
-  padding: var(--space-xl) 0;
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg) 0;
   border-top: 1px solid var(--color-border-light);
   text-align: center;
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--color-ink-faint);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .container {
     padding: 0 var(--space-md);
   }
@@ -84,14 +88,15 @@
   }
 
   .logo {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .navLinks {
-    gap: var(--space-md);
+    gap: var(--space-sm);
   }
 
-  .navLink {
-    font-size: 0.8rem;
+  .navLink,
+  .signOutBtn {
+    font-size: 0.78rem;
   }
 }

@@ -26,6 +26,9 @@
   font-family: var(--font-sans);
   font-size: 0.85rem;
   color: var(--color-success);
+  background: var(--color-success-bg);
+  padding: 0.35rem 0.75rem;
+  border-radius: 100px;
 }
 
 .error {
