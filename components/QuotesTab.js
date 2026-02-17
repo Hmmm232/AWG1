@@ -133,13 +133,25 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
   async function reorderQuote(index, direction) {
     const newIndex = index + direction;
     if (newIndex < 0 || newIndex >= quotes.length) return;
+    const oldQuotes = quotes;
     const newQuotes = [...quotes];
     const [moved] = newQuotes.splice(index, 1);
     newQuotes.splice(newIndex, 0, moved);
     const updates = newQuotes.map((q, i) => ({ ...q, sort_order: i }));
     setQuotes(updates);
-    for (const q of updates) {
-      await supabase.from('quotes').update({ sort_order: q.sort_order }).eq('id', q.id);
+    try {
+      const results = await Promise.all(
+        updates.map((q) =>
+          supabase.from('quotes').update({ sort_order: q.sort_order }).eq('id', q.id)
+        )
+      );
+      if (results.some((r) => r.error)) {
+        setError('Failed to save new order');
+        setQuotes(oldQuotes);
+      }
+    } catch {
+      setError('Failed to save new order');
+      setQuotes(oldQuotes);
     }
   }
 

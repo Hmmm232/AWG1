@@ -122,13 +122,25 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
   async function reorderReRec(index, direction) {
     const newIndex = index + direction;
     if (newIndex < 0 || newIndex >= rerecs.length) return;
+    const oldRerecs = rerecs;
     const newRerecs = [...rerecs];
     const [moved] = newRerecs.splice(index, 1);
     newRerecs.splice(newIndex, 0, moved);
     const updates = newRerecs.map((r, i) => ({ ...r, sort_order: i }));
     setRerecs(updates);
-    for (const r of updates) {
-      await supabase.from('rerecs').update({ sort_order: r.sort_order }).eq('id', r.id);
+    try {
+      const results = await Promise.all(
+        updates.map((r) =>
+          supabase.from('rerecs').update({ sort_order: r.sort_order }).eq('id', r.id)
+        )
+      );
+      if (results.some((r) => r.error)) {
+        setError('Failed to save new order');
+        setRerecs(oldRerecs);
+      }
+    } catch {
+      setError('Failed to save new order');
+      setRerecs(oldRerecs);
     }
   }
 

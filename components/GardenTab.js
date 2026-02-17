@@ -173,20 +173,27 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
     const newIndex = index + direction;
     if (newIndex < 0 || newIndex >= categories.length) return;
 
+    const oldCategories = categories;
     const newCategories = [...categories];
     const [moved] = newCategories.splice(index, 1);
     newCategories.splice(newIndex, 0, moved);
 
-    // Update sort_order for both swapped items
     const updates = newCategories.map((cat, i) => ({ ...cat, sort_order: i }));
     setCategories(updates);
 
-    // Persist
-    for (const cat of updates) {
-      await supabase
-        .from('categories')
-        .update({ sort_order: cat.sort_order })
-        .eq('id', cat.id);
+    try {
+      const results = await Promise.all(
+        updates.map((cat) =>
+          supabase.from('categories').update({ sort_order: cat.sort_order }).eq('id', cat.id)
+        )
+      );
+      if (results.some((r) => r.error)) {
+        setError('Failed to save new order');
+        setCategories(oldCategories);
+      }
+    } catch {
+      setError('Failed to save new order');
+      setCategories(oldCategories);
     }
   }
 
@@ -244,6 +251,7 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
     const newIndex = index + direction;
     if (newIndex < 0 || newIndex >= works.length) return;
 
+    const oldWorks = worksByCategory;
     const newWorks = [...works];
     const [moved] = newWorks.splice(index, 1);
     newWorks.splice(newIndex, 0, moved);
@@ -251,11 +259,19 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
     const updates = newWorks.map((w, i) => ({ ...w, sort_order: i }));
     setWorksByCategory({ ...worksByCategory, [categoryId]: updates });
 
-    for (const w of updates) {
-      await supabase
-        .from('works')
-        .update({ sort_order: w.sort_order })
-        .eq('id', w.id);
+    try {
+      const results = await Promise.all(
+        updates.map((w) =>
+          supabase.from('works').update({ sort_order: w.sort_order }).eq('id', w.id)
+        )
+      );
+      if (results.some((r) => r.error)) {
+        setError('Failed to save new order');
+        setWorksByCategory(oldWorks);
+      }
+    } catch {
+      setError('Failed to save new order');
+      setWorksByCategory(oldWorks);
     }
   }
 

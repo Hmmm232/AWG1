@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import { AuthProvider } from '@/lib/AuthContext';
 import Layout from '@/components/Layout';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import Head from 'next/head';
 
 export default function App({ Component, pageProps }) {
@@ -22,7 +23,9 @@ export default function App({ Component, pageProps }) {
         <meta name="twitter:description" content="A place to gather the works that have shaped you — books, essays, poems — and share them with others." />
       </Head>
       <Layout>
-        <Component {...pageProps} />
+        <ErrorBoundary>
+          <Component {...pageProps} />
+        </ErrorBoundary>
       </Layout>
     </AuthProvider>
   );

@@ -51,20 +51,28 @@ export default function ProfilePage({
       return;
     }
 
-    if (isFollowing) {
-      await supabase
-        .from('follows')
-        .delete()
-        .eq('follower_id', user.id)
-        .eq('following_id', profile.id);
-      setIsFollowing(false);
-      setFollowerCount((c) => c - 1);
-    } else {
-      await supabase
-        .from('follows')
-        .insert({ follower_id: user.id, following_id: profile.id });
-      setIsFollowing(true);
-      setFollowerCount((c) => c + 1);
+    try {
+      if (isFollowing) {
+        const { error } = await supabase
+          .from('follows')
+          .delete()
+          .eq('follower_id', user.id)
+          .eq('following_id', profile.id);
+        if (!error) {
+          setIsFollowing(false);
+          setFollowerCount((c) => c - 1);
+        }
+      } else {
+        const { error } = await supabase
+          .from('follows')
+          .insert({ follower_id: user.id, following_id: profile.id });
+        if (!error) {
+          setIsFollowing(true);
+          setFollowerCount((c) => c + 1);
+        }
+      }
+    } catch (err) {
+      console.error('Follow action failed:', err);
     }
   }
 
@@ -170,59 +178,52 @@ export async function getServerSideProps({ params }) {
     return { notFound: true };
   }
 
-  // Get follower/following counts
-  const { count: followerCount } = await supabase
-    .from('follows')
-    .select('*', { count: 'exact', head: true })
-    .eq('following_id', profile.id);
+  // Run all independent queries in parallel
+  const [
+    { count: followerCount },
+    { count: followingCount },
+    { data: categories },
+    { data: works },
+    { data: quotes },
+    { data: rerecs },
+    { data: followData },
+  ] = await Promise.all([
+    supabase
+      .from('follows')
+      .select('*', { count: 'exact', head: true })
+      .eq('following_id', profile.id),
+    supabase
+      .from('follows')
+      .select('*', { count: 'exact', head: true })
+      .eq('follower_id', profile.id),
+    supabase
+      .from('categories')
+      .select('*')
+      .eq('user_id', profile.id)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('works')
+      .select('*')
+      .eq('user_id', profile.id)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('quotes')
+      .select('*')
+      .eq('user_id', profile.id)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('rerecs')
+      .select('*')
+      .eq('user_id', profile.id)
+      .order('sort_order', { ascending: true }),
+    // Single query with join instead of N+1
+    supabase
+      .from('follows')
+      .select('following:profiles!following_id(id, handle, display_name, bio)')
+      .eq('follower_id', profile.id),
+  ]);
 
-  const { count: followingCount } = await supabase
-    .from('follows')
-    .select('*', { count: 'exact', head: true })
-    .eq('follower_id', profile.id);
-
-  // Get categories and works for the garden
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('user_id', profile.id)
-    .order('sort_order', { ascending: true });
-
-  const { data: works } = await supabase
-    .from('works')
-    .select('*')
-    .eq('user_id', profile.id)
-    .order('sort_order', { ascending: true });
-
-  // Get quotes
-  const { data: quotes } = await supabase
-    .from('quotes')
-    .select('*')
-    .eq('user_id', profile.id)
-    .order('sort_order', { ascending: true });
-
-  // Get rerecs
-  const { data: rerecs } = await supabase
-    .from('rerecs')
-    .select('*')
-    .eq('user_id', profile.id)
-    .order('sort_order', { ascending: true });
-
-  // Get following profiles (who this user follows)
-  const { data: followRows } = await supabase
-    .from('follows')
-    .select('following_id')
-    .eq('follower_id', profile.id);
-
-  let following = [];
-  if (followRows && followRows.length > 0) {
-    const followingIds = followRows.map((f) => f.following_id);
-    const { data: followingProfiles } = await supabase
-      .from('profiles')
-      .select('id, handle, display_name, bio')
-      .in('id', followingIds);
-    following = followingProfiles || [];
-  }
+  const following = (followData || []).map((f) => f.following);
 
   return {
     props: {
