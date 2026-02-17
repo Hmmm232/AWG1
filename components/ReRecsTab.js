@@ -13,13 +13,16 @@ function ReRecForm({ initial, onSave, onCancel }) {
     e.preventDefault();
     if (!workTitle.trim()) return;
     setSaving(true);
-    await onSave({
-      work_title: workTitle.trim(),
-      original_recommender: originalRecommender.trim(),
-      commentary: commentary.trim(),
-      source_url: sourceUrl.trim(),
-    });
-    setSaving(false);
+    try {
+      await onSave({
+        work_title: workTitle.trim(),
+        original_recommender: originalRecommender.trim(),
+        commentary: commentary.trim(),
+        source_url: sourceUrl.trim(),
+      });
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -173,7 +176,7 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
                   {rerec.commentary && (
                     <p className={styles.workCommentary}>{rerec.commentary}</p>
                   )}
-                  {rerec.source_url && (
+                  {rerec.source_url && /^https?:\/\//i.test(rerec.source_url) && (
                     <p style={{ marginTop: 'var(--space-xs)' }}>
                       <a href={rerec.source_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.85rem', fontFamily: 'var(--font-sans)' }}>
                         Original recommendation &#8599;

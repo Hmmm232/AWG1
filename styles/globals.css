@@ -154,6 +154,7 @@ button, .btn {
 
 .btn-primary:hover {
   background-color: var(--color-accent-hover);
+  color: var(--color-white);
 }
 
 .btn-secondary {
@@ -164,6 +165,7 @@ button, .btn {
 
 .btn-secondary:hover {
   background-color: var(--color-accent-light);
+  color: var(--color-accent-hover);
 }
 
 .btn-small {

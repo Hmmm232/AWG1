@@ -6,23 +6,33 @@ function QuoteForm({ initial, onSave, onCancel }) {
   const [quoteText, setQuoteText] = useState(initial?.quote_text || '');
   const [attribution, setAttribution] = useState(initial?.attribution || '');
   const [source, setSource] = useState(initial?.source || '');
+  const [note, setNote] = useState(initial?.note || '');
   const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (!quoteText.trim()) return;
     setSaving(true);
-    await onSave({
-      quote_text: quoteText.trim(),
-      attribution: attribution.trim(),
-      source: source.trim(),
-    });
-    setSaving(false);
+    setFormError('');
+    try {
+      await onSave({
+        quote_text: quoteText.trim(),
+        attribution: attribution.trim(),
+        source: source.trim(),
+        note: note.trim(),
+      });
+    } catch (err) {
+      setFormError(err.message || 'Failed to save quote');
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <p className={styles.formTitle}>{initial ? 'Edit quote' : 'Add a quote'}</p>
+      {formError && <p className={styles.error}>{formError}</p>}
       <div className={styles.field}>
         <label htmlFor="quoteText">Quote</label>
         <textarea
@@ -54,6 +64,16 @@ function QuoteForm({ initial, onSave, onCancel }) {
           onChange={(e) => setSource(e.target.value)}
         />
       </div>
+      <div className={styles.field}>
+        <label htmlFor="note">Your note (optional)</label>
+        <textarea
+          id="note"
+          placeholder="Why this quote matters to you..."
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          rows={2}
+        />
+      </div>
       <div className={styles.formActions}>
         <button type="submit" className="btn btn-primary btn-small" disabled={saving}>
           {saving ? 'Saving...' : initial ? 'Save' : 'Add quote'}
@@ -72,27 +92,33 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
   const [editingQuoteId, setEditingQuoteId] = useState(null);
   const [error, setError] = useState('');
 
-  async function addQuote({ quote_text, attribution, source }) {
+  async function addQuote({ quote_text, attribution, source, note }) {
     setError('');
     const sortOrder = quotes.length;
     const { data, error: err } = await supabase
       .from('quotes')
-      .insert({ user_id: userId, quote_text, attribution, source, sort_order: sortOrder })
+      .insert({ user_id: userId, quote_text, attribution, source, note, sort_order: sortOrder })
       .select()
       .single();
-    if (err) { setError(err.message); return; }
+    if (err) {
+      setError(err.message);
+      throw new Error(err.message);
+    }
     setQuotes([...quotes, data]);
     setShowNewQuote(false);
   }
 
-  async function updateQuote(id, { quote_text, attribution, source }) {
+  async function updateQuote(id, { quote_text, attribution, source, note }) {
     setError('');
     const { error: err } = await supabase
       .from('quotes')
-      .update({ quote_text, attribution, source })
+      .update({ quote_text, attribution, source, note })
       .eq('id', id);
-    if (err) { setError(err.message); return; }
-    setQuotes(quotes.map((q) => q.id === id ? { ...q, quote_text, attribution, source } : q));
+    if (err) {
+      setError(err.message);
+      throw new Error(err.message);
+    }
+    setQuotes(quotes.map((q) => q.id === id ? { ...q, quote_text, attribution, source, note } : q));
     setEditingQuoteId(null);
   }
 
@@ -160,6 +186,11 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
                       {quote.attribution && <span>— {quote.attribution}</span>}
                       {quote.attribution && quote.source && ', '}
                       {quote.source && <em>{quote.source}</em>}
+                    </p>
+                  )}
+                  {quote.note && (
+                    <p style={{ marginTop: 'var(--space-sm)', fontSize: '0.9rem', color: 'var(--color-ink-light)', lineHeight: 1.6 }}>
+                      {quote.note}
                     </p>
                   )}
                 </div>

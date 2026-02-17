@@ -38,9 +38,13 @@ create table quotes (
   quote_text text not null,
   attribution text not null default '',
   source text not null default '',
+  note text not null default '',
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- NOTE: If the quotes table already exists, run this instead:
+-- alter table quotes add column note text not null default '';
 
 -- Re-recs
 create table rerecs (

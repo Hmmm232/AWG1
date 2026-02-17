@@ -12,8 +12,11 @@ function CategoryForm({ initial, onSave, onCancel }) {
     e.preventDefault();
     if (!name.trim()) return;
     setSaving(true);
-    await onSave({ name: name.trim(), introduction: introduction.trim() });
-    setSaving(false);
+    try {
+      await onSave({ name: name.trim(), introduction: introduction.trim() });
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -62,8 +65,11 @@ function WorkForm({ initial, onSave, onCancel }) {
     e.preventDefault();
     if (!title.trim()) return;
     setSaving(true);
-    await onSave({ title: title.trim(), commentary: commentary.trim() });
-    setSaving(false);
+    try {
+      await onSave({ title: title.trim(), commentary: commentary.trim() });
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
