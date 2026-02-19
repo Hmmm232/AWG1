@@ -98,25 +98,23 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
     const row = { user_id: userId, quote_text, attribution, source, sort_order: sortOrder };
     if (note !== undefined) row.note = note;
 
-    // Try insert; if it fails on the 'note' column, retry without it
-    let { data, error: err } = await supabase
+    // Insert — don't chain .select().single() to avoid masking insert success
+    const { error: insertErr } = await supabase
       .from('quotes')
-      .insert(row)
-      .select()
-      .single();
-    if (err && err.message && err.message.includes('note')) {
-      delete row.note;
-      ({ data, error: err } = await supabase
-        .from('quotes')
-        .insert(row)
-        .select()
-        .single());
+      .insert(row);
+    if (insertErr) {
+      console.error('Quote insert failed:', insertErr);
+      setError(insertErr.message);
+      throw new Error(insertErr.message);
     }
-    if (err) {
-      setError(err.message);
-      throw new Error(err.message);
-    }
-    setQuotes([...quotes, data]);
+
+    // Fetch fresh quotes list after successful insert
+    const { data: freshQuotes } = await supabase
+      .from('quotes')
+      .select('*')
+      .eq('user_id', userId)
+      .order('sort_order', { ascending: true });
+    setQuotes(freshQuotes || []);
     setShowNewQuote(false);
   }
 
@@ -125,22 +123,17 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
     const fields = { quote_text, attribution, source };
     if (note !== undefined) fields.note = note;
 
-    let { error: err } = await supabase
+    const { error: updateErr } = await supabase
       .from('quotes')
       .update(fields)
       .eq('id', id);
-    if (err && err.message && err.message.includes('note')) {
-      delete fields.note;
-      ({ error: err } = await supabase
-        .from('quotes')
-        .update(fields)
-        .eq('id', id));
+    if (updateErr) {
+      console.error('Quote update failed:', updateErr);
+      setError(updateErr.message);
+      throw new Error(updateErr.message);
     }
-    if (err) {
-      setError(err.message);
-      throw new Error(err.message);
-    }
-    setQuotes(quotes.map((q) => q.id === id ? { ...q, ...fields, note: note || q.note } : q));
+
+    setQuotes(quotes.map((q) => q.id === id ? { ...q, ...fields } : q));
     setEditingQuoteId(null);
   }
 
