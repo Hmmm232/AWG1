@@ -49,7 +49,7 @@ function QuoteForm({ initial, onSave, onCancel }) {
         <input
           id="attribution"
           type="text"
-          placeholder='e.g. "Marcus Aurelius"'
+          placeholder='e.g. "Virginia Woolf"'
           value={attribution}
           onChange={(e) => setAttribution(e.target.value)}
         />
@@ -59,7 +59,7 @@ function QuoteForm({ initial, onSave, onCancel }) {
         <input
           id="source"
           type="text"
-          placeholder='e.g. "Meditations, Book IV"'
+          placeholder='e.g. "To the Lighthouse"'
           value={source}
           onChange={(e) => setSource(e.target.value)}
         />
@@ -95,11 +95,23 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
   async function addQuote({ quote_text, attribution, source, note }) {
     setError('');
     const sortOrder = quotes.length;
-    const { data, error: err } = await supabase
+    const row = { user_id: userId, quote_text, attribution, source, sort_order: sortOrder };
+    if (note !== undefined) row.note = note;
+
+    // Try insert; if it fails on the 'note' column, retry without it
+    let { data, error: err } = await supabase
       .from('quotes')
-      .insert({ user_id: userId, quote_text, attribution, source, note, sort_order: sortOrder })
+      .insert(row)
       .select()
       .single();
+    if (err && err.message && err.message.includes('note')) {
+      delete row.note;
+      ({ data, error: err } = await supabase
+        .from('quotes')
+        .insert(row)
+        .select()
+        .single());
+    }
     if (err) {
       setError(err.message);
       throw new Error(err.message);
@@ -110,15 +122,25 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
 
   async function updateQuote(id, { quote_text, attribution, source, note }) {
     setError('');
-    const { error: err } = await supabase
+    const fields = { quote_text, attribution, source };
+    if (note !== undefined) fields.note = note;
+
+    let { error: err } = await supabase
       .from('quotes')
-      .update({ quote_text, attribution, source, note })
+      .update(fields)
       .eq('id', id);
+    if (err && err.message && err.message.includes('note')) {
+      delete fields.note;
+      ({ error: err } = await supabase
+        .from('quotes')
+        .update(fields)
+        .eq('id', id));
+    }
     if (err) {
       setError(err.message);
       throw new Error(err.message);
     }
-    setQuotes(quotes.map((q) => q.id === id ? { ...q, quote_text, attribution, source, note } : q));
+    setQuotes(quotes.map((q) => q.id === id ? { ...q, ...fields, note: note || q.note } : q));
     setEditingQuoteId(null);
   }
 

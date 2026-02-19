@@ -33,7 +33,7 @@ function ReRecForm({ initial, onSave, onCancel }) {
         <input
           id="workTitle"
           type="text"
-          placeholder='e.g. "Meditations by Marcus Aurelius"'
+          placeholder='e.g. "Gilead by Marilynne Robinson"'
           value={workTitle}
           onChange={(e) => setWorkTitle(e.target.value)}
           required
