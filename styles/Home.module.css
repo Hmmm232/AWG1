@@ -107,22 +107,23 @@
 
 /* ─── Garden cards ─────────────────────────────────────────── */
 .gardenCard {
-  flex: 0 0 240px;
+  flex: 0 0 320px;
   scroll-snap-align: start;
-  background: var(--color-surface);
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
   border-radius: 10px;
   border-left: 3px solid transparent;
-  transition: background-color 0.15s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .gardenCard:hover {
-  background: var(--color-surface-hover);
   border-left-color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .gardenLink {
   display: block;
-  padding: var(--space-lg);
+  padding: var(--space-xl) var(--space-lg);
   color: var(--color-ink);
 }
 
@@ -134,7 +135,7 @@
   display: block;
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.05rem;
   margin-bottom: 0.15rem;
 }
 
@@ -143,16 +144,16 @@
   font-family: var(--font-sans);
   font-size: 0.8rem;
   color: var(--color-ink-faint);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
 }
 
 .gardenBio {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-ink-light);
-  line-height: 1.5;
+  line-height: 1.6;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -245,7 +246,7 @@
   }
 
   .gardenCard {
-    flex: 0 0 200px;
+    flex: 0 0 260px;
   }
 
   .quoteCard {

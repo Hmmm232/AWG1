@@ -94,27 +94,26 @@ export default function Home({ gardens, quotes }) {
       <section id="about" className={styles.about}>
         <h2>About A Walled Garden</h2>
         <p>
-          This site began as a place to gather the books, poems, essays and
-          curiosities worth remembering &mdash; reading lists with commentary,
-          favourite quotes, articles and curios worth passing on.
+          I intended this website first as a place where I could talk about my
+          favourite books and poems, reading lists of favourite works, share
+          interesting articles, quotes and curios with little bits of commentary.
         </p>
         <p>
-          It has since grown, and now anyone can plant a garden of their own,
-          centred around whatever they please. Create categories, add works with
-          your own commentary, collect the quotes you return to, and share
-          recommendations from people you trust.
+          I have extended things now so that anyone can create a garden of their
+          own, centred around whatever they please, I think it&rsquo;s pretty
+          intuitive to do so.
         </p>
         <p>
-          We do not intend, like so many places on the internet, to commoditise
-          your time and attention. We have no interest in the deliberately
-          upsetting, the emotionally but not intellectually provocative, the
-          endless scroll. This is a jumping-off point to better things, a means
-          of sharing and discovering.
+          I do not intend for this site, like many other places on the internet,
+          to commoditise your time and attention, we do not want to immerse you
+          in the deliberately upsetting and controversial, the emotionally but
+          not intellectually provocative. We want this to be a jumping off point
+          to better things, a mode for sharing and discovering.
         </p>
         <p>
-          If this site works as it should, it will direct you outwards and
-          onwards &mdash; to curiosities and works of art that add to life, not
-          distract from it.
+          If successful this site will direct you outwards and onwards, to
+          curiosities and works of art that add to life, we will not keep you
+          captive in an endless stream of ephemeral slop that detracts from it.
         </p>
         <div className={styles.cta} style={{ marginTop: 'var(--space-xl)' }}>
           {user ? (
