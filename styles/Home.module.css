@@ -1,4 +1,6 @@
 /* Landing / Home page */
+
+/* ─── Hero ─────────────────────────────────────────────────── */
 .hero {
   text-align: center;
   padding: var(--space-3xl) 0 var(--space-2xl);
@@ -22,11 +24,22 @@
   border-radius: 1px;
 }
 
-.subtitle {
-  font-size: 1.1rem;
+.epigraph {
+  font-style: italic;
+  font-size: 1.05rem;
   color: var(--color-ink-light);
+  margin-bottom: var(--space-xl);
+  letter-spacing: 0.005em;
+}
+
+.heroBody {
   max-width: 480px;
   margin: 0 auto var(--space-xl);
+}
+
+.heroBody p {
+  font-size: 1.05rem;
+  color: var(--color-ink-light);
   line-height: 1.8;
 }
 
@@ -37,33 +50,65 @@
   flex-wrap: wrap;
 }
 
-/* Gardens section */
-.gardens {
-  padding: var(--space-2xl) 0;
+/* ─── Section (gardens, quotes) ────────────────────────────── */
+.section {
+  padding: var(--space-xl) 0;
 }
 
-.gardensHeader {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+.sectionTitle {
+  font-size: 1.25rem;
+  letter-spacing: 0.01em;
   margin-bottom: var(--space-lg);
 }
 
-.gardensHeader h2 {
-  font-size: 1.25rem;
-  letter-spacing: 0.01em;
+/* ─── Horizontal scroll ────────────────────────────────────── */
+.scrollContainer {
+  position: relative;
 }
 
-.gardenGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+/* Fade on the right edge to hint at scrollability */
+.scrollContainer::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  background: linear-gradient(to right, transparent, var(--color-bg));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scrollRow {
+  display: flex;
   gap: var(--space-md);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0 48px var(--space-sm) 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }
 
+.scrollRow::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scrollRow::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollRow::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+/* ─── Garden cards ─────────────────────────────────────────── */
 .gardenCard {
+  flex: 0 0 240px;
+  scroll-snap-align: start;
   background: var(--color-surface);
   border-radius: 10px;
   border-left: 3px solid transparent;
@@ -112,12 +157,40 @@
   overflow: hidden;
 }
 
-/* Divider — centered ornamental dot */
+/* ─── Quote cards ──────────────────────────────────────────── */
+.quoteCard {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+  background: var(--color-surface);
+  border-left: 2px solid var(--color-accent);
+  border-radius: 0 8px 8px 0;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quoteText {
+  margin: 0;
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.quoteAttr {
+  margin-top: var(--space-sm);
+  font-size: 0.85rem;
+  color: var(--color-ink-light);
+  font-style: normal;
+}
+
+/* ─── Divider — centered ornamental dots ───────────────────── */
 .divider {
   width: 100%;
-  height: auto;
-  background: none;
-  margin: 0;
   text-align: center;
   line-height: 1;
   color: var(--color-border);
@@ -130,23 +203,26 @@
   content: '\00B7\2002\00B7\2002\00B7';
 }
 
-/* About section */
+/* ─── About section ────────────────────────────────────────── */
 .about {
   max-width: 520px;
   margin: 0 auto;
-  text-align: center;
   padding: var(--space-2xl) 0;
+  scroll-margin-top: var(--space-xl);
 }
 
 .about h2 {
-  margin-bottom: var(--space-md);
+  text-align: center;
+  margin-bottom: var(--space-lg);
 }
 
 .about p {
   color: var(--color-ink-light);
   font-size: 0.95rem;
+  line-height: 1.8;
 }
 
+/* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 640px) {
   .hero {
     padding: var(--space-2xl) 0 var(--space-lg);
@@ -156,16 +232,24 @@
     font-size: 1.85rem;
   }
 
-  .subtitle {
+  .epigraph {
+    font-size: 0.95rem;
+  }
+
+  .heroBody p {
     font-size: 1rem;
   }
 
-  .gardenGrid {
-    grid-template-columns: 1fr;
+  .section {
+    padding: var(--space-lg) 0;
   }
 
-  .gardens {
-    padding: var(--space-lg) 0;
+  .gardenCard {
+    flex: 0 0 200px;
+  }
+
+  .quoteCard {
+    flex: 0 0 260px;
   }
 
   .about {
