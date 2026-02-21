@@ -181,7 +181,7 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
                 <div style={{ flex: 1 }}>
                   <p className={styles.workTitle}>{rerec.work_title}</p>
                   {rerec.original_recommender && (
-                    <p style={{ fontSize: '0.85rem', color: 'var(--color-ink-faint)', marginBottom: 'var(--space-xs)', fontFamily: 'var(--font-sans)' }}>
+                    <p className={styles.rerecMeta}>
                       Recommended by {rerec.original_recommender}
                     </p>
                   )}
@@ -189,8 +189,8 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
                     <p className={styles.workCommentary}>{rerec.commentary}</p>
                   )}
                   {rerec.source_url && /^https?:\/\//i.test(rerec.source_url) && (
-                    <p style={{ marginTop: 'var(--space-xs)' }}>
-                      <a href={rerec.source_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.85rem', fontFamily: 'var(--font-sans)' }}>
+                    <p className={styles.rerecLink}>
+                      <a href={rerec.source_url} target="_blank" rel="noopener noreferrer">
                         Original recommendation &#8599;
                       </a>
                     </p>

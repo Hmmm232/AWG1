@@ -1,11 +1,14 @@
 /* Profile page */
 .header {
   margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .displayName {
   font-size: 1.75rem;
   margin-bottom: 0.1rem;
+  letter-spacing: -0.015em;
 }
 
 .handle {
@@ -20,6 +23,7 @@
   font-size: 1rem;
   margin-bottom: var(--space-sm);
   max-width: 560px;
+  line-height: 1.7;
 }
 
 .stats {
@@ -68,7 +72,8 @@
 }
 
 .tabActive {
-  color: var(--color-ink);
+  color: var(--color-accent);
+  font-weight: 600;
   border-bottom-color: var(--color-accent);
 }
 

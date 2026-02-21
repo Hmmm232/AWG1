@@ -205,18 +205,18 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
             <>
               <div className={styles.categoryHeader}>
                 <div style={{ flex: 1 }}>
-                  <blockquote style={{ margin: 0, fontStyle: 'italic', fontSize: '1.05rem', lineHeight: 1.7 }}>
+                  <blockquote className={styles.quoteBlock}>
                     &ldquo;{quote.quote_text}&rdquo;
                   </blockquote>
                   {(quote.attribution || quote.source) && (
-                    <p style={{ marginTop: 'var(--space-sm)', fontSize: '0.9rem', color: 'var(--color-ink-light)' }}>
+                    <p className={styles.quoteAttribution}>
                       {quote.attribution && <span>— {quote.attribution}</span>}
                       {quote.attribution && quote.source && ', '}
                       {quote.source && <em>{quote.source}</em>}
                     </p>
                   )}
                   {quote.note && (
-                    <p style={{ marginTop: 'var(--space-sm)', fontSize: '0.9rem', color: 'var(--color-ink-light)', lineHeight: 1.6 }}>
+                    <p className={styles.quoteNote}>
                       {quote.note}
                     </p>
                   )}

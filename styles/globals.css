@@ -5,22 +5,22 @@
 
 :root {
   /* Colour palette */
-  --color-bg: #ffffff;
-  --color-surface: #f7f7f5;
-  --color-surface-hover: #f0efed;
+  --color-bg: #fdfdfb;
+  --color-surface: #f5f4f0;
+  --color-surface-hover: #edecea;
   --color-ink: #1a1a1a;
   --color-ink-light: #4a4a4a;
-  --color-ink-faint: #888888;
-  --color-accent: #388e3c;
-  --color-accent-hover: #2e7d32;
-  --color-accent-light: #e8f5e9;
-  --color-border: #e0e0e0;
-  --color-border-light: #eeeeee;
+  --color-ink-faint: #8a8a8a;
+  --color-accent: #3a9b63;
+  --color-accent-hover: #2f8252;
+  --color-accent-light: #edf7f1;
+  --color-border: #ddd;
+  --color-border-light: #eae9e6;
   --color-white: #ffffff;
   --color-error: #c62828;
   --color-error-bg: #fce4ec;
-  --color-success: #2e7d32;
-  --color-success-bg: #e8f5e9;
+  --color-success: #2f8252;
+  --color-success-bg: #edf7f1;
 
   /* Typography */
   --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
@@ -74,6 +74,7 @@ h1, h2, h3, h4 {
   font-family: var(--font-serif);
   font-weight: 600;
   line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 h1 { font-size: 1.75rem; }

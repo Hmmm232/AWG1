@@ -54,15 +54,17 @@
   padding: 0.6rem 0.85rem;
   border-radius: 8px;
   margin-bottom: var(--space-lg);
+  line-height: 1.5;
 }
 
 .success {
   background-color: var(--color-success-bg);
-  border: 1px solid #c8e6c9;
+  border: 1px solid #c3e2ce;
   color: var(--color-success);
   font-family: var(--font-sans);
   font-size: 0.85rem;
   padding: 0.6rem 0.85rem;
   border-radius: 8px;
   margin-bottom: var(--space-lg);
+  line-height: 1.5;
 }

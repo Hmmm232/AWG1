@@ -7,8 +7,19 @@
 .title {
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: var(--space-md);
-  letter-spacing: -0.025em;
+  margin-bottom: var(--space-lg);
+  letter-spacing: -0.02em;
+}
+
+/* Decorative rule beneath the title — like a title page ornament */
+.title::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--color-accent);
+  margin: var(--space-md) auto 0;
+  border-radius: 1px;
 }
 
 .subtitle {
@@ -16,7 +27,7 @@
   color: var(--color-ink-light);
   max-width: 480px;
   margin: 0 auto var(--space-xl);
-  line-height: 1.75;
+  line-height: 1.8;
 }
 
 .cta {
@@ -40,6 +51,7 @@
 
 .gardensHeader h2 {
   font-size: 1.25rem;
+  letter-spacing: 0.01em;
 }
 
 .gardenGrid {
@@ -54,11 +66,13 @@
 .gardenCard {
   background: var(--color-surface);
   border-radius: 10px;
-  transition: background-color 0.15s ease, transform 0.1s ease;
+  border-left: 3px solid transparent;
+  transition: background-color 0.15s ease, border-color 0.2s ease;
 }
 
 .gardenCard:hover {
   background: var(--color-surface-hover);
+  border-left-color: var(--color-accent);
 }
 
 .gardenLink {
@@ -98,12 +112,22 @@
   overflow: hidden;
 }
 
-/* Divider */
+/* Divider — centered ornamental dot */
 .divider {
   width: 100%;
-  height: 1px;
-  background: var(--color-border-light);
+  height: auto;
+  background: none;
   margin: 0;
+  text-align: center;
+  line-height: 1;
+  color: var(--color-border);
+  font-size: 1.2rem;
+  letter-spacing: 0.5em;
+  padding: var(--space-xs) 0;
+}
+
+.divider::before {
+  content: '\00B7\2002\00B7\2002\00B7';
 }
 
 /* About section */
