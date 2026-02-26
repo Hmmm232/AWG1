@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import GardenTab from '@/components/GardenTab';
@@ -95,7 +96,13 @@ export default function ProfilePage({
       <div className={styles.header}>
         <h1 className={styles.displayName}>{profile.display_name || profile.handle}</h1>
         <p className={styles.handle}>@{profile.handle}</p>
-        {profile.bio && <p className={styles.bio}>{profile.bio}</p>}
+        {profile.bio ? (
+          <p className={styles.bio}>{profile.bio}</p>
+        ) : isOwner ? (
+          <p className={styles.bioPrompt}>
+            <Link href="/settings">Add a bio</Link> to tell visitors about yourself and what you read.
+          </p>
+        ) : null}
         <div className={styles.stats}>
           <span><span className={styles.statCount}>{followerCount}</span> {followerCount === 1 ? 'follower' : 'followers'}</span>
           <span><span className={styles.statCount}>{initialFollowingCount || 0}</span> following</span>

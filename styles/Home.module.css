@@ -3,13 +3,13 @@
 /* ─── Hero ─────────────────────────────────────────────────── */
 .hero {
   text-align: center;
-  padding: var(--space-3xl) 0 var(--space-2xl);
+  padding: var(--space-2xl) 0 var(--space-xl);
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
   letter-spacing: -0.02em;
 }
 
@@ -20,7 +20,7 @@
   width: 48px;
   height: 2px;
   background: var(--color-accent);
-  margin: var(--space-md) auto 0;
+  margin: var(--space-sm) auto 0;
   border-radius: 1px;
 }
 
@@ -28,13 +28,13 @@
   font-style: italic;
   font-size: 1.05rem;
   color: var(--color-ink-light);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
   letter-spacing: 0.005em;
 }
 
 .heroBody {
   max-width: 480px;
-  margin: 0 auto var(--space-xl);
+  margin: 0 auto var(--space-lg);
 }
 
 .heroBody p {
@@ -52,13 +52,13 @@
 
 /* ─── Section (gardens, quotes) ────────────────────────────── */
 .section {
-  padding: var(--space-xl) 0;
+  padding: var(--space-lg) 0;
 }
 
 .sectionTitle {
   font-size: 1.25rem;
   letter-spacing: 0.01em;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
 /* ─── Horizontal scroll ────────────────────────────────────── */
@@ -105,14 +105,16 @@
   border-radius: 3px;
 }
 
+/* ─── Shared card base ─────────────────────────────────────── */
+
 /* ─── Garden cards ─────────────────────────────────────────── */
 .gardenCard {
-  flex: 0 0 320px;
+  flex: 0 0 300px;
   scroll-snap-align: start;
   background: var(--color-white);
   border: 1px solid var(--color-border-light);
   border-radius: 10px;
-  border-left: 3px solid transparent;
+  border-left: 3px solid var(--color-border-light);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -123,7 +125,7 @@
 
 .gardenLink {
   display: block;
-  padding: var(--space-xl) var(--space-lg);
+  padding: var(--space-lg);
   color: var(--color-ink);
 }
 
@@ -144,7 +146,7 @@
   font-family: var(--font-sans);
   font-size: 0.8rem;
   color: var(--color-ink-faint);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .gardenBio {
@@ -162,13 +164,19 @@
 .quoteCard {
   flex: 0 0 300px;
   scroll-snap-align: start;
-  background: var(--color-surface);
-  border-left: 2px solid var(--color-accent);
-  border-radius: 0 8px 8px 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 10px;
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.quoteCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .quoteText {
@@ -197,7 +205,7 @@
   color: var(--color-border);
   font-size: 1.2rem;
   letter-spacing: 0.5em;
-  padding: var(--space-xs) 0;
+  padding: var(--space-sm) 0;
 }
 
 .divider::before {
@@ -208,7 +216,7 @@
 .about {
   max-width: 520px;
   margin: 0 auto;
-  padding: var(--space-2xl) 0;
+  padding: var(--space-xl) 0;
   scroll-margin-top: var(--space-xl);
 }
 
@@ -226,7 +234,7 @@
 /* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 640px) {
   .hero {
-    padding: var(--space-2xl) 0 var(--space-lg);
+    padding: var(--space-xl) 0 var(--space-lg);
   }
 
   .title {
@@ -242,7 +250,7 @@
   }
 
   .section {
-    padding: var(--space-lg) 0;
+    padding: var(--space-md) 0;
   }
 
   .gardenCard {
