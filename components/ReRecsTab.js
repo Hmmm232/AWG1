@@ -90,13 +90,18 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
   async function addReRec({ work_title, original_recommender, commentary, source_url }) {
     setError('');
     const sortOrder = rerecs.length;
-    const { data, error: err } = await supabase
+    const { error: insertErr } = await supabase
       .from('rerecs')
-      .insert({ user_id: userId, work_title, original_recommender, commentary, source_url, sort_order: sortOrder })
-      .select()
-      .single();
-    if (err) { setError(err.message); return; }
-    setRerecs([...rerecs, data]);
+      .insert({ user_id: userId, work_title, original_recommender, commentary, source_url, sort_order: sortOrder });
+    if (insertErr) { setError(insertErr.message); return; }
+
+    // Fetch fresh re-recs after successful insert
+    const { data: freshReRecs } = await supabase
+      .from('rerecs')
+      .select('*')
+      .eq('user_id', userId)
+      .order('sort_order', { ascending: true });
+    setRerecs(freshReRecs || []);
     setShowNewReRec(false);
   }
 

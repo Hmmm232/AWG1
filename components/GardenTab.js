@@ -133,14 +133,26 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
   async function addCategory({ name, introduction }) {
     setError('');
     const sortOrder = categories.length;
-    const { data, error: err } = await supabase
+    const { error: insertErr } = await supabase
       .from('categories')
-      .insert({ user_id: userId, name, introduction, sort_order: sortOrder })
-      .select()
-      .single();
-    if (err) { setError(err.message); return; }
-    setCategories([...categories, data]);
-    setWorksByCategory({ ...worksByCategory, [data.id]: [] });
+      .insert({ user_id: userId, name, introduction, sort_order: sortOrder });
+    if (insertErr) { setError(insertErr.message); return; }
+
+    // Fetch fresh categories after successful insert
+    const { data: freshCategories } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('user_id', userId)
+      .order('sort_order', { ascending: true });
+    setCategories(freshCategories || []);
+    // Preserve existing works state; add empty array for any new categories
+    const newWorksByCategory = { ...worksByCategory };
+    for (const cat of (freshCategories || [])) {
+      if (!newWorksByCategory[cat.id]) {
+        newWorksByCategory[cat.id] = [];
+      }
+    }
+    setWorksByCategory(newWorksByCategory);
     setShowNewCategory(false);
   }
 
@@ -203,15 +215,21 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
     setError('');
     const existingWorks = worksByCategory[categoryId] || [];
     const sortOrder = existingWorks.length;
-    const { data, error: err } = await supabase
+    const { error: insertErr } = await supabase
       .from('works')
-      .insert({ category_id: categoryId, user_id: userId, title, commentary, sort_order: sortOrder })
-      .select()
-      .single();
-    if (err) { setError(err.message); return; }
+      .insert({ category_id: categoryId, user_id: userId, title, commentary, sort_order: sortOrder });
+    if (insertErr) { setError(insertErr.message); return; }
+
+    // Fetch fresh works for this category after successful insert
+    const { data: freshWorks } = await supabase
+      .from('works')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('category_id', categoryId)
+      .order('sort_order', { ascending: true });
     setWorksByCategory({
       ...worksByCategory,
-      [categoryId]: [...existingWorks, data],
+      [categoryId]: freshWorks || [],
     });
     setAddingWorkToCategoryId(null);
   }

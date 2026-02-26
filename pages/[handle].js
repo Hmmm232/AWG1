@@ -138,35 +138,35 @@ export default function ProfilePage({
       </div>
 
       <div className={styles.tabContent}>
-        {activeTab === 'Garden' && (
+        <div style={{ display: activeTab === 'Garden' ? 'block' : 'none' }}>
           <GardenTab
             userId={profile.id}
             isOwner={isOwner}
             initialCategories={initialCategories || []}
             initialWorks={initialWorks || []}
           />
-        )}
-        {activeTab === 'Quotes' && (
+        </div>
+        <div style={{ display: activeTab === 'Quotes' ? 'block' : 'none' }}>
           <QuotesTab
             userId={profile.id}
             isOwner={isOwner}
             initialQuotes={initialQuotes || []}
           />
-        )}
-        {activeTab === 'Re-recs' && (
+        </div>
+        <div style={{ display: activeTab === 'Re-recs' ? 'block' : 'none' }}>
           <ReRecsTab
             userId={profile.id}
             isOwner={isOwner}
             initialReRecs={initialReRecs || []}
           />
-        )}
-        {activeTab === 'Following' && (
+        </div>
+        <div style={{ display: activeTab === 'Following' ? 'block' : 'none' }}>
           <FollowingTab
             isOwner={isOwner}
             following={initialFollowing || []}
             profileName={profile.display_name || profile.handle}
           />
-        )}
+        </div>
       </div>
     </>
   );
