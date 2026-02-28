@@ -194,7 +194,7 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
       )}
 
       {quotes.map((quote, index) => (
-        <div key={quote.id} className={styles.category} style={{ paddingBottom: 'var(--space-lg)' }}>
+        <div key={quote.id} className={styles.category}>
           {editingQuoteId === quote.id ? (
             <QuoteForm
               initial={quote}
