@@ -133,11 +133,9 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
   async function addCategory({ name, introduction }) {
     setError('');
     const sortOrder = categories.length;
-    console.log('[AWG] addCategory: inserting', { userId, name, sortOrder });
     const { error: insertErr } = await supabase
       .from('categories')
       .insert({ user_id: userId, name, introduction, sort_order: sortOrder });
-    console.log('[AWG] addCategory: insert returned', { error: insertErr });
     if (insertErr) { setError(insertErr.message); return; }
 
     // Fetch fresh categories after successful insert
@@ -217,11 +215,9 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
     setError('');
     const existingWorks = worksByCategory[categoryId] || [];
     const sortOrder = existingWorks.length;
-    console.log('[AWG] addWork: inserting', { categoryId, userId, title, sortOrder });
     const { error: insertErr } = await supabase
       .from('works')
       .insert({ category_id: categoryId, user_id: userId, title, commentary, sort_order: sortOrder });
-    console.log('[AWG] addWork: insert returned', { error: insertErr });
     if (insertErr) { setError(insertErr.message); return; }
 
     // Fetch fresh works for this category after successful insert
@@ -240,12 +236,10 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
 
   async function updateWork(categoryId, workId, { title, commentary }) {
     setError('');
-    console.log('[AWG] updateWork: updating', { categoryId, workId, title });
     const { error: err } = await supabase
       .from('works')
       .update({ title, commentary })
       .eq('id', workId);
-    console.log('[AWG] updateWork: update returned', { error: err });
     if (err) { setError(err.message); return; }
     setWorksByCategory({
       ...worksByCategory,
