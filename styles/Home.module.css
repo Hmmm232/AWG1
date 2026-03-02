@@ -114,12 +114,11 @@
   background: var(--color-white);
   border: 1px solid var(--color-border-light);
   border-radius: 10px;
-  border-left: 3px solid var(--color-border-light);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border-left: 3px solid var(--color-accent);
+  transition: box-shadow 0.2s ease;
 }
 
 .gardenCard:hover {
-  border-left-color: var(--color-accent);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -177,6 +176,15 @@
 
 .quoteCard:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.quoteLink {
+  display: block;
+  color: var(--color-ink);
+}
+
+.quoteLink:hover {
+  color: var(--color-ink);
 }
 
 .quoteText {

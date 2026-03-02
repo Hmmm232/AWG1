@@ -72,15 +72,20 @@ export default function Home({ gardens, quotes }) {
               <ul className={styles.scrollRow}>
                 {quotes.map((q) => (
                   <li key={q.id} className={styles.quoteCard}>
-                    <blockquote className={styles.quoteText}>
-                      &ldquo;{q.quote_text}&rdquo;
-                    </blockquote>
-                    {q.attribution && (
-                      <p className={styles.quoteAttr}>
-                        &mdash; {q.attribution}
-                        {q.source && <span>, <em>{q.source}</em></span>}
-                      </p>
-                    )}
+                    <Link
+                      href={q.profiles?.handle ? `/${q.profiles.handle}?tab=quotes&item=${q.id}` : '#'}
+                      className={styles.quoteLink}
+                    >
+                      <blockquote className={styles.quoteText}>
+                        &ldquo;{q.quote_text}&rdquo;
+                      </blockquote>
+                      {q.attribution && (
+                        <p className={styles.quoteAttr}>
+                          &mdash; {q.attribution}
+                          {q.source && <span>, <em>{q.source}</em></span>}
+                        </p>
+                      )}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -143,7 +148,7 @@ export async function getServerSideProps() {
       .limit(12),
     supabase
       .from('quotes')
-      .select('id, quote_text, attribution, source')
+      .select('id, quote_text, attribution, source, user_id, profiles!user_id(handle)')
       .neq('attribution', '')
       .order('created_at', { ascending: false })
       .limit(10),

@@ -25,8 +25,9 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 .categoryName {
@@ -67,7 +68,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-md);
+  gap: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 .workTitle {
@@ -283,4 +285,19 @@
 .reorderBtn:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+/* ─── Responsive ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .worksList {
+    padding-left: var(--space-sm);
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+
+  .categoryName {
+    font-size: 1.2rem;
+  }
 }
