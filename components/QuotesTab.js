@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import ShareButton from './ShareButton';
 import styles from '@/styles/Garden.module.css';
 
 function QuoteForm({ initial, onSave, onCancel }) {
@@ -194,7 +195,7 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
       )}
 
       {quotes.map((quote, index) => (
-        <div key={quote.id} className={styles.category}>
+        <div key={quote.id} id={quote.id} className={styles.category}>
           {editingQuoteId === quote.id ? (
             <QuoteForm
               initial={quote}
@@ -221,16 +222,19 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
                     </p>
                   )}
                 </div>
-                {isOwner && (
-                  <div className={styles.actions}>
-                    <div className={styles.reorderGroup}>
-                      <button className={styles.reorderBtn} onClick={() => reorderQuote(index, -1)} disabled={index === 0} title="Move up">&#9650;</button>
-                      <button className={styles.reorderBtn} onClick={() => reorderQuote(index, 1)} disabled={index === quotes.length - 1} title="Move down">&#9660;</button>
-                    </div>
-                    <button className={styles.iconBtn} onClick={() => setEditingQuoteId(quote.id)} title="Edit">Edit</button>
-                    <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteQuote(quote.id)} title="Delete">Delete</button>
-                  </div>
-                )}
+                <div className={styles.actions}>
+                  <ShareButton tab="quotes" itemId={quote.id} />
+                  {isOwner && (
+                    <>
+                      <div className={styles.reorderGroup}>
+                        <button className={styles.reorderBtn} onClick={() => reorderQuote(index, -1)} disabled={index === 0} title="Move up">&#9650;</button>
+                        <button className={styles.reorderBtn} onClick={() => reorderQuote(index, 1)} disabled={index === quotes.length - 1} title="Move down">&#9660;</button>
+                      </div>
+                      <button className={styles.iconBtn} onClick={() => setEditingQuoteId(quote.id)} title="Edit">Edit</button>
+                      <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteQuote(quote.id)} title="Delete">Delete</button>
+                    </>
+                  )}
+                </div>
               </div>
             </>
           )}

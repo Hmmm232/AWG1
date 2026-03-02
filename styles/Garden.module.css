@@ -115,6 +115,16 @@
   background: var(--color-error-bg);
 }
 
+.shareBtn {
+  color: var(--color-ink-faint);
+}
+
+.shareBtn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
 /* Forms */
 .form {
   background: var(--color-surface);

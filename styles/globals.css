@@ -192,6 +192,16 @@ button:disabled,
   border: 0;
 }
 
+/* Shared item highlight (for deep-linked items) */
+.share-highlight {
+  animation: share-highlight-fade 2.5s ease;
+}
+
+@keyframes share-highlight-fade {
+  0%, 20% { background-color: var(--color-accent-light); }
+  100% { background-color: transparent; }
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   h1 { font-size: 1.4rem; }

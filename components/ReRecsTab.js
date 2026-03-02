@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import ShareButton from './ShareButton';
 import styles from '@/styles/Garden.module.css';
 
 function ReRecForm({ initial, onSave, onCancel }) {
@@ -173,7 +174,7 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
       )}
 
       {rerecs.map((rerec, index) => (
-        <div key={rerec.id} className={styles.category} style={{ paddingBottom: 'var(--space-lg)' }}>
+        <div key={rerec.id} id={rerec.id} className={styles.category}>
           {editingReRecId === rerec.id ? (
             <ReRecForm
               initial={rerec}
@@ -201,16 +202,19 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
                     </p>
                   )}
                 </div>
-                {isOwner && (
-                  <div className={styles.actions}>
-                    <div className={styles.reorderGroup}>
-                      <button className={styles.reorderBtn} onClick={() => reorderReRec(index, -1)} disabled={index === 0} title="Move up">&#9650;</button>
-                      <button className={styles.reorderBtn} onClick={() => reorderReRec(index, 1)} disabled={index === rerecs.length - 1} title="Move down">&#9660;</button>
-                    </div>
-                    <button className={styles.iconBtn} onClick={() => setEditingReRecId(rerec.id)} title="Edit">Edit</button>
-                    <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteReRec(rerec.id)} title="Delete">Delete</button>
-                  </div>
-                )}
+                <div className={styles.actions}>
+                  <ShareButton tab="rerecs" itemId={rerec.id} />
+                  {isOwner && (
+                    <>
+                      <div className={styles.reorderGroup}>
+                        <button className={styles.reorderBtn} onClick={() => reorderReRec(index, -1)} disabled={index === 0} title="Move up">&#9650;</button>
+                        <button className={styles.reorderBtn} onClick={() => reorderReRec(index, 1)} disabled={index === rerecs.length - 1} title="Move down">&#9660;</button>
+                      </div>
+                      <button className={styles.iconBtn} onClick={() => setEditingReRecId(rerec.id)} title="Edit">Edit</button>
+                      <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteReRec(rerec.id)} title="Delete">Delete</button>
+                    </>
+                  )}
+                </div>
               </div>
             </>
           )}

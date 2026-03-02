@@ -31,6 +31,26 @@ export default function ProfilePage({
   const profile = initialProfile;
   const isOwner = user && profile && user.id === profile.id;
 
+  // Deep-link: read ?tab=...&item=... from URL and switch tab + scroll
+  useEffect(() => {
+    const TAB_MAP = { garden: 'Garden', quotes: 'Quotes', rerecs: 'Re-recs', following: 'Following' };
+    const { tab, item } = router.query;
+    if (tab && TAB_MAP[tab]) {
+      setActiveTab(TAB_MAP[tab]);
+    }
+    if (item) {
+      // Small delay so the tab content is visible before scrolling
+      setTimeout(() => {
+        const el = document.getElementById(item);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('share-highlight');
+          setTimeout(() => el.classList.remove('share-highlight'), 3000);
+        }
+      }, 150);
+    }
+  }, [router.query]);
+
   // Check if current user follows this profile
   useEffect(() => {
     async function checkFollow() {

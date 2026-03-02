@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import ShareButton from './ShareButton';
 import styles from '@/styles/Garden.module.css';
 
 // ─── Category Form ──────────────────────────────────────────────
@@ -322,7 +323,7 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
 
       {/* Categories */}
       {categories.map((category, catIndex) => (
-        <div key={category.id} className={styles.category}>
+        <div key={category.id} id={category.id} className={styles.category}>
           {editingCategoryId === category.id ? (
             <CategoryForm
               initial={category}
@@ -333,30 +334,33 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
             <>
               <div className={styles.categoryHeader}>
                 <h2 className={styles.categoryName}>{category.name}</h2>
-                {isOwner && (
-                  <div className={styles.actions}>
-                    <div className={styles.reorderGroup}>
-                      <button
-                        className={styles.reorderBtn}
-                        onClick={() => reorderCategory(catIndex, -1)}
-                        disabled={catIndex === 0}
-                        title="Move up"
-                      >&#9650;</button>
-                      <button
-                        className={styles.reorderBtn}
-                        onClick={() => reorderCategory(catIndex, 1)}
-                        disabled={catIndex === categories.length - 1}
-                        title="Move down"
-                      >&#9660;</button>
-                    </div>
-                    <button className={styles.iconBtn} onClick={() => setEditingCategoryId(category.id)} title="Edit">
-                      Edit
-                    </button>
-                    <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteCategory(category.id)} title="Delete">
-                      Delete
-                    </button>
-                  </div>
-                )}
+                <div className={styles.actions}>
+                  <ShareButton tab="garden" itemId={category.id} />
+                  {isOwner && (
+                    <>
+                      <div className={styles.reorderGroup}>
+                        <button
+                          className={styles.reorderBtn}
+                          onClick={() => reorderCategory(catIndex, -1)}
+                          disabled={catIndex === 0}
+                          title="Move up"
+                        >&#9650;</button>
+                        <button
+                          className={styles.reorderBtn}
+                          onClick={() => reorderCategory(catIndex, 1)}
+                          disabled={catIndex === categories.length - 1}
+                          title="Move down"
+                        >&#9660;</button>
+                      </div>
+                      <button className={styles.iconBtn} onClick={() => setEditingCategoryId(category.id)} title="Edit">
+                        Edit
+                      </button>
+                      <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteCategory(category.id)} title="Delete">
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
               {category.introduction && (
                 <p className={styles.categoryIntro}>{category.introduction}</p>
@@ -368,7 +372,7 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
           {(worksByCategory[category.id] || []).length > 0 ? (
             <ul className={styles.worksList}>
               {(worksByCategory[category.id] || []).map((work, workIndex) => (
-                <li key={work.id} className={styles.work}>
+                <li key={work.id} id={work.id} className={styles.work}>
                   {editingWorkId === work.id ? (
                     <WorkForm
                       initial={work}
@@ -384,30 +388,33 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
                             <p className={styles.workCommentary}>{work.commentary}</p>
                           )}
                         </div>
-                        {isOwner && (
-                          <div className={styles.actions}>
-                            <div className={styles.reorderGroup}>
-                              <button
-                                className={styles.reorderBtn}
-                                onClick={() => reorderWork(category.id, workIndex, -1)}
-                                disabled={workIndex === 0}
-                                title="Move up"
-                              >&#9650;</button>
-                              <button
-                                className={styles.reorderBtn}
-                                onClick={() => reorderWork(category.id, workIndex, 1)}
-                                disabled={workIndex === worksByCategory[category.id].length - 1}
-                                title="Move down"
-                              >&#9660;</button>
-                            </div>
-                            <button className={styles.iconBtn} onClick={() => setEditingWorkId(work.id)} title="Edit">
-                              Edit
-                            </button>
-                            <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteWork(category.id, work.id)} title="Delete">
-                              Delete
-                            </button>
-                          </div>
-                        )}
+                        <div className={styles.actions}>
+                          <ShareButton tab="garden" itemId={work.id} />
+                          {isOwner && (
+                            <>
+                              <div className={styles.reorderGroup}>
+                                <button
+                                  className={styles.reorderBtn}
+                                  onClick={() => reorderWork(category.id, workIndex, -1)}
+                                  disabled={workIndex === 0}
+                                  title="Move up"
+                                >&#9650;</button>
+                                <button
+                                  className={styles.reorderBtn}
+                                  onClick={() => reorderWork(category.id, workIndex, 1)}
+                                  disabled={workIndex === worksByCategory[category.id].length - 1}
+                                  title="Move down"
+                                >&#9660;</button>
+                              </div>
+                              <button className={styles.iconBtn} onClick={() => setEditingWorkId(work.id)} title="Edit">
+                                Edit
+                              </button>
+                              <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteWork(category.id, work.id)} title="Delete">
+                                Delete
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </>
                   )}
