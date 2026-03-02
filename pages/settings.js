@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import styles from '@/styles/Settings.module.css';
@@ -112,6 +113,14 @@ export default function Settings() {
             {saved && <span className={styles.saved}>Saved</span>}
           </div>
         </form>
+
+        {profile?.handle && (
+          <div className={styles.gardenLink}>
+            <Link href={`/${profile.handle}`} className="btn btn-secondary">
+              Go to my garden
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

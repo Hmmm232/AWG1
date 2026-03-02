@@ -12,6 +12,9 @@ export default function Layout({ children }) {
           A Walled Garden
         </Link>
         <div className={styles.navLinks}>
+          <Link href="/explore" className={styles.navLink}>
+            Explore
+          </Link>
           {loading ? null : user ? (
             <>
               {profile?.handle && (

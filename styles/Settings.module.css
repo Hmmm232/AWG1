@@ -44,3 +44,7 @@
   color: var(--color-ink-faint);
   margin-top: var(--space-xs);
 }
+
+.gardenLink {
+  margin-top: var(--space-xl);
+}

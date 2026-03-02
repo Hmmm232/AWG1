@@ -1,0 +1,150 @@
+/* Explore pages */
+.page {
+  padding-top: var(--space-lg);
+}
+
+.pageHeader {
+  margin-bottom: var(--space-xl);
+}
+
+.pageTitle {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-xs);
+}
+
+.pageDesc {
+  color: var(--color-ink-light);
+  font-size: 0.95rem;
+}
+
+/* Navigation between explore sub-pages */
+.nav {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.navLink {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  border: 1px solid var(--color-border);
+  color: var(--color-ink-light);
+  transition: all 0.15s ease;
+}
+
+.navLink:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.navLinkActive {
+  background: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+}
+
+.navLinkActive:hover {
+  background: var(--color-accent-hover);
+  color: var(--color-white);
+  border-color: var(--color-accent-hover);
+}
+
+/* Grid of items */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Card — shared across all explore pages */
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 10px;
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cardLink {
+  display: block;
+  padding: var(--space-lg);
+  color: var(--color-ink);
+}
+
+.cardLink:hover {
+  color: var(--color-ink);
+}
+
+.cardTitle {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.15rem;
+}
+
+.cardMeta {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-ink-faint);
+  margin-bottom: var(--space-sm);
+}
+
+.cardBody {
+  font-size: 0.9rem;
+  color: var(--color-ink-light);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardBodyItalic {
+  composes: cardBody;
+  font-style: italic;
+}
+
+/* Quote-specific: full blockquote styling */
+.cardQuote {
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: var(--space-sm);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardAttr {
+  font-size: 0.85rem;
+  color: var(--color-ink-light);
+  font-style: normal;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-ink-faint);
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pageTitle {
+    font-size: 1.4rem;
+  }
+}
