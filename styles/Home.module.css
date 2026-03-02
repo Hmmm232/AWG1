@@ -50,15 +50,33 @@
   flex-wrap: wrap;
 }
 
-/* ─── Section (gardens, quotes) ────────────────────────────── */
+/* ─── Section (gardens, categories, works, quotes) ────────── */
 .section {
-  padding: var(--space-lg) 0;
+  padding: var(--space-sm) 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
 }
 
 .sectionTitle {
   font-size: 1.25rem;
   letter-spacing: 0.01em;
-  margin-bottom: var(--space-md);
+  margin-bottom: 0;
+}
+
+.exploreLink {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-ink-faint);
+  transition: color 0.15s ease;
+}
+
+.exploreLink:hover {
+  color: var(--color-accent);
 }
 
 /* ─── Horizontal scroll ────────────────────────────────────── */
@@ -106,10 +124,9 @@
 }
 
 /* ─── Shared card base ─────────────────────────────────────── */
-
-/* ─── Garden cards ─────────────────────────────────────────── */
-.gardenCard {
-  flex: 0 0 300px;
+.card {
+  flex: 0 0 280px;
+  min-height: 170px;
   scroll-snap-align: start;
   background: var(--color-white);
   border: 1px solid var(--color-border-light);
@@ -118,19 +135,24 @@
   transition: box-shadow 0.2s ease;
 }
 
-.gardenCard:hover {
+.card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.gardenLink {
-  display: block;
+.cardInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: var(--space-lg);
+  color: var(--color-ink);
+  height: 100%;
+}
+
+.cardInner:hover {
   color: var(--color-ink);
 }
 
-.gardenLink:hover {
-  color: var(--color-ink);
-}
+/* ─── Garden cards ─────────────────────────────────────────── */
 
 .gardenName {
   display: block;
@@ -159,32 +181,8 @@
   overflow: hidden;
 }
 
-/* ─── Category cards ──────────────────────────────────────── */
-.categoryCard {
-  flex: 0 0 300px;
-  scroll-snap-align: start;
-  background: var(--color-white);
-  border: 1px solid var(--color-border-light);
-  border-radius: 10px;
-  border-left: 3px solid var(--color-accent);
-  transition: box-shadow 0.2s ease;
-}
-
-.categoryCard:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.categoryLink {
-  display: block;
-  padding: var(--space-lg);
-  color: var(--color-ink);
-}
-
-.categoryLink:hover {
-  color: var(--color-ink);
-}
-
-.categoryName {
+/* ─── Card text: category ─────────────────────────────────── */
+.cardName {
   display: block;
   font-family: var(--font-serif);
   font-weight: 600;
@@ -192,7 +190,7 @@
   margin-bottom: 0.15rem;
 }
 
-.categoryBy {
+.cardBy {
   display: block;
   font-family: var(--font-sans);
   font-size: 0.8rem;
@@ -200,7 +198,7 @@
   margin-bottom: var(--space-sm);
 }
 
-.categoryIntro {
+.cardIntro {
   display: block;
   font-size: 0.9rem;
   color: var(--color-ink-light);
@@ -212,34 +210,19 @@
   overflow: hidden;
 }
 
-/* ─── Quote cards ──────────────────────────────────────────── */
-.quoteCard {
-  flex: 0 0 300px;
-  scroll-snap-align: start;
-  background: var(--color-white);
-  border: 1px solid var(--color-border-light);
-  border-left: 3px solid var(--color-accent);
-  border-radius: 10px;
-  padding: var(--space-lg);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  transition: box-shadow 0.2s ease;
-}
-
-.quoteCard:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.quoteLink {
+/* ─── Card text: work ─────────────────────────────────────── */
+.workCommentary {
   display: block;
-  color: var(--color-ink);
+  font-size: 0.9rem;
+  color: var(--color-ink-light);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.quoteLink:hover {
-  color: var(--color-ink);
-}
-
+/* ─── Card text: quote ────────────────────────────────────── */
 .quoteText {
   margin: 0;
   font-style: italic;
@@ -266,7 +249,7 @@
   color: var(--color-border);
   font-size: 1.2rem;
   letter-spacing: 0.5em;
-  padding: var(--space-sm) 0;
+  padding: var(--space-xs) 0;
 }
 
 .divider::before {
@@ -311,19 +294,12 @@
   }
 
   .section {
-    padding: var(--space-md) 0;
+    padding: var(--space-xs) 0;
   }
 
-  .gardenCard {
-    flex: 0 0 260px;
-  }
-
-  .categoryCard {
-    flex: 0 0 260px;
-  }
-
-  .quoteCard {
-    flex: 0 0 260px;
+  .card {
+    flex: 0 0 240px;
+    min-height: 150px;
   }
 
   .about {

@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import styles from '@/styles/Home.module.css';
 
-export default function Home({ gardens, categories, quotes }) {
+export default function Home({ gardens, categories, works, quotes }) {
   const { user, profile } = useAuth();
 
   return (
@@ -44,12 +44,15 @@ export default function Home({ gardens, categories, quotes }) {
         <>
           <div className={styles.divider} />
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Gardens</h2>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Gardens</h2>
+              <Link href="/explore/gardens" className={styles.exploreLink}>Explore all gardens &rarr;</Link>
+            </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
                 {gardens.map((g) => (
-                  <li key={g.id} className={styles.gardenCard}>
-                    <Link href={`/${g.handle}`} className={styles.gardenLink}>
+                  <li key={g.id} className={styles.card}>
+                    <Link href={`/${g.handle}`} className={styles.cardInner}>
                       <span className={styles.gardenName}>{g.display_name || g.handle}</span>
                       <span className={styles.gardenHandle}>@{g.handle}</span>
                       {g.bio && <span className={styles.gardenBio}>{g.bio}</span>}
@@ -67,23 +70,59 @@ export default function Home({ gardens, categories, quotes }) {
         <>
           <div className={styles.divider} />
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Categories</h2>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Categories</h2>
+              <Link href="/explore/categories" className={styles.exploreLink}>Explore all categories &rarr;</Link>
+            </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
                 {categories.map((c) => (
-                  <li key={c.id} className={styles.categoryCard}>
+                  <li key={c.id} className={styles.card}>
                     <Link
                       href={c.profiles?.handle ? `/${c.profiles.handle}?tab=garden&item=${c.id}` : '#'}
-                      className={styles.categoryLink}
+                      className={styles.cardInner}
                     >
-                      <span className={styles.categoryName}>{c.name}</span>
+                      <span className={styles.cardName}>{c.name}</span>
                       {c.profiles && (
-                        <span className={styles.categoryBy}>
+                        <span className={styles.cardBy}>
                           {c.profiles.display_name || c.profiles.handle}
                         </span>
                       )}
                       {c.introduction && (
-                        <span className={styles.categoryIntro}>{c.introduction}</span>
+                        <span className={styles.cardIntro}>{c.introduction}</span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Works */}
+      {works && works.length > 0 && (
+        <>
+          <div className={styles.divider} />
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Works</h2>
+              <Link href="/explore/works" className={styles.exploreLink}>Explore all works &rarr;</Link>
+            </div>
+            <div className={styles.scrollContainer}>
+              <ul className={styles.scrollRow}>
+                {works.map((w) => (
+                  <li key={w.id} className={styles.card}>
+                    <Link
+                      href={w.profiles?.handle ? `/${w.profiles.handle}?tab=garden&item=${w.id}` : '#'}
+                      className={styles.cardInner}
+                    >
+                      <span className={styles.cardName}>{w.title}</span>
+                      <span className={styles.cardBy}>
+                        {w.profiles?.display_name || w.profiles?.handle || 'Unknown'}
+                      </span>
+                      {w.commentary && (
+                        <span className={styles.workCommentary}>{w.commentary}</span>
                       )}
                     </Link>
                   </li>
@@ -99,14 +138,17 @@ export default function Home({ gardens, categories, quotes }) {
         <>
           <div className={styles.divider} />
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Quotes</h2>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Quotes</h2>
+              <Link href="/explore/quotes" className={styles.exploreLink}>Explore all quotes &rarr;</Link>
+            </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
                 {quotes.map((q) => (
-                  <li key={q.id} className={styles.quoteCard}>
+                  <li key={q.id} className={styles.card}>
                     <Link
                       href={q.profiles?.handle ? `/${q.profiles.handle}?tab=quotes&item=${q.id}` : '#'}
-                      className={styles.quoteLink}
+                      className={styles.cardInner}
                     >
                       <blockquote className={styles.quoteText}>
                         &ldquo;{q.quote_text}&rdquo;
@@ -172,6 +214,7 @@ export async function getServerSideProps() {
   const [
     { data: profiles },
     { data: siteCategories },
+    { data: siteWorks },
     { data: siteQuotes },
   ] = await Promise.all([
     supabase
@@ -182,6 +225,11 @@ export async function getServerSideProps() {
     supabase
       .from('categories')
       .select('id, name, introduction, user_id, profiles!user_id(handle, display_name)')
+      .order('created_at', { ascending: false })
+      .limit(12),
+    supabase
+      .from('works')
+      .select('id, title, commentary, user_id, profiles!user_id(handle, display_name)')
       .order('created_at', { ascending: false })
       .limit(12),
     supabase
@@ -196,6 +244,7 @@ export async function getServerSideProps() {
     props: {
       gardens: profiles || [],
       categories: siteCategories || [],
+      works: siteWorks || [],
       quotes: siteQuotes || [],
     },
   };
