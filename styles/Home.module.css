@@ -159,6 +159,59 @@
   overflow: hidden;
 }
 
+/* ─── Category cards ──────────────────────────────────────── */
+.categoryCard {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: 10px;
+  border-left: 3px solid var(--color-accent);
+  transition: box-shadow 0.2s ease;
+}
+
+.categoryCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.categoryLink {
+  display: block;
+  padding: var(--space-lg);
+  color: var(--color-ink);
+}
+
+.categoryLink:hover {
+  color: var(--color-ink);
+}
+
+.categoryName {
+  display: block;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.15rem;
+}
+
+.categoryBy {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-ink-faint);
+  margin-bottom: var(--space-sm);
+}
+
+.categoryIntro {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--color-ink-light);
+  font-style: italic;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* ─── Quote cards ──────────────────────────────────────────── */
 .quoteCard {
   flex: 0 0 300px;
@@ -262,6 +315,10 @@
   }
 
   .gardenCard {
+    flex: 0 0 260px;
+  }
+
+  .categoryCard {
     flex: 0 0 260px;
   }
 

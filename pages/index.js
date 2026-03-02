@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import styles from '@/styles/Home.module.css';
 
-export default function Home({ gardens, quotes }) {
+export default function Home({ gardens, categories, quotes }) {
   const { user, profile } = useAuth();
 
   return (
@@ -53,6 +53,38 @@ export default function Home({ gardens, quotes }) {
                       <span className={styles.gardenName}>{g.display_name || g.handle}</span>
                       <span className={styles.gardenHandle}>@{g.handle}</span>
                       {g.bio && <span className={styles.gardenBio}>{g.bio}</span>}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Categories */}
+      {categories && categories.length > 0 && (
+        <>
+          <div className={styles.divider} />
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>Categories</h2>
+            <div className={styles.scrollContainer}>
+              <ul className={styles.scrollRow}>
+                {categories.map((c) => (
+                  <li key={c.id} className={styles.categoryCard}>
+                    <Link
+                      href={c.profiles?.handle ? `/${c.profiles.handle}?tab=garden&item=${c.id}` : '#'}
+                      className={styles.categoryLink}
+                    >
+                      <span className={styles.categoryName}>{c.name}</span>
+                      {c.profiles && (
+                        <span className={styles.categoryBy}>
+                          {c.profiles.display_name || c.profiles.handle}
+                        </span>
+                      )}
+                      {c.introduction && (
+                        <span className={styles.categoryIntro}>{c.introduction}</span>
+                      )}
                     </Link>
                   </li>
                 ))}
@@ -139,11 +171,17 @@ export default function Home({ gardens, quotes }) {
 export async function getServerSideProps() {
   const [
     { data: profiles },
+    { data: siteCategories },
     { data: siteQuotes },
   ] = await Promise.all([
     supabase
       .from('profiles')
       .select('id, handle, display_name, bio')
+      .order('created_at', { ascending: false })
+      .limit(12),
+    supabase
+      .from('categories')
+      .select('id, name, introduction, user_id, profiles!user_id(handle, display_name)')
       .order('created_at', { ascending: false })
       .limit(12),
     supabase
@@ -157,6 +195,7 @@ export async function getServerSideProps() {
   return {
     props: {
       gardens: profiles || [],
+      categories: siteCategories || [],
       quotes: siteQuotes || [],
     },
   };
