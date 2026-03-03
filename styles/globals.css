@@ -204,6 +204,10 @@ button:disabled,
 
 /* Responsive */
 @media (max-width: 640px) {
+  html {
+    font-size: 17px;
+  }
+
   h1 { font-size: 1.4rem; }
   h2 { font-size: 1.15rem; }
 

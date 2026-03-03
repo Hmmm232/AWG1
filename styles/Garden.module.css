@@ -35,7 +35,7 @@
   font-weight: 700;
   letter-spacing: -0.01em;
   padding-bottom: var(--space-xs);
-  border-bottom: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-accent);
 }
 
 .categoryIntro {
@@ -298,6 +298,26 @@
   }
 
   .categoryName {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
+  }
+
+  .workTitle {
+    font-size: 1.05rem;
+  }
+
+  .workCommentary {
+    font-size: 1rem;
+  }
+
+  .quoteBlock {
+    font-size: 1.05rem;
+  }
+
+  .quoteNote {
+    font-size: 0.95rem;
+  }
+
+  .categoryIntro {
+    font-size: 1rem;
   }
 }

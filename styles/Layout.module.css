@@ -60,6 +60,67 @@
   color: var(--color-accent);
 }
 
+/* Hamburger button — hidden on desktop */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  width: 36px;
+  height: 36px;
+  position: relative;
+  border-radius: 0;
+}
+
+.hamburgerBar,
+.hamburgerBar::before,
+.hamburgerBar::after {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: var(--color-ink);
+  border-radius: 1px;
+  position: absolute;
+  left: 8px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.hamburgerBar {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hamburgerBar::before {
+  content: '';
+  top: -6px;
+}
+
+.hamburgerBar::after {
+  content: '';
+  top: 6px;
+}
+
+/* Animate to X when open */
+.hamburgerOpen {
+  background: transparent;
+}
+
+.hamburgerOpen::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.hamburgerOpen::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* Mobile menu — hidden on desktop */
+.mobileMenu {
+  display: none;
+}
+
 /* Main content */
 .main {
   padding-bottom: var(--space-3xl);
@@ -85,25 +146,55 @@
   margin-bottom: var(--space-sm);
 }
 
+/* ─── Mobile ────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .container {
     padding: 0 var(--space-md);
   }
 
   .nav {
-    margin-bottom: var(--space-md);
+    margin-bottom: 0;
   }
 
   .logo {
     font-size: 1.15rem;
   }
 
+  /* Hide desktop nav links on mobile */
   .navLinks {
-    gap: var(--space-sm);
+    display: none;
   }
 
-  .navLink,
-  .signOutBtn {
-    font-size: 0.78rem;
+  /* Show hamburger on mobile */
+  .hamburger {
+    display: block;
+  }
+
+  /* Mobile menu */
+  .mobileMenu {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--color-border-light);
+    padding: var(--space-sm) 0 var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .mobileLink {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--color-ink-light);
+    padding: 0.6rem 0;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.15s ease;
+    border-radius: 0;
+  }
+
+  .mobileLink:hover {
+    color: var(--color-accent);
   }
 }
