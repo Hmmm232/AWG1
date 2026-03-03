@@ -89,8 +89,20 @@
     font-size: 1.4rem;
   }
 
+  .bio {
+    font-size: 1.05rem;
+  }
+
+  .handle {
+    font-size: 0.95rem;
+  }
+
+  .stats {
+    font-size: 0.9rem;
+  }
+
   .tab {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     padding: var(--space-sm) var(--space-md);
   }
 

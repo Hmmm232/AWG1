@@ -78,6 +78,49 @@
   text-transform: uppercase;
 }
 
+/* Hamburger — hidden on desktop */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4.5px;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  border-radius: 0;
+}
+
+.hamburgerLine {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: var(--color-ink);
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+/* X transformation when open */
+.hamburgerOpen .hamburgerLine:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburgerOpen .hamburgerLine:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburgerOpen .hamburgerLine:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Mobile dropdown menu — hidden on desktop */
+.mobileMenu {
+  display: none;
+}
+
 @media (max-width: 640px) {
   .container {
     padding: 0 var(--space-md);
@@ -91,12 +134,50 @@
     font-size: 0.95rem;
   }
 
+  /* Hide desktop nav, show hamburger */
   .navLinks {
-    gap: var(--space-sm);
+    display: none;
   }
 
-  .navLink,
-  .signOutBtn {
-    font-size: 0.78rem;
+  .hamburger {
+    display: flex;
+  }
+
+  /* Mobile dropdown */
+  .mobileMenu {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .mobileMenuLink {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--color-ink-light);
+    padding: 0.65rem 0;
+    transition: color 0.15s ease;
+  }
+
+  .mobileMenuLink:hover {
+    color: var(--color-accent);
+  }
+
+  .mobileMenuBtn {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--color-ink-faint);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.65rem 0;
+    text-align: left;
+    border-radius: 0;
+    transition: color 0.15s ease;
+  }
+
+  .mobileMenuBtn:hover {
+    color: var(--color-accent);
   }
 }

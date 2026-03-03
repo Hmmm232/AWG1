@@ -4,7 +4,7 @@
 .category {
   margin-bottom: var(--space-2xl);
   padding-bottom: var(--space-xl);
-  border-bottom: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-accent);
 }
 
 .category:last-child {
@@ -214,4 +214,22 @@
 .reorderBtn:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+@media (max-width: 640px) {
+  .categoryName {
+    font-size: 1.2rem;
+  }
+
+  .categoryIntro {
+    font-size: 1rem;
+  }
+
+  .workTitle {
+    font-size: 1.05rem;
+  }
+
+  .workCommentary {
+    font-size: 1rem;
+  }
 }
