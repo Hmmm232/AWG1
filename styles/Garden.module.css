@@ -22,6 +22,10 @@
 .categoryName {
   font-size: 1.3rem;
   font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
 }
 
 .categoryIntro {
