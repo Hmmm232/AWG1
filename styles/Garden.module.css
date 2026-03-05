@@ -28,6 +28,7 @@
   gap: var(--space-sm);
   margin-bottom: var(--space-sm);
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .categoryName {
@@ -45,6 +46,8 @@
   margin-top: var(--space-sm);
   margin-bottom: var(--space-md);
   white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Works within a category */
@@ -52,6 +55,7 @@
   list-style: none;
   padding: 0 0 0 var(--space-lg);
   margin: 0 0 var(--space-md) 0;
+  min-width: 0;
 }
 
 .work {
@@ -70,18 +74,28 @@
   justify-content: space-between;
   gap: var(--space-sm);
   flex-wrap: wrap;
+  min-width: 0;
+}
+
+.workText {
+  min-width: 0;
+  flex: 1;
 }
 
 .workTitle {
   font-weight: 600;
   font-size: 1.05rem;
   margin-bottom: 0.2rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .workCommentary {
   color: var(--color-ink-light);
   font-size: 0.95rem;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Action buttons (edit, delete, reorder) */
@@ -217,6 +231,8 @@
   font-size: 1.05rem;
   line-height: 1.75;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .quoteAttribution {

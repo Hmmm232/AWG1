@@ -382,7 +382,7 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
                   ) : (
                     <>
                       <div className={styles.workHeader}>
-                        <div>
+                        <div className={styles.workText}>
                           <p className={styles.workTitle}>{work.title}</p>
                           {work.commentary && (
                             <p className={styles.workCommentary}>{work.commentary}</p>
