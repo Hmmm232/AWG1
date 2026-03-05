@@ -26,6 +26,16 @@ export default function Layout({ children }) {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [menuOpen]);
 
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
   function handleSignOut() {
     setMenuOpen(false);
     signOut();
@@ -80,38 +90,63 @@ export default function Layout({ children }) {
         </button>
       </nav>
 
-      {/* Mobile menu overlay */}
-      {menuOpen && (
-        <div className={styles.mobileMenu}>
-          <Link href="/explore" className={styles.mobileLink}>
-            Explore
-          </Link>
-          {loading ? null : user ? (
-            <>
-              {profile?.handle && (
-                <Link href={`/${profile.handle}`} className={styles.mobileLink}>
-                  My Garden
+      {/* Mobile menu — always rendered, animated via CSS */}
+      <div
+        className={`${styles.mobileBackdrop} ${menuOpen ? styles.mobileBackdropOpen : ''}`}
+        onClick={() => setMenuOpen(false)}
+      />
+      <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}>
+        <div className={styles.mobileMenuInner}>
+          <div className={styles.mobileMenuHeader}>
+            <span className={styles.mobileMenuTitle}>Menu</span>
+            <button
+              className={styles.mobileClose}
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              &times;
+            </button>
+          </div>
+
+          <div className={styles.mobileMenuDivider} />
+
+          <nav className={styles.mobileNav}>
+            <Link href="/explore" className={styles.mobileLink}>
+              <span className={styles.mobileLinkIcon}>&#10047;</span>
+              Explore
+            </Link>
+            {loading ? null : user ? (
+              <>
+                {profile?.handle && (
+                  <Link href={`/${profile.handle}`} className={styles.mobileLink}>
+                    <span className={styles.mobileLinkIcon}>&#9672;</span>
+                    My Garden
+                  </Link>
+                )}
+                <Link href="/settings" className={styles.mobileLink}>
+                  <span className={styles.mobileLinkIcon}>&#9881;</span>
+                  Settings
                 </Link>
-              )}
-              <Link href="/settings" className={styles.mobileLink}>
-                Settings
-              </Link>
-              <button onClick={handleSignOut} className={styles.mobileLink}>
-                Sign out
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/signin" className={styles.mobileLink}>
-                Sign in
-              </Link>
-              <Link href="/signup" className={styles.mobileLink}>
-                Create your garden
-              </Link>
-            </>
-          )}
+                <div className={styles.mobileMenuDivider} />
+                <button onClick={handleSignOut} className={styles.mobileLinkBtn}>
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/signin" className={styles.mobileLink}>
+                  <span className={styles.mobileLinkIcon}>&#10132;</span>
+                  Sign in
+                </Link>
+                <div className={styles.mobileMenuDivider} />
+                <Link href="/signup" className={styles.mobileCta}>
+                  Create your garden
+                </Link>
+              </>
+            )}
+          </nav>
         </div>
-      )}
+      </div>
 
       <main className={styles.main}>
         {children}
