@@ -1,7 +1,66 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import ShareButton from './ShareButton';
 import styles from '@/styles/Garden.module.css';
+
+// ─── Table of Contents ─────────────────────────────────────────
+function TableOfContents({ categories }) {
+  const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const tocRef = useRef(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    setIsMobile(mq.matches);
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  if (categories.length < 2) return null;
+
+  function handleClick(categoryId) {
+    const el = document.getElementById(categoryId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setOpen(false);
+  }
+
+  const tocList = (
+    <ul className={styles.tocList}>
+      {categories.map((cat) => (
+        <li key={cat.id} className={styles.tocItem}>
+          <button className={styles.tocLink} onClick={() => handleClick(cat.id)}>
+            {cat.name}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+
+  if (!isMobile) {
+    return (
+      <div className={styles.toc}>
+        {tocList}
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.toc} ref={tocRef}>
+      <button
+        className={styles.tocToggle}
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+      >
+        Contents
+        <span className={`${styles.tocArrow} ${open ? styles.tocArrowOpen : ''}`}>&#9662;</span>
+      </button>
+      {open && tocList}
+    </div>
+  );
+}
 
 // ─── Category Form ──────────────────────────────────────────────
 function CategoryForm({ initial, onSave, onCancel }) {
@@ -320,6 +379,9 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
           Your garden is empty. Start by adding a category.
         </p>
       )}
+
+      {/* Table of Contents */}
+      <TableOfContents categories={categories} />
 
       {/* Categories */}
       {categories.map((category, catIndex) => (

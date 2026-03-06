@@ -1,10 +1,80 @@
 /* Garden Tab */
 
+/* ─── Table of Contents ──────────────────────────────────────── */
+.toc {
+  margin-bottom: var(--space-lg);
+}
+
+.tocList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+}
+
+.tocItem {
+  max-width: 200px;
+}
+
+.tocLink {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+  padding: 0.15rem 0;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  display: block;
+  border-radius: 0;
+  transition: color 0.15s ease;
+}
+
+.tocLink:hover {
+  color: var(--color-accent);
+}
+
+.tocToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+  padding: 0.3rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 0;
+  transition: color 0.15s ease;
+}
+
+.tocToggle:hover {
+  color: var(--color-accent);
+}
+
+.tocArrow {
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.tocArrowOpen {
+  transform: rotate(180deg);
+}
+
 /* Category — separated by a centered ornamental dot */
 .category {
   margin-bottom: var(--space-md);
   padding-bottom: var(--space-md);
   position: relative;
+  scroll-margin-top: calc(var(--nav-height) + var(--space-md));
 }
 
 .category::after {
@@ -305,6 +375,26 @@
 
 /* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 640px) {
+  .toc {
+    margin-bottom: var(--space-md);
+  }
+
+  .tocList {
+    flex-direction: column;
+    gap: 0;
+    padding: var(--space-xs) 0 0;
+  }
+
+  .tocItem {
+    max-width: none;
+  }
+
+  .tocLink {
+    max-width: none;
+    padding: 0.35rem 0;
+    font-size: 0.82rem;
+  }
+
   .worksList {
     padding-left: var(--space-sm);
   }
