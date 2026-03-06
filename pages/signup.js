@@ -16,60 +16,62 @@ export default function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    setLoading(true);
 
     // Validate handle: lowercase letters, numbers, hyphens only, 2-30 chars
     const cleanHandle = handle.toLowerCase().trim();
     if (cleanHandle.length < 2 || cleanHandle.length > 30) {
       setError('Handle must be between 2 and 30 characters.');
-      setLoading(false);
       return;
     }
 
     if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(cleanHandle)) {
       setError('Handle must start and end with a letter or number, and contain only lowercase letters, numbers, and hyphens.');
-      setLoading(false);
       return;
     }
 
     if (password.length < 6) {
       setError('Password must be at least 6 characters.');
-      setLoading(false);
       return;
     }
 
-    // Check if handle is already taken
-    const { data: existing } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('handle', cleanHandle)
-      .single();
+    setLoading(true);
 
-    if (existing) {
-      setError('That handle is already taken.');
-      setLoading(false);
-      return;
-    }
+    try {
+      // Check if handle is already taken
+      const { data: existing } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('handle', cleanHandle)
+        .single();
 
-    const { error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          handle: cleanHandle,
-          display_name: displayName.trim() || cleanHandle,
+      if (existing) {
+        setError('That handle is already taken.');
+        return;
+      }
+
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            handle: cleanHandle,
+            display_name: displayName.trim() || cleanHandle,
+          },
         },
-      },
-    });
+      });
 
-    if (signUpError) {
-      setError(signUpError.message);
+      if (signUpError) {
+        setError(signUpError.message);
+        return;
+      }
+
+      // Redirect to their new garden
+      router.push(`/${cleanHandle}`);
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // Redirect to their new garden
-    router.push(`/${cleanHandle}`);
   }
 
   return (
