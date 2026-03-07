@@ -10,6 +10,28 @@ import ReRecsTab from '@/components/ReRecsTab';
 import FollowingTab from '@/components/FollowingTab';
 import styles from '@/styles/Profile.module.css';
 
+function ShareProfileButton({ handle }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleShare() {
+    const url = `${window.location.origin}/${handle}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  return (
+    <button
+      className={`${styles.shareProfileBtn}`}
+      onClick={handleShare}
+      title="Copy link to this garden"
+    >
+      {copied ? 'Link copied!' : 'Share garden'}
+    </button>
+  );
+}
+
 const TABS = ['Garden', 'Quotes', 'Re-recs', 'Following'];
 
 export default function ProfilePage({
@@ -143,6 +165,7 @@ export default function ProfilePage({
             Follow
           </button>
         )}
+        <ShareProfileButton handle={profile.handle} />
       </div>
 
       <div className={styles.tabs}>

@@ -95,11 +95,22 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
 
   async function addQuote({ quote_text, attribution, source, note }) {
     setError('');
-    const sortOrder = quotes.length;
-    const row = { user_id: userId, quote_text, attribution, source, sort_order: sortOrder };
+    const row = { user_id: userId, quote_text, attribution, source, sort_order: 0 };
     if (note !== undefined) row.note = note;
 
-    // Insert — don't chain .select().single() to avoid masking insert success
+    // Shift all existing quotes down by 1 to make room at the top
+    if (quotes.length > 0) {
+      const results = await Promise.all(
+        quotes.map((q) =>
+          supabase.from('quotes').update({ sort_order: q.sort_order + 1 }).eq('id', q.id)
+        )
+      );
+      if (results.some((r) => r.error)) {
+        setError('Failed to reorder existing quotes');
+        return;
+      }
+    }
+
     const { error: insertErr } = await supabase
       .from('quotes')
       .insert(row);
