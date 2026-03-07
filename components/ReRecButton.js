@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import styles from '@/styles/Garden.module.css';
 
-export default function ReRecButton({ workTitle, recommenderHandle, recommenderName, sourceUrl }) {
+export default function ReRecButton({ workTitle, recommenderHandle, recommenderName, tab, itemId }) {
   const { user } = useAuth();
   const router = useRouter();
   const [status, setStatus] = useState('idle'); // idle | saving | done
@@ -22,6 +22,8 @@ export default function ReRecButton({ workTitle, recommenderHandle, recommenderN
         .select('*', { count: 'exact', head: true })
         .eq('user_id', user.id);
 
+      const itemUrl = `${window.location.origin}/${recommenderHandle}?tab=${tab}&item=${itemId}`;
+
       const { error } = await supabase
         .from('rerecs')
         .insert({
@@ -29,7 +31,7 @@ export default function ReRecButton({ workTitle, recommenderHandle, recommenderN
           work_title: workTitle,
           original_recommender: recommenderName || `@${recommenderHandle}`,
           commentary: '',
-          source_url: sourceUrl || `${window.location.origin}/${recommenderHandle}`,
+          source_url: itemUrl,
           sort_order: count || 0,
         });
 

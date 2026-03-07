@@ -240,6 +240,8 @@ export default function QuotesTab({ userId, isOwner, profileHandle, profileName,
                       workTitle={quote.attribution ? `"${quote.quote_text.slice(0, 80)}${quote.quote_text.length > 80 ? '...' : ''}" — ${quote.attribution}` : `"${quote.quote_text.slice(0, 100)}${quote.quote_text.length > 100 ? '...' : ''}"`}
                       recommenderHandle={profileHandle}
                       recommenderName={profileName}
+                      tab="quotes"
+                      itemId={quote.id}
                     />
                   )}
                   <ShareButton tab="quotes" itemId={quote.id} />

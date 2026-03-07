@@ -457,6 +457,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                               workTitle={work.title}
                               recommenderHandle={profileHandle}
                               recommenderName={profileName}
+                              tab="garden"
+                              itemId={work.id}
                             />
                           )}
                           <ShareButton tab="garden" itemId={work.id} />
