@@ -161,6 +161,52 @@ export default function Home({ gardens, categories, works, quotes }) {
         </>
       )}
 
+      {/* About */}
+      <div className={styles.divider} />
+      <section className={styles.about}>
+        <h2 className={styles.aboutTitle}>About A Walled Garden</h2>
+        <p>
+          I intended this website first as a place where I could talk about my
+          favourite books and poems, reading lists of favourite works, share
+          interesting articles, quotes and curios with little bits of commentary.
+        </p>
+        <p>
+          I have extended things now so that anyone can create a garden of their
+          own, centered around whatever they please, I think it&rsquo;s pretty
+          intuitive to do so. You can read more about the ins and outs of doing
+          so <Link href="/about">here</Link>.
+        </p>
+        <p>
+          I do not intend for this site, like many other places on the internet,
+          to commoditise your time and attention, we do not want to immerse you
+          in the deliberately upsetting and controversial, the emotionally but
+          not intellectually provocative. We want this to be a jumping off point
+          to better things, a mode for sharing and discovering.
+        </p>
+        <p>
+          If successful this site will direct you outwards and onwards, to
+          curiosities and works of art that add to life, we will not keep you
+          captive in an endless stream of ephemeral slop that detracts from it.
+        </p>
+        <div className={styles.cta} style={{ marginTop: 'var(--space-xl)' }}>
+          {user ? (
+            <Link href={profile?.handle ? `/${profile.handle}` : '/settings'} className="btn btn-primary">
+              Go to your garden
+            </Link>
+          ) : (
+            <Link href="/signup" className="btn btn-primary">
+              Create your garden
+            </Link>
+          )}
+          <Link href="/explore" className="btn btn-secondary">
+            Explore
+          </Link>
+          <Link href="/about" className="btn btn-secondary">
+            Guide to creating a garden
+          </Link>
+        </div>
+      </section>
+
     </div>
   );
 }
