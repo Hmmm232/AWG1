@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { scoreWork, rank } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import styles from '@/styles/Explore.module.css';
 
@@ -46,12 +47,21 @@ export default function ExploreWorks({ works }) {
 }
 
 export async function getServerSideProps() {
-  // Fetch works with owner profiles
-  const { data: worksData } = await supabase
-    .from('works')
-    .select('id, title, commentary, category_id, created_at, profiles!user_id(handle, display_name)')
-    .order('created_at', { ascending: false })
-    .limit(100);
+  const [
+    { data: worksData },
+    { data: followerCounts },
+  ] = await Promise.all([
+    supabase
+      .from('works')
+      .select('id, title, commentary, category_id, user_id, featured, profiles!user_id(handle, display_name)')
+      .limit(200),
+    supabase.from('follows').select('following_id'),
+  ]);
+
+  const followerMap = {};
+  for (const f of (followerCounts || [])) {
+    followerMap[f.following_id] = (followerMap[f.following_id] || 0) + 1;
+  }
 
   // Fetch category names for display
   const categoryIds = [...new Set((worksData || []).map((w) => w.category_id))];
@@ -66,10 +76,18 @@ export async function getServerSideProps() {
     }
   }
 
-  const works = (worksData || []).map((w) => ({
-    ...w,
-    category_name: categoryMap[w.category_id] || '',
-  }));
+  const scored = (worksData || []).map((w) => {
+    const enriched = { ...w, owner_followers: followerMap[w.user_id] || 0 };
+    return {
+      ...enriched,
+      category_name: categoryMap[w.category_id] || '',
+      _score: scoreWork(enriched),
+    };
+  });
+
+  const works = rank(scored, 'works')
+    .slice(0, 100)
+    .map(({ _score, owner_followers, featured, user_id, category_id, ...rest }) => rest);
 
   return { props: { works } };
 }

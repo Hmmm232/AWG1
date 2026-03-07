@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { scoreCategory, rank } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import styles from '@/styles/Explore.module.css';
 
@@ -46,26 +47,37 @@ export default function ExploreCategories({ categories }) {
 }
 
 export async function getServerSideProps() {
-  // Fetch categories with owner profiles
-  const { data: cats } = await supabase
-    .from('categories')
-    .select('id, name, introduction, created_at, profiles!user_id(handle, display_name)')
-    .order('created_at', { ascending: false });
+  const [
+    { data: cats },
+    { data: works },
+    { data: followerCounts },
+  ] = await Promise.all([
+    supabase
+      .from('categories')
+      .select('id, name, introduction, user_id, featured, profiles!user_id(handle, display_name)'),
+    supabase.from('works').select('category_id'),
+    supabase.from('follows').select('following_id'),
+  ]);
 
-  // Get works counts per category
-  const { data: works } = await supabase
-    .from('works')
-    .select('category_id');
-
-  const countMap = {};
+  const worksMap = {};
   for (const w of (works || [])) {
-    countMap[w.category_id] = (countMap[w.category_id] || 0) + 1;
+    worksMap[w.category_id] = (worksMap[w.category_id] || 0) + 1;
+  }
+  const followerMap = {};
+  for (const f of (followerCounts || [])) {
+    followerMap[f.following_id] = (followerMap[f.following_id] || 0) + 1;
   }
 
-  // Attach counts and sort: most works first, then newest
-  const categories = (cats || [])
-    .map((c) => ({ ...c, works_count: countMap[c.id] || 0 }))
-    .sort((a, b) => b.works_count - a.works_count || new Date(b.created_at) - new Date(a.created_at));
+  const scored = (cats || []).map((c) => {
+    const enriched = {
+      ...c,
+      works_count: worksMap[c.id] || 0,
+      owner_followers: followerMap[c.user_id] || 0,
+    };
+    return { ...enriched, _score: scoreCategory(enriched) };
+  });
+
+  const categories = rank(scored, 'categories').map(({ _score, owner_followers, featured, user_id, ...rest }) => rest);
 
   return { props: { categories } };
 }

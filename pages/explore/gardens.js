@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { scoreGarden, rank } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import styles from '@/styles/Explore.module.css';
 
@@ -43,27 +44,42 @@ export default function ExploreGardens({ gardens }) {
 }
 
 export async function getServerSideProps() {
-  // Fetch all profiles with follower counts for ranking
-  const { data: profiles } = await supabase
-    .from('profiles')
-    .select('id, handle, display_name, bio, created_at')
-    .order('created_at', { ascending: false });
+  const [
+    { data: profiles },
+    { data: followerCounts },
+    { data: workCounts },
+    { data: categoryCounts },
+  ] = await Promise.all([
+    supabase.from('profiles').select('id, handle, display_name, bio, featured'),
+    supabase.from('follows').select('following_id'),
+    supabase.from('works').select('user_id'),
+    supabase.from('categories').select('user_id'),
+  ]);
 
-  // Get follower counts in a single query
-  const { data: followerCounts } = await supabase
-    .from('follows')
-    .select('following_id');
-
-  // Count followers per profile
-  const countMap = {};
+  const followerMap = {};
   for (const f of (followerCounts || [])) {
-    countMap[f.following_id] = (countMap[f.following_id] || 0) + 1;
+    followerMap[f.following_id] = (followerMap[f.following_id] || 0) + 1;
+  }
+  const worksMap = {};
+  for (const w of (workCounts || [])) {
+    worksMap[w.user_id] = (worksMap[w.user_id] || 0) + 1;
+  }
+  const catsMap = {};
+  for (const c of (categoryCounts || [])) {
+    catsMap[c.user_id] = (catsMap[c.user_id] || 0) + 1;
   }
 
-  // Attach counts and sort: most followers first, then newest
-  const gardens = (profiles || [])
-    .map((p) => ({ ...p, follower_count: countMap[p.id] || 0 }))
-    .sort((a, b) => b.follower_count - a.follower_count || new Date(b.created_at) - new Date(a.created_at));
+  const scored = (profiles || []).map((p) => {
+    const enriched = {
+      ...p,
+      follower_count: followerMap[p.id] || 0,
+      category_count: catsMap[p.id] || 0,
+      work_count: worksMap[p.id] || 0,
+    };
+    return { ...enriched, _score: scoreGarden(enriched) };
+  });
+
+  const gardens = rank(scored, 'gardens').map(({ _score, category_count, work_count, featured, ...rest }) => rest);
 
   return { props: { gardens } };
 }

@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { scoreQuote, rank } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import styles from '@/styles/Explore.module.css';
 
@@ -50,11 +51,30 @@ export default function ExploreQuotes({ quotes }) {
 }
 
 export async function getServerSideProps() {
-  const { data: quotes } = await supabase
-    .from('quotes')
-    .select('id, quote_text, attribution, source, created_at, profiles!user_id(handle, display_name)')
-    .order('created_at', { ascending: false })
-    .limit(100);
+  const [
+    { data: quotesData },
+    { data: followerCounts },
+  ] = await Promise.all([
+    supabase
+      .from('quotes')
+      .select('id, quote_text, attribution, source, note, user_id, featured, profiles!user_id(handle, display_name)')
+      .limit(200),
+    supabase.from('follows').select('following_id'),
+  ]);
 
-  return { props: { quotes: quotes || [] } };
+  const followerMap = {};
+  for (const f of (followerCounts || [])) {
+    followerMap[f.following_id] = (followerMap[f.following_id] || 0) + 1;
+  }
+
+  const scored = (quotesData || []).map((q) => {
+    const enriched = { ...q, owner_followers: followerMap[q.user_id] || 0 };
+    return { ...enriched, _score: scoreQuote(enriched) };
+  });
+
+  const quotes = rank(scored, 'quotes')
+    .slice(0, 100)
+    .map(({ _score, owner_followers, featured, user_id, note, ...rest }) => rest);
+
+  return { props: { quotes } };
 }

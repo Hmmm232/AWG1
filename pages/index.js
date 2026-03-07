@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
+import { scoreGarden, scoreCategory, scoreWork, scoreQuote, rank } from '@/lib/ranking';
 import styles from '@/styles/Home.module.css';
 
 export default function Home({ gardens, categories, works, quotes }) {
@@ -211,41 +212,115 @@ export default function Home({ gardens, categories, works, quotes }) {
 }
 
 export async function getServerSideProps() {
+  // Fetch more than we display so scoring + rotation have a decent pool
   const [
     { data: profiles },
     { data: siteCategories },
     { data: siteWorks },
     { data: siteQuotes },
+    { data: followerCounts },
+    { data: workCounts },
+    { data: categoryCounts },
   ] = await Promise.all([
     supabase
       .from('profiles')
-      .select('id, handle, display_name, bio')
-      .order('created_at', { ascending: false })
-      .limit(12),
+      .select('id, handle, display_name, bio, featured')
+      .limit(60),
     supabase
       .from('categories')
-      .select('id, name, introduction, user_id, profiles!user_id(handle, display_name)')
-      .order('created_at', { ascending: false })
-      .limit(12),
+      .select('id, name, introduction, user_id, featured, profiles!user_id(handle, display_name)')
+      .limit(60),
     supabase
       .from('works')
-      .select('id, title, commentary, user_id, profiles!user_id(handle, display_name)')
-      .order('created_at', { ascending: false })
-      .limit(12),
+      .select('id, title, commentary, user_id, featured, profiles!user_id(handle, display_name)')
+      .limit(60),
     supabase
       .from('quotes')
-      .select('id, quote_text, attribution, source, user_id, profiles!user_id(handle)')
+      .select('id, quote_text, attribution, source, note, user_id, featured, profiles!user_id(handle)')
       .neq('attribution', '')
-      .order('created_at', { ascending: false })
-      .limit(10),
+      .limit(60),
+    supabase.from('follows').select('following_id'),
+    supabase.from('works').select('category_id, user_id'),
+    supabase.from('categories').select('user_id'),
   ]);
+
+  // Build lookup maps
+  const followerMap = {};
+  for (const f of (followerCounts || [])) {
+    followerMap[f.following_id] = (followerMap[f.following_id] || 0) + 1;
+  }
+
+  const worksPerCategory = {};
+  const worksPerUser = {};
+  for (const w of (workCounts || [])) {
+    worksPerCategory[w.category_id] = (worksPerCategory[w.category_id] || 0) + 1;
+    worksPerUser[w.user_id] = (worksPerUser[w.user_id] || 0) + 1;
+  }
+
+  const catsPerUser = {};
+  for (const c of (categoryCounts || [])) {
+    catsPerUser[c.user_id] = (catsPerUser[c.user_id] || 0) + 1;
+  }
+
+  // Score and rank gardens
+  const scoredGardens = (profiles || []).map((g) => ({
+    ...g,
+    follower_count: followerMap[g.id] || 0,
+    category_count: catsPerUser[g.id] || 0,
+    work_count: worksPerUser[g.id] || 0,
+    _score: scoreGarden({
+      ...g,
+      follower_count: followerMap[g.id] || 0,
+      category_count: catsPerUser[g.id] || 0,
+      work_count: worksPerUser[g.id] || 0,
+    }),
+  }));
+  const gardens = rank(scoredGardens, 'gardens').slice(0, 12);
+
+  // Score and rank categories
+  const scoredCategories = (siteCategories || []).map((c) => ({
+    ...c,
+    works_count: worksPerCategory[c.id] || 0,
+    owner_followers: followerMap[c.user_id] || 0,
+    _score: scoreCategory({
+      ...c,
+      works_count: worksPerCategory[c.id] || 0,
+      owner_followers: followerMap[c.user_id] || 0,
+    }),
+  }));
+  const categories = rank(scoredCategories, 'categories').slice(0, 12);
+
+  // Score and rank works
+  const scoredWorks = (siteWorks || []).map((w) => ({
+    ...w,
+    owner_followers: followerMap[w.user_id] || 0,
+    _score: scoreWork({
+      ...w,
+      owner_followers: followerMap[w.user_id] || 0,
+    }),
+  }));
+  const works = rank(scoredWorks, 'works').slice(0, 12);
+
+  // Score and rank quotes
+  const scoredQuotes = (siteQuotes || []).map((q) => ({
+    ...q,
+    owner_followers: followerMap[q.user_id] || 0,
+    _score: scoreQuote({
+      ...q,
+      owner_followers: followerMap[q.user_id] || 0,
+    }),
+  }));
+  const quotes = rank(scoredQuotes, 'quotes').slice(0, 10);
+
+  // Strip internal scoring fields before sending to client
+  const clean = (arr) => arr.map(({ _score, owner_followers, follower_count, category_count, work_count, works_count, ...rest }) => rest);
 
   return {
     props: {
-      gardens: profiles || [],
-      categories: siteCategories || [],
-      works: siteWorks || [],
-      quotes: siteQuotes || [],
+      gardens: clean(gardens),
+      categories: clean(categories),
+      works: clean(works),
+      quotes: clean(quotes),
     },
   };
 }
