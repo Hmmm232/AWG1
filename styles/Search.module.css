@@ -1,0 +1,38 @@
+/* Search page */
+.form {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.input {
+  flex: 1;
+  font-size: 1rem;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.section {
+  /* grouped result type */
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-md);
+  color: var(--color-ink-light);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .form {
+    flex-direction: column;
+  }
+
+  .sectionTitle {
+    font-size: 1.05rem;
+  }
+}

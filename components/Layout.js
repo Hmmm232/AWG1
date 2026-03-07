@@ -50,6 +50,9 @@ export default function Layout({ children }) {
 
         {/* Desktop nav links */}
         <div className={styles.navLinks}>
+          <Link href="/search" className={styles.navLink}>
+            Search
+          </Link>
           <Link href="/explore" className={styles.navLink}>
             Explore
           </Link>
@@ -111,6 +114,10 @@ export default function Layout({ children }) {
           <div className={styles.mobileMenuDivider} />
 
           <nav className={styles.mobileNav}>
+            <Link href="/search" className={styles.mobileLink}>
+              <span className={styles.mobileLinkIcon}>&#8981;</span>
+              Search
+            </Link>
             <Link href="/explore" className={styles.mobileLink}>
               <span className={styles.mobileLinkIcon}>&#10047;</span>
               Explore
