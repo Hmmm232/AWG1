@@ -185,6 +185,8 @@ export default function ProfilePage({
           <GardenTab
             userId={profile.id}
             isOwner={isOwner}
+            profileHandle={profile.handle}
+            profileName={profile.display_name || profile.handle}
             initialCategories={initialCategories || []}
             initialWorks={initialWorks || []}
           />
@@ -193,6 +195,8 @@ export default function ProfilePage({
           <QuotesTab
             userId={profile.id}
             isOwner={isOwner}
+            profileHandle={profile.handle}
+            profileName={profile.display_name || profile.handle}
             initialQuotes={initialQuotes || []}
           />
         </div>

@@ -211,6 +211,16 @@
   background: var(--color-accent-light);
 }
 
+.rerecBtn {
+  color: var(--color-ink-faint);
+}
+
+.rerecBtn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
 /* Forms */
 .form {
   background: var(--color-surface);

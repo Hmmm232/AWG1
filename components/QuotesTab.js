@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import ShareButton from './ShareButton';
+import ReRecButton from './ReRecButton';
 import styles from '@/styles/Garden.module.css';
 
 function QuoteForm({ initial, onSave, onCancel }) {
@@ -87,7 +88,7 @@ function QuoteForm({ initial, onSave, onCancel }) {
   );
 }
 
-export default function QuotesTab({ userId, isOwner, initialQuotes }) {
+export default function QuotesTab({ userId, isOwner, profileHandle, profileName, initialQuotes }) {
   const [quotes, setQuotes] = useState(initialQuotes || []);
   const [showNewQuote, setShowNewQuote] = useState(false);
   const [editingQuoteId, setEditingQuoteId] = useState(null);
@@ -234,6 +235,13 @@ export default function QuotesTab({ userId, isOwner, initialQuotes }) {
                   )}
                 </div>
                 <div className={styles.actions}>
+                  {!isOwner && (
+                    <ReRecButton
+                      workTitle={quote.attribution ? `"${quote.quote_text.slice(0, 80)}${quote.quote_text.length > 80 ? '...' : ''}" — ${quote.attribution}` : `"${quote.quote_text.slice(0, 100)}${quote.quote_text.length > 100 ? '...' : ''}"`}
+                      recommenderHandle={profileHandle}
+                      recommenderName={profileName}
+                    />
+                  )}
                   <ShareButton tab="quotes" itemId={quote.id} />
                   {isOwner && (
                     <>

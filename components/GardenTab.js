@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import ShareButton from './ShareButton';
+import ReRecButton from './ReRecButton';
 import styles from '@/styles/Garden.module.css';
 
 // ─── Table of Contents ─────────────────────────────────────────
@@ -169,7 +170,7 @@ function WorkForm({ initial, onSave, onCancel }) {
 }
 
 // ─── Main GardenTab ─────────────────────────────────────────────
-export default function GardenTab({ userId, isOwner, initialCategories, initialWorks }) {
+export default function GardenTab({ userId, isOwner, profileHandle, profileName, initialCategories, initialWorks }) {
   const [categories, setCategories] = useState(initialCategories || []);
   const [worksByCategory, setWorksByCategory] = useState(() => {
     const grouped = {};
@@ -451,6 +452,13 @@ export default function GardenTab({ userId, isOwner, initialCategories, initialW
                           )}
                         </div>
                         <div className={styles.actions}>
+                          {!isOwner && (
+                            <ReRecButton
+                              workTitle={work.title}
+                              recommenderHandle={profileHandle}
+                              recommenderName={profileName}
+                            />
+                          )}
                           <ShareButton tab="garden" itemId={work.id} />
                           {isOwner && (
                             <>
