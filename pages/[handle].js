@@ -183,6 +183,7 @@ export default function ProfilePage({
       <div className={styles.tabContent}>
         <div style={{ display: activeTab === 'Garden' ? 'block' : 'none' }}>
           <GardenTab
+            key={profile.id}
             userId={profile.id}
             isOwner={isOwner}
             profileHandle={profile.handle}
@@ -193,6 +194,7 @@ export default function ProfilePage({
         </div>
         <div style={{ display: activeTab === 'Quotes' ? 'block' : 'none' }}>
           <QuotesTab
+            key={profile.id}
             userId={profile.id}
             isOwner={isOwner}
             profileHandle={profile.handle}
@@ -202,6 +204,7 @@ export default function ProfilePage({
         </div>
         <div style={{ display: activeTab === 'Re-recs' ? 'block' : 'none' }}>
           <ReRecsTab
+            key={profile.id}
             userId={profile.id}
             isOwner={isOwner}
             initialReRecs={initialReRecs || []}
