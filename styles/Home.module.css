@@ -3,7 +3,7 @@
 /* ─── Hero ─────────────────────────────────────────────────── */
 .hero {
   text-align: center;
-  padding: var(--space-2xl) 0 var(--space-xl);
+  padding: var(--space-xl) 0 var(--space-md);
 }
 
 .title {
@@ -24,20 +24,9 @@
   border-radius: 1px;
 }
 
-.epigraph {
-  font-style: italic;
-  font-size: 1.05rem;
-  color: var(--color-ink-light);
-  margin-bottom: var(--space-lg);
-  letter-spacing: 0.005em;
-}
-
 .heroBody {
-  max-width: 480px;
-  margin: 0 auto var(--space-lg);
-}
-
-.heroBody p {
+  max-width: 520px;
+  margin: 0 auto var(--space-md);
   font-size: 1.05rem;
   color: var(--color-ink-light);
   line-height: 1.8;
@@ -278,18 +267,14 @@
 /* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 640px) {
   .hero {
-    padding: var(--space-xl) 0 var(--space-lg);
+    padding: var(--space-lg) 0 var(--space-sm);
   }
 
   .title {
     font-size: 1.85rem;
   }
 
-  .epigraph {
-    font-size: 0.95rem;
-  }
-
-  .heroBody p {
+  .heroBody {
     font-size: 1rem;
   }
 

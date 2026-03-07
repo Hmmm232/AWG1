@@ -12,18 +12,10 @@ export default function Home({ gardens, categories, works, quotes }) {
       {/* Hero */}
       <section className={styles.hero}>
         <h1 className={styles.title}>A Walled Garden</h1>
-        <p className={styles.epigraph}>
-          &ldquo;I know also,&rdquo; said Candide, &ldquo;that we must cultivate our garden.&rdquo;
+        <p className={styles.heroBody}>
+          A new home for culture on the internet, a place to gather the books,
+          poems, essays and curios you love, and share them with the world.
         </p>
-        <div className={styles.heroBody}>
-          <p>
-            A place to gather the books, poems, essays and curiosities that have
-            shaped you &mdash; with your own commentary, in your own time.
-          </p>
-          <p>
-            Anyone can plant a garden, centred around whatever they please.
-          </p>
-        </div>
         <div className={styles.cta}>
           {user ? (
             <Link href={profile?.handle ? `/${profile.handle}` : '/settings'} className="btn btn-primary">
@@ -34,72 +26,11 @@ export default function Home({ gardens, categories, works, quotes }) {
               Create your garden
             </Link>
           )}
-          <a href="#about" className="btn btn-secondary">
+          <Link href="/about" className="btn btn-secondary">
             Read more
-          </a>
+          </Link>
         </div>
       </section>
-
-      {/* Gardens */}
-      {gardens && gardens.length > 0 && (
-        <>
-          <div className={styles.divider} />
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>Gardens</h2>
-              <Link href="/explore/gardens" className={styles.exploreLink}>Explore all gardens &rarr;</Link>
-            </div>
-            <div className={styles.scrollContainer}>
-              <ul className={styles.scrollRow}>
-                {gardens.map((g) => (
-                  <li key={g.id} className={styles.card}>
-                    <Link href={`/${g.handle}`} className={styles.cardInner}>
-                      <span className={styles.gardenName}>{g.display_name || g.handle}</span>
-                      <span className={styles.gardenHandle}>@{g.handle}</span>
-                      {g.bio && <span className={styles.gardenBio}>{g.bio}</span>}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* Categories */}
-      {categories && categories.length > 0 && (
-        <>
-          <div className={styles.divider} />
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>Categories</h2>
-              <Link href="/explore/categories" className={styles.exploreLink}>Explore all categories &rarr;</Link>
-            </div>
-            <div className={styles.scrollContainer}>
-              <ul className={styles.scrollRow}>
-                {categories.map((c) => (
-                  <li key={c.id} className={styles.card}>
-                    <Link
-                      href={c.profiles?.handle ? `/${c.profiles.handle}?tab=garden&item=${c.id}` : '#'}
-                      className={styles.cardInner}
-                    >
-                      <span className={styles.cardName}>{c.name}</span>
-                      {c.profiles && (
-                        <span className={styles.cardBy}>
-                          {c.profiles.display_name || c.profiles.handle}
-                        </span>
-                      )}
-                      {c.introduction && (
-                        <span className={styles.cardIntro}>{c.introduction}</span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        </>
-      )}
 
       {/* Works */}
       {works && works.length > 0 && (
@@ -108,7 +39,7 @@ export default function Home({ gardens, categories, works, quotes }) {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Works</h2>
-              <Link href="/explore/works" className={styles.exploreLink}>Explore all works &rarr;</Link>
+              <Link href="/explore/works" className={styles.exploreLink}>Explore more works &rarr;</Link>
             </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
@@ -141,7 +72,7 @@ export default function Home({ gardens, categories, works, quotes }) {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Quotes</h2>
-              <Link href="/explore/quotes" className={styles.exploreLink}>Explore all quotes &rarr;</Link>
+              <Link href="/explore/quotes" className={styles.exploreLink}>Explore more quotes &rarr;</Link>
             </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
@@ -169,44 +100,67 @@ export default function Home({ gardens, categories, works, quotes }) {
         </>
       )}
 
-      {/* About */}
-      <div className={styles.divider} />
-      <section id="about" className={styles.about}>
-        <h2>About A Walled Garden</h2>
-        <p>
-          I intended this website first as a place where I could talk about my
-          favourite books and poems, reading lists of favourite works, share
-          interesting articles, quotes and curios with little bits of commentary.
-        </p>
-        <p>
-          I have extended things now so that anyone can create a garden of their
-          own, centred around whatever they please, I think it&rsquo;s pretty
-          intuitive to do so.
-        </p>
-        <p>
-          I do not intend for this site, like many other places on the internet,
-          to commoditise your time and attention, we do not want to immerse you
-          in the deliberately upsetting and controversial, the emotionally but
-          not intellectually provocative. We want this to be a jumping off point
-          to better things, a mode for sharing and discovering.
-        </p>
-        <p>
-          If successful this site will direct you outwards and onwards, to
-          curiosities and works of art that add to life, we will not keep you
-          captive in an endless stream of ephemeral slop that detracts from it.
-        </p>
-        <div className={styles.cta} style={{ marginTop: 'var(--space-xl)' }}>
-          {user ? (
-            <Link href={profile?.handle ? `/${profile.handle}` : '/settings'} className="btn btn-primary">
-              Go to your garden
-            </Link>
-          ) : (
-            <Link href="/signup" className="btn btn-primary">
-              Create your garden
-            </Link>
-          )}
-        </div>
-      </section>
+      {/* Gardens */}
+      {gardens && gardens.length > 0 && (
+        <>
+          <div className={styles.divider} />
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Gardens</h2>
+              <Link href="/explore/gardens" className={styles.exploreLink}>Explore more gardens &rarr;</Link>
+            </div>
+            <div className={styles.scrollContainer}>
+              <ul className={styles.scrollRow}>
+                {gardens.map((g) => (
+                  <li key={g.id} className={styles.card}>
+                    <Link href={`/${g.handle}`} className={styles.cardInner}>
+                      <span className={styles.gardenName}>{g.display_name || g.handle}</span>
+                      <span className={styles.gardenHandle}>@{g.handle}</span>
+                      {g.bio && <span className={styles.gardenBio}>{g.bio}</span>}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Categories */}
+      {categories && categories.length > 0 && (
+        <>
+          <div className={styles.divider} />
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Categories</h2>
+              <Link href="/explore/categories" className={styles.exploreLink}>Explore more categories &rarr;</Link>
+            </div>
+            <div className={styles.scrollContainer}>
+              <ul className={styles.scrollRow}>
+                {categories.map((c) => (
+                  <li key={c.id} className={styles.card}>
+                    <Link
+                      href={c.profiles?.handle ? `/${c.profiles.handle}?tab=garden&item=${c.id}` : '#'}
+                      className={styles.cardInner}
+                    >
+                      <span className={styles.cardName}>{c.name}</span>
+                      {c.profiles && (
+                        <span className={styles.cardBy}>
+                          {c.profiles.display_name || c.profiles.handle}
+                        </span>
+                      )}
+                      {c.introduction && (
+                        <span className={styles.cardIntro}>{c.introduction}</span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        </>
+      )}
+
     </div>
   );
 }
