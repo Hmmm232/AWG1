@@ -24,6 +24,14 @@
   border-radius: 1px;
 }
 
+.epigraph {
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--color-ink-light);
+  margin-bottom: var(--space-md);
+  letter-spacing: 0.005em;
+}
+
 .heroBody {
   max-width: 520px;
   margin: 0 auto var(--space-md);

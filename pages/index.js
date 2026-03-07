@@ -12,6 +12,9 @@ export default function Home({ gardens, categories, works, quotes }) {
       {/* Hero */}
       <section className={styles.hero}>
         <h1 className={styles.title}>A Walled Garden</h1>
+        <p className={styles.epigraph}>
+          &ldquo;I know also,&rdquo; said Candide, &ldquo;that we must cultivate our garden.&rdquo;
+        </p>
         <p className={styles.heroBody}>
           A new home for culture on the internet, a place to gather the books,
           poems, essays and curios you love, and share them with the world.
