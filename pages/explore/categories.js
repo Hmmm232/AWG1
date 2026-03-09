@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { scoreCategory, rank } from '@/lib/ranking';
+import { scoreCategory, rank, buildLikeMap } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
+import LikeButton from '@/components/LikeButton';
+import SaveButton from '@/components/SaveButton';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreCategories({ categories }) {
@@ -37,6 +39,10 @@ export default function ExploreCategories({ categories }) {
                   </p>
                   {c.introduction && <p className={styles.cardBodyItalic}>{c.introduction}</p>}
                 </Link>
+                <div className={styles.cardActions}>
+                  <LikeButton itemId={c.id} itemType="category" />
+                  <SaveButton itemId={c.id} itemType="category" />
+                </div>
               </div>
             ))}
           </div>
@@ -51,12 +57,14 @@ export async function getServerSideProps() {
     { data: cats },
     { data: works },
     { data: followerCounts },
+    { data: likesData },
   ] = await Promise.all([
     supabase
       .from('categories')
       .select('id, name, introduction, user_id, featured, profiles!user_id(handle, display_name)'),
     supabase.from('works').select('category_id'),
     supabase.from('follows').select('following_id'),
+    supabase.from('likes').select('item_id').eq('item_type', 'category'),
   ]);
 
   const worksMap = {};
@@ -67,17 +75,19 @@ export async function getServerSideProps() {
   for (const f of (followerCounts || [])) {
     followerMap[f.following_id] = (followerMap[f.following_id] || 0) + 1;
   }
+  const likeMap = buildLikeMap(likesData);
 
   const scored = (cats || []).map((c) => {
     const enriched = {
       ...c,
       works_count: worksMap[c.id] || 0,
       owner_followers: followerMap[c.user_id] || 0,
+      like_count: likeMap[c.id] || 0,
     };
     return { ...enriched, _score: scoreCategory(enriched) };
   });
 
-  const categories = rank(scored, 'categories').map(({ _score, owner_followers, featured, user_id, ...rest }) => rest);
+  const categories = rank(scored, 'categories').map(({ _score, owner_followers, like_count, featured, user_id, ...rest }) => rest);
 
   return { props: { categories } };
 }

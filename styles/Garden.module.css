@@ -221,6 +221,42 @@
   background: var(--color-accent-light);
 }
 
+.likeBtn {
+  color: var(--color-ink-faint);
+}
+
+.likeBtn:hover {
+  color: #c0392b;
+  border-color: #c0392b;
+  background: #fdf0ef;
+}
+
+.likeBtnActive {
+  color: #c0392b;
+  border-color: #e8c4c0;
+}
+
+.likeBtnActive:hover {
+  color: #c0392b;
+  border-color: #c0392b;
+  background: #fdf0ef;
+}
+
+.saveBtn {
+  color: var(--color-ink-faint);
+}
+
+.saveBtn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.saveBtnActive {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
 /* Forms */
 .form {
   background: var(--color-surface);

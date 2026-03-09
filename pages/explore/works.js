@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { scoreWork, rank } from '@/lib/ranking';
+import { scoreWork, rank, buildLikeMap } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
+import LikeButton from '@/components/LikeButton';
+import SaveButton from '@/components/SaveButton';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreWorks({ works }) {
@@ -37,6 +39,10 @@ export default function ExploreWorks({ works }) {
                   </p>
                   {w.commentary && <p className={styles.cardBody}>{w.commentary}</p>}
                 </Link>
+                <div className={styles.cardActions}>
+                  <LikeButton itemId={w.id} itemType="work" />
+                  <SaveButton itemId={w.id} itemType="work" />
+                </div>
               </div>
             ))}
           </div>
@@ -50,18 +56,21 @@ export async function getServerSideProps() {
   const [
     { data: worksData },
     { data: followerCounts },
+    { data: likesData },
   ] = await Promise.all([
     supabase
       .from('works')
       .select('id, title, commentary, category_id, user_id, featured, profiles!user_id(handle, display_name)')
       .limit(200),
     supabase.from('follows').select('following_id'),
+    supabase.from('likes').select('item_id').eq('item_type', 'work'),
   ]);
 
   const followerMap = {};
   for (const f of (followerCounts || [])) {
     followerMap[f.following_id] = (followerMap[f.following_id] || 0) + 1;
   }
+  const likeMap = buildLikeMap(likesData);
 
   // Fetch category names for display
   const categoryIds = [...new Set((worksData || []).map((w) => w.category_id))];
@@ -77,7 +86,7 @@ export async function getServerSideProps() {
   }
 
   const scored = (worksData || []).map((w) => {
-    const enriched = { ...w, owner_followers: followerMap[w.user_id] || 0 };
+    const enriched = { ...w, owner_followers: followerMap[w.user_id] || 0, like_count: likeMap[w.id] || 0 };
     return {
       ...enriched,
       category_name: categoryMap[w.category_id] || '',
@@ -87,7 +96,7 @@ export async function getServerSideProps() {
 
   const works = rank(scored, 'works')
     .slice(0, 100)
-    .map(({ _score, owner_followers, featured, user_id, category_id, ...rest }) => rest);
+    .map(({ _score, owner_followers, like_count, featured, user_id, category_id, ...rest }) => rest);
 
   return { props: { works } };
 }

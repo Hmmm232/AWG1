@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
+import LikeButton from './LikeButton';
+import SaveButton from './SaveButton';
 import styles from '@/styles/Garden.module.css';
 
 // ─── Table of Contents ─────────────────────────────────────────
@@ -398,6 +400,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
               <div className={styles.categoryHeader}>
                 <h2 className={styles.categoryName}>{category.name}</h2>
                 <div className={styles.actions}>
+                  <LikeButton itemId={category.id} itemType="category" />
+                  <SaveButton itemId={category.id} itemType="category" />
                   <ShareButton tab="garden" itemId={category.id} />
                   {isOwner && (
                     <>
@@ -452,6 +456,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                           )}
                         </div>
                         <div className={styles.actions}>
+                          <LikeButton itemId={work.id} itemType="work" />
+                          <SaveButton itemId={work.id} itemType="work" />
                           {!isOwner && (
                             <ReRecButton
                               workTitle={work.title}

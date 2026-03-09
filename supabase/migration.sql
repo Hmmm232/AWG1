@@ -159,6 +159,54 @@ create policy "Users can follow others"
 create policy "Users can unfollow"
   on follows for delete using (auth.uid() = follower_id);
 
+-- Likes (favourites — public)
+create table likes (
+  user_id uuid references profiles(id) on delete cascade not null,
+  item_id uuid not null,
+  item_type text not null check (item_type in ('work', 'quote', 'category')),
+  created_at timestamptz not null default now(),
+  primary key (user_id, item_id)
+);
+
+-- Saves (bookmarks — private to the user)
+create table saves (
+  user_id uuid references profiles(id) on delete cascade not null,
+  item_id uuid not null,
+  item_type text not null check (item_type in ('work', 'quote', 'category')),
+  created_at timestamptz not null default now(),
+  primary key (user_id, item_id)
+);
+
+-- Indexes for likes and saves
+create index idx_likes_user on likes(user_id);
+create index idx_likes_item on likes(item_id);
+create index idx_likes_type on likes(item_type);
+create index idx_saves_user on saves(user_id);
+
+-- RLS for likes and saves
+alter table likes enable row level security;
+alter table saves enable row level security;
+
+-- Likes: anyone can read (public counts), users manage their own
+create policy "Likes are publicly readable"
+  on likes for select using (true);
+
+create policy "Users can like items"
+  on likes for insert with check (auth.uid() = user_id);
+
+create policy "Users can unlike items"
+  on likes for delete using (auth.uid() = user_id);
+
+-- Saves: only the owner can read/manage (private bookmarks)
+create policy "Users can read their own saves"
+  on saves for select using (auth.uid() = user_id);
+
+create policy "Users can save items"
+  on saves for insert with check (auth.uid() = user_id);
+
+create policy "Users can unsave items"
+  on saves for delete using (auth.uid() = user_id);
+
 -- Function to automatically create a profile on signup
 -- You'll set this up as a database trigger in Supabase
 create or replace function public.handle_new_user()

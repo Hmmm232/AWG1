@@ -63,6 +63,9 @@ export default function Layout({ children }) {
                   My Garden
                 </Link>
               )}
+              <Link href="/saved" className={styles.navLink}>
+                Saved
+              </Link>
               <Link href="/settings" className={styles.navLink}>
                 Settings
               </Link>
@@ -130,6 +133,10 @@ export default function Layout({ children }) {
                     My Garden
                   </Link>
                 )}
+                <Link href="/saved" className={styles.mobileLink}>
+                  <span className={styles.mobileLinkIcon}>&#9733;</span>
+                  Saved
+                </Link>
                 <Link href="/settings" className={styles.mobileLink}>
                   <span className={styles.mobileLinkIcon}>&#9881;</span>
                   Settings

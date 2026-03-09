@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { scoreQuote, rank } from '@/lib/ranking';
+import { scoreQuote, rank, buildLikeMap } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
+import LikeButton from '@/components/LikeButton';
+import SaveButton from '@/components/SaveButton';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreQuotes({ quotes }) {
@@ -41,6 +43,10 @@ export default function ExploreQuotes({ quotes }) {
                     Shared by {q.profiles?.display_name || q.profiles?.handle || 'Unknown'}
                   </p>
                 </Link>
+                <div className={styles.cardActions}>
+                  <LikeButton itemId={q.id} itemType="quote" />
+                  <SaveButton itemId={q.id} itemType="quote" />
+                </div>
               </div>
             ))}
           </div>
@@ -54,27 +60,30 @@ export async function getServerSideProps() {
   const [
     { data: quotesData },
     { data: followerCounts },
+    { data: likesData },
   ] = await Promise.all([
     supabase
       .from('quotes')
       .select('id, quote_text, attribution, source, note, user_id, featured, profiles!user_id(handle, display_name)')
       .limit(200),
     supabase.from('follows').select('following_id'),
+    supabase.from('likes').select('item_id').eq('item_type', 'quote'),
   ]);
 
   const followerMap = {};
   for (const f of (followerCounts || [])) {
     followerMap[f.following_id] = (followerMap[f.following_id] || 0) + 1;
   }
+  const likeMap = buildLikeMap(likesData);
 
   const scored = (quotesData || []).map((q) => {
-    const enriched = { ...q, owner_followers: followerMap[q.user_id] || 0 };
+    const enriched = { ...q, owner_followers: followerMap[q.user_id] || 0, like_count: likeMap[q.id] || 0 };
     return { ...enriched, _score: scoreQuote(enriched) };
   });
 
   const quotes = rank(scored, 'quotes')
     .slice(0, 100)
-    .map(({ _score, owner_followers, featured, user_id, note, ...rest }) => rest);
+    .map(({ _score, owner_followers, like_count, featured, user_id, note, ...rest }) => rest);
 
   return { props: { quotes } };
 }

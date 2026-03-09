@@ -131,6 +131,14 @@
   font-style: normal;
 }
 
+/* Card action buttons (like, save) */
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-lg) var(--space-md);
+}
+
 /* Empty state */
 .empty {
   text-align: center;

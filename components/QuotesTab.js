@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
+import LikeButton from './LikeButton';
+import SaveButton from './SaveButton';
 import styles from '@/styles/Garden.module.css';
 
 function QuoteForm({ initial, onSave, onCancel }) {
@@ -235,6 +237,8 @@ export default function QuotesTab({ userId, isOwner, profileHandle, profileName,
                   )}
                 </div>
                 <div className={styles.actions}>
+                  <LikeButton itemId={quote.id} itemType="quote" />
+                  <SaveButton itemId={quote.id} itemType="quote" />
                   {!isOwner && (
                     <ReRecButton
                       workTitle={quote.attribution ? `"${quote.quote_text.slice(0, 80)}${quote.quote_text.length > 80 ? '...' : ''}" — ${quote.attribution}` : `"${quote.quote_text.slice(0, 100)}${quote.quote_text.length > 100 ? '...' : ''}"`}
