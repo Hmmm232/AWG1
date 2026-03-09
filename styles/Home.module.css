@@ -102,23 +102,15 @@
   -webkit-overflow-scrolling: touch;
   list-style: none;
   margin: 0;
-  padding: 0 48px var(--space-sm) 0;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
+  padding: 0 48px var(--space-md) 0;
+  scrollbar-width: none;          /* Firefox: hide default scrollbar */
+  -ms-overflow-style: none;       /* IE/Edge: hide default scrollbar */
 }
 
 .scrollRow::-webkit-scrollbar {
-  height: 6px;
+  display: none;                   /* WebKit: hide default scrollbar */
 }
 
-.scrollRow::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scrollRow::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 3px;
-}
 
 /* ─── Shared card base ─────────────────────────────────────── */
 .card {

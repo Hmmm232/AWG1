@@ -54,7 +54,9 @@ export default function SaveButton({ itemId, itemType }) {
       disabled={busy}
       title={saved ? 'Remove from saved' : 'Save'}
     >
-      {saved ? '\u2691' : '\u2690'}
+      <svg width="12" height="14" viewBox="0 0 12 14" fill={saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.5">
+        <path d="M1 1h10v12L6 9.5 1 13V1z" />
+      </svg>
     </button>
   );
 }
