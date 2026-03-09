@@ -102,13 +102,22 @@
   -webkit-overflow-scrolling: touch;
   list-style: none;
   margin: 0;
-  padding: 0 48px var(--space-md) 0;
-  scrollbar-width: none;          /* Firefox: hide default scrollbar */
-  -ms-overflow-style: none;       /* IE/Edge: hide default scrollbar */
+  padding: 0 48px var(--space-sm) 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-light) transparent;
 }
 
 .scrollRow::-webkit-scrollbar {
-  display: none;                   /* WebKit: hide default scrollbar */
+  height: 4px;
+}
+
+.scrollRow::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollRow::-webkit-scrollbar-thumb {
+  background: var(--color-border-light);
+  border-radius: 2px;
 }
 
 

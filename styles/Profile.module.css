@@ -1,7 +1,7 @@
 /* Profile page */
 .header {
-  margin-bottom: var(--space-md);
-  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-sm);
   border-bottom: 1px solid var(--color-border-light);
 }
 
@@ -52,7 +52,8 @@
 }
 
 .followBtn {
-  margin-bottom: var(--space-md);
+  margin-right: var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
 
 .shareProfileBtn {

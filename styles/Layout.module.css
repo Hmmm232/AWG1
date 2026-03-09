@@ -321,8 +321,8 @@
   }
 
   .mobileLinkBtn:hover {
-    color: var(--color-error);
-    background: var(--color-error-bg);
+    color: var(--color-ink);
+    background: var(--color-surface-hover);
   }
 
   .mobileCta {
