@@ -166,7 +166,11 @@ export default function Layout({ children }) {
         {children}
       </main>
       <footer className={styles.footer}>
-        A Walled Garden
+        <span>A Walled Garden</span>
+        <span className={styles.footerLinks}>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
+        </span>
       </footer>
     </div>
   );

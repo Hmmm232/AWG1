@@ -257,6 +257,17 @@
   border-color: var(--color-accent);
 }
 
+.reportBtn {
+  color: var(--color-ink-faint);
+  font-size: 0.7rem;
+}
+
+.reportBtn:hover {
+  color: var(--color-error);
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+}
+
 /* Forms */
 .form {
   background: var(--color-surface);

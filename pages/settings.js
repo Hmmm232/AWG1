@@ -14,6 +14,7 @@ export default function Settings() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -57,6 +58,41 @@ export default function Settings() {
     setSaving(false);
   }
 
+  async function handleDeleteAccount() {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete your account?\n\nAll your data (garden, quotes, re-recs, follows, likes, saves) will be permanently deleted. This cannot be undone.'
+    );
+    if (!confirmed) return;
+
+    const doubleConfirm = window.prompt(
+      'Type your handle to confirm deletion:'
+    );
+    if (doubleConfirm !== profile?.handle) {
+      alert('Handle did not match. Account was not deleted.');
+      return;
+    }
+
+    setDeleting(true);
+    try {
+      const { error: deleteError } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', user.id);
+
+      if (deleteError) {
+        alert('Failed to delete account: ' + deleteError.message);
+        setDeleting(false);
+        return;
+      }
+
+      await supabase.auth.signOut();
+      router.push('/');
+    } catch (err) {
+      alert('Something went wrong. Please try again.');
+      setDeleting(false);
+    }
+  }
+
   if (loading || !user) {
     return null;
   }
@@ -90,6 +126,7 @@ export default function Settings() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Your display name"
+              maxLength={100}
             />
           </div>
 
@@ -101,6 +138,7 @@ export default function Settings() {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell people about yourself and what you read..."
               rows={4}
+              maxLength={500}
             />
           </div>
 
@@ -121,6 +159,22 @@ export default function Settings() {
             </Link>
           </div>
         )}
+
+        <div className={styles.dangerZone}>
+          <h2 className={styles.dangerTitle}>Danger zone</h2>
+          <p className={styles.dangerText}>
+            Permanently delete your account and all your data (garden, quotes, re-recs, follows).
+            This action cannot be undone.
+          </p>
+          <button
+            className="btn btn-small"
+            style={{ background: 'var(--color-error)', color: 'white' }}
+            disabled={deleting}
+            onClick={handleDeleteAccount}
+          >
+            {deleting ? 'Deleting...' : 'Delete my account'}
+          </button>
+        </div>
       </div>
     </>
   );

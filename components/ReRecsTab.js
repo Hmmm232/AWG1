@@ -38,6 +38,7 @@ function ReRecForm({ initial, onSave, onCancel }) {
           value={workTitle}
           onChange={(e) => setWorkTitle(e.target.value)}
           required
+          maxLength={300}
         />
       </div>
       <div className={styles.field}>
@@ -48,6 +49,7 @@ function ReRecForm({ initial, onSave, onCancel }) {
           placeholder='e.g. "Ryan Holiday" or "@ryan"'
           value={originalRecommender}
           onChange={(e) => setOriginalRecommender(e.target.value)}
+          maxLength={200}
         />
       </div>
       <div className={styles.field}>
@@ -58,6 +60,7 @@ function ReRecForm({ initial, onSave, onCancel }) {
           value={commentary}
           onChange={(e) => setCommentary(e.target.value)}
           rows={3}
+          maxLength={5000}
         />
       </div>
       <div className={styles.field}>
@@ -68,6 +71,7 @@ function ReRecForm({ initial, onSave, onCancel }) {
           placeholder="https://..."
           value={sourceUrl}
           onChange={(e) => setSourceUrl(e.target.value)}
+          maxLength={2000}
         />
       </div>
       <div className={styles.formActions}>

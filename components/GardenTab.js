@@ -94,6 +94,7 @@ function CategoryForm({ initial, onSave, onCancel }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          maxLength={200}
         />
       </div>
       <div className={styles.field}>
@@ -104,6 +105,7 @@ function CategoryForm({ initial, onSave, onCancel }) {
           value={introduction}
           onChange={(e) => setIntroduction(e.target.value)}
           rows={3}
+          maxLength={2000}
         />
       </div>
       <div className={styles.formActions}>
@@ -147,6 +149,7 @@ function WorkForm({ initial, onSave, onCancel }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          maxLength={300}
         />
       </div>
       <div className={styles.field}>
@@ -157,6 +160,7 @@ function WorkForm({ initial, onSave, onCancel }) {
           value={commentary}
           onChange={(e) => setCommentary(e.target.value)}
           rows={3}
+          maxLength={5000}
         />
       </div>
       <div className={styles.formActions}>

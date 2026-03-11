@@ -46,6 +46,7 @@ function QuoteForm({ initial, onSave, onCancel }) {
           onChange={(e) => setQuoteText(e.target.value)}
           rows={4}
           required
+          maxLength={5000}
         />
       </div>
       <div className={styles.field}>
@@ -56,6 +57,7 @@ function QuoteForm({ initial, onSave, onCancel }) {
           placeholder='e.g. "Virginia Woolf"'
           value={attribution}
           onChange={(e) => setAttribution(e.target.value)}
+          maxLength={300}
         />
       </div>
       <div className={styles.field}>
@@ -66,6 +68,7 @@ function QuoteForm({ initial, onSave, onCancel }) {
           placeholder='e.g. "To the Lighthouse"'
           value={source}
           onChange={(e) => setSource(e.target.value)}
+          maxLength={300}
         />
       </div>
       <div className={styles.field}>
@@ -76,6 +79,7 @@ function QuoteForm({ initial, onSave, onCancel }) {
           value={note}
           onChange={(e) => setNote(e.target.value)}
           rows={2}
+          maxLength={2000}
         />
       </div>
       <div className={styles.formActions}>

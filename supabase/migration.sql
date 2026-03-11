@@ -207,6 +207,33 @@ create policy "Users can save items"
 create policy "Users can unsave items"
   on saves for delete using (auth.uid() = user_id);
 
+-- Reports (content moderation)
+create table reports (
+  id uuid default gen_random_uuid() primary key,
+  reporter_id uuid references profiles(id) on delete cascade not null,
+  item_id uuid not null,
+  item_type text not null check (item_type in ('work', 'quote', 'category', 'rerec', 'profile')),
+  reason text not null default '',
+  resolved boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+create index idx_reports_resolved on reports(resolved);
+
+alter table reports enable row level security;
+
+create policy "Users can insert reports"
+  on reports for insert with check (auth.uid() = reporter_id);
+
+create policy "Users can read their own reports"
+  on reports for select using (auth.uid() = reporter_id);
+
+-- NOTE: Admin reads/updates should use a service-role key or an is_admin check
+
+-- Allow users to delete their own profile (for account deletion)
+create policy "Users can delete their own profile"
+  on profiles for delete using (auth.uid() = id);
+
 -- Function to automatically create a profile on signup
 -- You'll set this up as a database trigger in Supabase
 create or replace function public.handle_new_user()

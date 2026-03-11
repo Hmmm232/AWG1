@@ -29,8 +29,8 @@ export default function SignUp() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
       return;
     }
 
@@ -102,6 +102,7 @@ export default function SignUp() {
             placeholder="Marcus Aurelius"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
+            maxLength={100}
           />
         </div>
 
@@ -122,7 +123,7 @@ export default function SignUp() {
           <input
             id="password"
             type="password"
-            placeholder="At least 6 characters"
+            placeholder="At least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -134,6 +135,9 @@ export default function SignUp() {
         </button>
       </form>
 
+      <p className={styles.footer}>
+        By creating an account you agree to our <Link href="/terms">Terms</Link> and <Link href="/privacy">Privacy Policy</Link>.
+      </p>
       <p className={styles.footer}>
         Already have an account? <Link href="/signin">Sign in</Link>
       </p>

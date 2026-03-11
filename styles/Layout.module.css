@@ -152,6 +152,22 @@
   margin-bottom: var(--space-sm);
 }
 
+.footerLinks {
+  display: block;
+  margin-top: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+}
+
+.footerLinks a {
+  color: var(--color-ink-faint);
+  margin: 0 var(--space-xs);
+}
+
+.footerLinks a:hover {
+  color: var(--color-accent);
+}
+
 /* ─── Mobile ────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .container {
