@@ -6,7 +6,10 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import styles from '@/styles/Settings.module.css';
 
-// Hardcode admin user IDs here — or add an is_admin column to profiles later
+// LAUNCH GATE: Set this to true once you've added your user ID to ADMIN_IDS
+const ADMIN_ENABLED = false;
+
+// Add your Supabase user ID here to grant admin access
 const ADMIN_IDS = [];
 
 export default function AdminPage() {
@@ -15,7 +18,7 @@ export default function AdminPage() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const isAdmin = user && (ADMIN_IDS.length === 0 || ADMIN_IDS.includes(user.id));
+  const isAdmin = ADMIN_ENABLED && user && ADMIN_IDS.includes(user.id);
 
   useEffect(() => {
     if (authLoading) return;
