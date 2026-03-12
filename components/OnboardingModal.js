@@ -18,6 +18,18 @@ const SLIDES = [
     ],
   },
   {
+    title: 'Your toolkit',
+    body: 'Everything you need is on the page — here are the controls you\'ll see:',
+    hints: [
+      ['+ Add a category', 'Creates a new shelf in your garden'],
+      ['+ Add a work', 'Adds a book, essay, poem or curiosity to a category'],
+      ['Edit / Delete', 'Appear on your own categories and works'],
+      ['\u25B2 \u25BC arrows', 'Drag categories and works into your preferred order'],
+      ['Commentary', 'Optional — a few words on why something matters to you'],
+      ['Share garden', 'Copies a link to your garden so you can send it to anyone'],
+    ],
+  },
+  {
     title: 'Beyond the garden',
     body: 'You can also save quotes that have stayed with you, and re-recommend works that others have shared with you. Follow gardens you admire, and explore what the community is reading.',
   },
@@ -99,6 +111,17 @@ export default function OnboardingModal({ onClose }) {
                 <li key={i} className={styles.example}>{item}</li>
               ))}
             </ul>
+          )}
+
+          {current.hints && (
+            <dl className={styles.hints}>
+              {current.hints.map(([term, desc], i) => (
+                <div key={i} className={styles.hint}>
+                  <dt className={styles.hintTerm}>{term}</dt>
+                  <dd className={styles.hintDesc}>{desc}</dd>
+                </div>
+              ))}
+            </dl>
           )}
         </div>
 
