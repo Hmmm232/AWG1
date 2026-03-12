@@ -8,6 +8,7 @@ import GardenTab from '@/components/GardenTab';
 import QuotesTab from '@/components/QuotesTab';
 import ReRecsTab from '@/components/ReRecsTab';
 import FollowingTab from '@/components/FollowingTab';
+import OnboardingModal from '@/components/OnboardingModal';
 import styles from '@/styles/Profile.module.css';
 
 function ShareProfileButton({ handle }) {
@@ -49,9 +50,28 @@ export default function ProfilePage({
   const [activeTab, setActiveTab] = useState('Garden');
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerCount, setFollowerCount] = useState(initialFollowerCount || 0);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const profile = initialProfile;
   const isOwner = user && profile && user.id === profile.id;
+
+  // Show onboarding for new users with empty gardens
+  useEffect(() => {
+    if (!isOwner) return;
+    const isEmpty = (initialCategories || []).length === 0
+      && (initialQuotes || []).length === 0
+      && (initialReRecs || []).length === 0;
+    if (!isEmpty) return;
+    const dismissed = localStorage.getItem('awg_onboarding_done');
+    if (!dismissed) {
+      setShowOnboarding(true);
+    }
+  }, [isOwner, initialCategories, initialQuotes, initialReRecs]);
+
+  function handleOnboardingClose() {
+    setShowOnboarding(false);
+    localStorage.setItem('awg_onboarding_done', '1');
+  }
 
   // Deep-link: read ?tab=...&item=... from URL and switch tab + scroll
   useEffect(() => {
@@ -218,6 +238,10 @@ export default function ProfilePage({
           />
         </div>
       </div>
+
+      {showOnboarding && (
+        <OnboardingModal onClose={handleOnboardingClose} />
+      )}
     </>
   );
 }
