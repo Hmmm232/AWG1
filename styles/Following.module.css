@@ -15,15 +15,34 @@
 
 .link {
   display: block;
-  padding: var(--space-md) var(--space-sm);
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-lg);
   color: var(--color-ink);
   border-radius: 8px;
   transition: background 0.15s ease;
+  position: relative;
+}
+
+.link::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
 }
 
 .link:hover {
   background: var(--color-surface);
   color: var(--color-ink);
+}
+
+.link:hover::before {
+  opacity: 1;
 }
 
 .name {
@@ -46,4 +65,10 @@
   font-size: 0.9rem;
   color: var(--color-ink-light);
   line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .link {
+    padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-lg);
+  }
 }

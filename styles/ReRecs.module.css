@@ -1,0 +1,66 @@
+/* Re-recs tab */
+
+.item {
+  padding: var(--space-md) 0 var(--space-md) var(--space-lg);
+  border-left: 2px solid var(--color-accent);
+  margin-bottom: var(--space-sm);
+  scroll-margin-top: calc(var(--nav-height) + var(--space-md));
+}
+
+.itemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.itemContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.recommender {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--color-ink-faint);
+  margin-bottom: var(--space-xs);
+}
+
+.commentary {
+  color: var(--color-ink-light);
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  margin-top: var(--space-xs);
+}
+
+.sourceLink {
+  margin-top: var(--space-xs);
+  font-size: 0.85rem;
+  font-family: var(--font-sans);
+}
+
+@media (max-width: 640px) {
+  .item {
+    padding-left: var(--space-md);
+  }
+
+  .title {
+    font-size: 1.05rem;
+  }
+
+  .commentary {
+    font-size: 1rem;
+  }
+}

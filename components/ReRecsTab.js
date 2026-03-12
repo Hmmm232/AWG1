@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import ShareButton from './ShareButton';
-import styles from '@/styles/Garden.module.css';
+import gardenStyles from '@/styles/Garden.module.css';
+import styles from '@/styles/ReRecs.module.css';
 
 function ReRecForm({ initial, onSave, onCancel }) {
   const [workTitle, setWorkTitle] = useState(initial?.work_title || '');
@@ -27,9 +28,9 @@ function ReRecForm({ initial, onSave, onCancel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <p className={styles.formTitle}>{initial ? 'Edit re-rec' : 'Add a re-rec'}</p>
-      <div className={styles.field}>
+    <form onSubmit={handleSubmit} className={gardenStyles.form}>
+      <p className={gardenStyles.formTitle}>{initial ? 'Edit re-rec' : 'Add a re-rec'}</p>
+      <div className={gardenStyles.field}>
         <label htmlFor="workTitle">What are you recommending?</label>
         <input
           id="workTitle"
@@ -41,7 +42,7 @@ function ReRecForm({ initial, onSave, onCancel }) {
           maxLength={300}
         />
       </div>
-      <div className={styles.field}>
+      <div className={gardenStyles.field}>
         <label htmlFor="recommender">Who originally recommended it?</label>
         <input
           id="recommender"
@@ -52,7 +53,7 @@ function ReRecForm({ initial, onSave, onCancel }) {
           maxLength={200}
         />
       </div>
-      <div className={styles.field}>
+      <div className={gardenStyles.field}>
         <label htmlFor="commentary">Why are you resharing this? (optional)</label>
         <textarea
           id="commentary"
@@ -63,7 +64,7 @@ function ReRecForm({ initial, onSave, onCancel }) {
           maxLength={5000}
         />
       </div>
-      <div className={styles.field}>
+      <div className={gardenStyles.field}>
         <label htmlFor="sourceUrl">Link to original recommendation (optional)</label>
         <input
           id="sourceUrl"
@@ -74,11 +75,11 @@ function ReRecForm({ initial, onSave, onCancel }) {
           maxLength={2000}
         />
       </div>
-      <div className={styles.formActions}>
+      <div className={gardenStyles.formActions}>
         <button type="submit" className="btn btn-primary btn-small" disabled={saving}>
           {saving ? 'Saving...' : initial ? 'Save' : 'Add re-rec'}
         </button>
-        <button type="button" className={styles.cancelBtn} onClick={onCancel}>
+        <button type="button" className={gardenStyles.cancelBtn} onClick={onCancel}>
           Cancel
         </button>
       </div>
@@ -160,10 +161,10 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
 
   return (
     <div>
-      {error && <p className={styles.error}>{error}</p>}
+      {error && <p className={gardenStyles.error}>{error}</p>}
 
       {isOwner && !showNewReRec && (
-        <button className={`${styles.addBtn} ${styles.addCategoryBtn}`} onClick={() => setShowNewReRec(true)}>
+        <button className={`${gardenStyles.addBtn} ${gardenStyles.addCategoryBtn}`} onClick={() => setShowNewReRec(true)}>
           + Add a re-rec
         </button>
       )}
@@ -178,7 +179,7 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
       )}
 
       {rerecs.map((rerec, index) => (
-        <div key={rerec.id} id={rerec.id} className={styles.category}>
+        <div key={rerec.id} id={rerec.id} className={styles.item}>
           {editingReRecId === rerec.id ? (
             <ReRecForm
               initial={rerec}
@@ -187,35 +188,35 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
             />
           ) : (
             <>
-              <div className={styles.categoryHeader}>
-                <div style={{ flex: 1 }}>
-                  <p className={styles.workTitle}>{rerec.work_title}</p>
+              <div className={styles.itemHeader}>
+                <div className={styles.itemContent}>
+                  <p className={styles.title}>{rerec.work_title}</p>
                   {rerec.original_recommender && (
-                    <p className={styles.rerecMeta}>
+                    <p className={styles.recommender}>
                       Recommended by {rerec.original_recommender}
                     </p>
                   )}
                   {rerec.commentary && (
-                    <p className={styles.workCommentary}>{rerec.commentary}</p>
+                    <p className={styles.commentary}>{rerec.commentary}</p>
                   )}
                   {rerec.source_url && /^https?:\/\//i.test(rerec.source_url) && (
-                    <p className={styles.rerecLink}>
+                    <p className={styles.sourceLink}>
                       <a href={rerec.source_url} target="_blank" rel="noopener noreferrer">
                         Original recommendation &#8599;
                       </a>
                     </p>
                   )}
                 </div>
-                <div className={styles.actions}>
+                <div className={gardenStyles.actions}>
                   <ShareButton tab="rerecs" itemId={rerec.id} />
                   {isOwner && (
                     <>
-                      <div className={styles.reorderGroup}>
-                        <button className={styles.reorderBtn} onClick={() => reorderReRec(index, -1)} disabled={index === 0} title="Move up">&#9650;</button>
-                        <button className={styles.reorderBtn} onClick={() => reorderReRec(index, 1)} disabled={index === rerecs.length - 1} title="Move down">&#9660;</button>
+                      <div className={gardenStyles.reorderGroup}>
+                        <button className={gardenStyles.reorderBtn} onClick={() => reorderReRec(index, -1)} disabled={index === 0} title="Move up">&#9650;</button>
+                        <button className={gardenStyles.reorderBtn} onClick={() => reorderReRec(index, 1)} disabled={index === rerecs.length - 1} title="Move down">&#9660;</button>
                       </div>
-                      <button className={styles.iconBtn} onClick={() => setEditingReRecId(rerec.id)} title="Edit">Edit</button>
-                      <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteReRec(rerec.id)} title="Delete">Delete</button>
+                      <button className={gardenStyles.iconBtn} onClick={() => setEditingReRecId(rerec.id)} title="Edit">Edit</button>
+                      <button className={`${gardenStyles.iconBtn} ${gardenStyles.iconBtnDanger}`} onClick={() => deleteReRec(rerec.id)} title="Delete">Delete</button>
                     </>
                   )}
                 </div>
