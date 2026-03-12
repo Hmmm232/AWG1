@@ -52,7 +52,11 @@ export default function ExploreCategories({ categories }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
+  if (!supabase) {
+    return { props: { categories: [] }, revalidate: 1 };
+  }
+
   const [
     { data: cats },
     { data: works },
@@ -89,5 +93,5 @@ export async function getServerSideProps() {
 
   const categories = rank(scored, 'categories').map(({ _score, owner_followers, like_count, featured, user_id, ...rest }) => rest);
 
-  return { props: { categories } };
+  return { props: { categories }, revalidate: 120 };
 }

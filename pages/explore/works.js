@@ -52,7 +52,11 @@ export default function ExploreWorks({ works }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
+  if (!supabase) {
+    return { props: { works: [] }, revalidate: 1 };
+  }
+
   const [
     { data: worksData },
     { data: followerCounts },
@@ -98,5 +102,5 @@ export async function getServerSideProps() {
     .slice(0, 100)
     .map(({ _score, owner_followers, like_count, featured, user_id, category_id, ...rest }) => rest);
 
-  return { props: { works } };
+  return { props: { works }, revalidate: 120 };
 }

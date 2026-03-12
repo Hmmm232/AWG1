@@ -214,7 +214,12 @@ export default function Home({ gardens, categories, works, quotes }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
+  // During build without env vars, return empty data — ISR will populate on first request
+  if (!supabase) {
+    return { props: { gardens: [], categories: [], works: [], quotes: [] }, revalidate: 1 };
+  }
+
   // Fetch more than we display so scoring + rotation have a decent pool
   const [
     { data: profiles },
@@ -325,5 +330,6 @@ export async function getServerSideProps() {
       works: clean(works),
       quotes: clean(quotes),
     },
+    revalidate: 120,
   };
 }

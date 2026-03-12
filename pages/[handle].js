@@ -222,7 +222,11 @@ export default function ProfilePage({
   );
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
+  return { paths: [], fallback: 'blocking' };
+}
+
+export async function getStaticProps({ params }) {
   const { handle } = params;
 
   const { data: profile } = await supabase
@@ -293,5 +297,6 @@ export async function getServerSideProps({ params }) {
       rerecs: rerecs || [],
       following,
     },
+    revalidate: 60,
   };
 }

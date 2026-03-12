@@ -43,7 +43,11 @@ export default function ExploreGardens({ gardens }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
+  if (!supabase) {
+    return { props: { gardens: [] }, revalidate: 1 };
+  }
+
   const [
     { data: profiles },
     { data: followerCounts },
@@ -81,5 +85,5 @@ export async function getServerSideProps() {
 
   const gardens = rank(scored, 'gardens').map(({ _score, category_count, work_count, featured, ...rest }) => rest);
 
-  return { props: { gardens } };
+  return { props: { gardens }, revalidate: 120 };
 }

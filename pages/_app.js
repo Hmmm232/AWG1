@@ -1,10 +1,17 @@
 import '@/styles/globals.css';
+import { useRouter } from 'next/router';
 import { AuthProvider } from '@/lib/AuthContext';
 import Layout from '@/components/Layout';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Head from 'next/head';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.com';
+
 export default function App({ Component, pageProps }) {
+  const router = useRouter();
+  const canonicalPath = router.asPath.split('?')[0].split('#')[0];
+  const canonicalUrl = `${SITE_URL}${canonicalPath === '/' ? '' : canonicalPath}`;
+
   return (
     <AuthProvider>
       <Head>
@@ -12,12 +19,14 @@ export default function App({ Component, pageProps }) {
         <meta name="description" content="Curate your favourite works. Build your garden." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href={canonicalUrl} />
 
         {/* Open Graph defaults — individual pages can override */}
         <meta property="og:site_name" content="A Walled Garden" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="A Walled Garden" />
         <meta property="og:description" content="A place to gather the works that have shaped you — books, essays, poems — and share them with others." />
+        <meta property="og:url" content={canonicalUrl} />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="A Walled Garden" />
         <meta name="twitter:description" content="A place to gather the works that have shaped you — books, essays, poems — and share them with others." />

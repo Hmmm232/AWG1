@@ -56,7 +56,11 @@ export default function ExploreQuotes({ quotes }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
+  if (!supabase) {
+    return { props: { quotes: [] }, revalidate: 1 };
+  }
+
   const [
     { data: quotesData },
     { data: followerCounts },
@@ -85,5 +89,5 @@ export async function getServerSideProps() {
     .slice(0, 100)
     .map(({ _score, owner_followers, like_count, featured, user_id, note, ...rest }) => rest);
 
-  return { props: { quotes } };
+  return { props: { quotes }, revalidate: 120 };
 }
