@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }) {
         <title>A Walled Garden</title>
         <meta name="description" content="Curate your favourite works. Build your garden." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="canonical" href={canonicalUrl} />
 
         {/* Open Graph defaults — individual pages can override */}
