@@ -148,9 +148,9 @@ export default function Terms() {
 
         <h2>14. Governing law</h2>
         <p>These terms are governed by and construed in accordance with the
-        laws of the United Kingdom. Any disputes arising from these terms or
-        your use of the service shall be subject to the exclusive
-        jurisdiction of the courts of England and Wales.</p>
+        laws of Ireland. Any disputes arising from these terms or your use of
+        the service shall be subject to the exclusive jurisdiction of the
+        courts of Ireland.</p>
 
         <h2>15. Contact</h2>
         <p>
