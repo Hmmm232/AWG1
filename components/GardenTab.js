@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { checkDailyLimit } from '@/lib/rateLimits';
+import { moderateFields } from '@/lib/moderation';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
 import LikeButton from './LikeButton';
@@ -202,6 +203,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     setError('');
     const limit = await checkDailyLimit(userId, 'categories');
     if (!limit.allowed) { setError(limit.message); return; }
+    const mod = await moderateFields({ name, introduction });
+    if (!mod.allowed) { setError(mod.reason); return; }
     const sortOrder = categories.length;
     const { error: insertErr } = await supabase
       .from('categories')
@@ -228,6 +231,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
 
   async function updateCategory(id, { name, introduction }) {
     setError('');
+    const mod = await moderateFields({ name, introduction });
+    if (!mod.allowed) { setError(mod.reason); return; }
     const { error: err } = await supabase
       .from('categories')
       .update({ name, introduction })
@@ -285,6 +290,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     setError('');
     const limit = await checkDailyLimit(userId, 'works');
     if (!limit.allowed) { setError(limit.message); return; }
+    const mod = await moderateFields({ title, commentary });
+    if (!mod.allowed) { setError(mod.reason); return; }
     const existingWorks = worksByCategory[categoryId] || [];
     const sortOrder = existingWorks.length;
     const { error: insertErr } = await supabase
@@ -308,6 +315,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
 
   async function updateWork(categoryId, workId, { title, commentary }) {
     setError('');
+    const mod = await moderateFields({ title, commentary });
+    if (!mod.allowed) { setError(mod.reason); return; }
     const { error: err } = await supabase
       .from('works')
       .update({ title, commentary })

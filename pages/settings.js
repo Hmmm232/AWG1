@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
+import { moderateFields } from '@/lib/moderation';
 import styles from '@/styles/Settings.module.css';
 
 export default function Settings() {
@@ -36,6 +37,13 @@ export default function Settings() {
     setError('');
 
     try {
+      const mod = await moderateFields({ display_name: displayName.trim(), bio: bio.trim() });
+      if (!mod.allowed) {
+        setError(mod.reason);
+        setSaving(false);
+        return;
+      }
+
       const { error: updateError } = await supabase
         .from('profiles')
         .update({

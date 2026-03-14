@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
+import { moderateFields } from '@/lib/moderation';
 import styles from '@/styles/Garden.module.css';
 
 export default function ReRecButton({ workTitle, recommenderHandle, recommenderName, tab, itemId }) {
@@ -21,6 +22,12 @@ export default function ReRecButton({ workTitle, recommenderHandle, recommenderN
         .from('rerecs')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', user.id);
+
+      const mod = await moderateFields({ work_title: workTitle });
+      if (!mod.allowed) {
+        setStatus('idle');
+        return;
+      }
 
       const itemUrl = `${window.location.origin}/${recommenderHandle}?tab=${tab}&item=${itemId}`;
 

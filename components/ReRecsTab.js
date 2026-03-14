@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { checkDailyLimit } from '@/lib/rateLimits';
+import { moderateFields } from '@/lib/moderation';
 import ShareButton from './ShareButton';
 import gardenStyles from '@/styles/Garden.module.css';
 import styles from '@/styles/ReRecs.module.css';
@@ -98,6 +99,8 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
     setError('');
     const limit = await checkDailyLimit(userId, 'rerecs');
     if (!limit.allowed) { setError(limit.message); return; }
+    const mod = await moderateFields({ work_title, original_recommender, commentary });
+    if (!mod.allowed) { setError(mod.reason); return; }
     const sortOrder = rerecs.length;
     const { error: insertErr } = await supabase
       .from('rerecs')
@@ -116,6 +119,8 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
 
   async function updateReRec(id, { work_title, original_recommender, commentary, source_url }) {
     setError('');
+    const mod = await moderateFields({ work_title, original_recommender, commentary });
+    if (!mod.allowed) { setError(mod.reason); return; }
     const { error: err } = await supabase
       .from('rerecs')
       .update({ work_title, original_recommender, commentary, source_url })
