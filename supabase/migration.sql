@@ -234,6 +234,43 @@ create policy "Users can read their own reports"
 create policy "Users can delete their own profile"
   on profiles for delete using (auth.uid() = id);
 
+-- ─── Daily creation limits (database-level enforcement) ────────────
+-- These prevent abuse even if the client-side checks are bypassed.
+
+create or replace function public.daily_count(tbl text, uid uuid)
+returns integer as $$
+declare
+  cnt integer;
+begin
+  execute format(
+    'select count(*) from %I where user_id = $1 and created_at >= current_date',
+    tbl
+  ) into cnt using uid;
+  return cnt;
+end;
+$$ language plpgsql security definer stable;
+
+-- Drop the old permissive insert policies and replace with limited ones
+drop policy if exists "Users can insert their own categories" on categories;
+create policy "Users can insert their own categories"
+  on categories for insert
+  with check (auth.uid() = user_id and public.daily_count('categories', auth.uid()) < 20);
+
+drop policy if exists "Users can insert their own works" on works;
+create policy "Users can insert their own works"
+  on works for insert
+  with check (auth.uid() = user_id and public.daily_count('works', auth.uid()) < 50);
+
+drop policy if exists "Users can insert their own quotes" on quotes;
+create policy "Users can insert their own quotes"
+  on quotes for insert
+  with check (auth.uid() = user_id and public.daily_count('quotes', auth.uid()) < 50);
+
+drop policy if exists "Users can insert their own rerecs" on rerecs;
+create policy "Users can insert their own rerecs"
+  on rerecs for insert
+  with check (auth.uid() = user_id and public.daily_count('rerecs', auth.uid()) < 50);
+
 -- Function to automatically create a profile on signup
 -- You'll set this up as a database trigger in Supabase
 create or replace function public.handle_new_user()

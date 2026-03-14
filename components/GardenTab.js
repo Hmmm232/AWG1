@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
+import { checkDailyLimit } from '@/lib/rateLimits';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
 import LikeButton from './LikeButton';
@@ -199,6 +200,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
 
   async function addCategory({ name, introduction }) {
     setError('');
+    const limit = await checkDailyLimit(userId, 'categories');
+    if (!limit.allowed) { setError(limit.message); return; }
     const sortOrder = categories.length;
     const { error: insertErr } = await supabase
       .from('categories')
@@ -280,6 +283,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
 
   async function addWork(categoryId, { title, commentary }) {
     setError('');
+    const limit = await checkDailyLimit(userId, 'works');
+    if (!limit.allowed) { setError(limit.message); return; }
     const existingWorks = worksByCategory[categoryId] || [];
     const sortOrder = existingWorks.length;
     const { error: insertErr } = await supabase

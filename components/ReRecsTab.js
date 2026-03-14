@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { checkDailyLimit } from '@/lib/rateLimits';
 import ShareButton from './ShareButton';
 import gardenStyles from '@/styles/Garden.module.css';
 import styles from '@/styles/ReRecs.module.css';
@@ -95,6 +96,8 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
 
   async function addReRec({ work_title, original_recommender, commentary, source_url }) {
     setError('');
+    const limit = await checkDailyLimit(userId, 'rerecs');
+    if (!limit.allowed) { setError(limit.message); return; }
     const sortOrder = rerecs.length;
     const { error: insertErr } = await supabase
       .from('rerecs')

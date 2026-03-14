@@ -1,14 +1,50 @@
 import Link from 'next/link';
+import Head from 'next/head';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { scoreGarden, scoreCategory, scoreWork, scoreQuote, rank } from '@/lib/ranking';
 import styles from '@/styles/Home.module.css';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'A Walled Garden',
+  url: SITE_URL,
+  description:
+    'A new home for culture on the internet — curate your favourite books, poems, essays and curios, and share them with the world.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${SITE_URL}/explore?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
 
 export default function Home({ gardens, categories, works, quotes }) {
   const { user, profile } = useAuth();
 
   return (
     <div>
+      <Head>
+        <meta
+          name="description"
+          content="A Walled Garden — a new home for culture on the internet. Curate your favourite books, poems, essays and curios, and share them with the world."
+        />
+        <meta
+          property="og:description"
+          content="A Walled Garden — a new home for culture on the internet. Curate your favourite books, poems, essays and curios, and share them with the world."
+        />
+        <meta
+          name="twitter:description"
+          content="A Walled Garden — a new home for culture on the internet. Curate your favourite books, poems, essays and curios, and share them with the world."
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </Head>
+
       {/* Hero */}
       <section className={styles.hero}>
         <h1 className={styles.title}>A Walled Garden</h1>

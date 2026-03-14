@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { checkDailyLimit } from '@/lib/rateLimits';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
 import LikeButton from './LikeButton';
@@ -102,6 +103,8 @@ export default function QuotesTab({ userId, isOwner, profileHandle, profileName,
 
   async function addQuote({ quote_text, attribution, source, note }) {
     setError('');
+    const limit = await checkDailyLimit(userId, 'quotes');
+    if (!limit.allowed) { setError(limit.message); return; }
     const row = { user_id: userId, quote_text, attribution, source, sort_order: 0 };
     if (note !== undefined) row.note = note;
 
