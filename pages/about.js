@@ -9,8 +9,8 @@ export default function About({ buildTime }) {
       </Head>
 
       <div className={styles.page}>
-        <div className={styles.pageHeader}>
-          <h1 className={styles.pageTitle}>About A Walled Garden</h1>
+        <div className={styles.pageHeader} style={{ textAlign: 'center' }}>
+          <h1 className={styles.pageTitle} style={{ display: 'inline-block', paddingBottom: 'var(--space-xs)', borderBottom: '1px solid var(--color-accent)' }}>About A Walled Garden</h1>
         </div>
 
         <div style={{ maxWidth: '640px', margin: '0 auto', fontFamily: 'var(--font-serif)', fontSize: '1.05rem', lineHeight: 1.75, color: 'var(--color-ink)' }}>

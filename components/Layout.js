@@ -45,7 +45,7 @@ export default function Layout({ children }) {
     <div className={styles.container}>
       <nav className={styles.nav}>
         <Link href="/" className={styles.logo}>
-          A Walled Garden
+          A Walled Garden<span className={styles.logoSuffix}>.org</span>
         </Link>
 
         {/* Desktop nav links */}
