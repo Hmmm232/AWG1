@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import styles from '@/styles/Explore.module.css';
 
 export default function About({ buildTime }) {
@@ -47,6 +48,11 @@ export default function About({ buildTime }) {
           <p style={{ marginTop: '1.25rem' }}>Once you have added categories and works, you can move them around with the little up and down arrows which appear to the right of the title. There are also share, edit and delete buttons.</p>
 
           <p style={{ marginTop: '1.25rem' }}>Quotes work much in the same way.</p>
+
+          <div style={{ display: 'flex', gap: 'var(--space-md)', justifyContent: 'center', marginTop: '2.5rem' }}>
+            <Link href="/signup" className="btn btn-primary">Create a Garden</Link>
+            <Link href="/explore" className="btn btn-secondary">Explore</Link>
+          </div>
         </div>
 
         {buildTime && (

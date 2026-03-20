@@ -456,6 +456,11 @@
     padding-left: var(--space-sm);
   }
 
+  .categoryHeader,
+  .workHeader {
+    flex-direction: column;
+  }
+
   .actions {
     flex-wrap: wrap;
   }
