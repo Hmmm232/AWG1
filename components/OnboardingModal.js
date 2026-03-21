@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import styles from '@/styles/Onboarding.module.css';
 
 const SLIDES = [
   {
     title: 'Welcome to your garden',
-    body: 'This is your corner of the internet — a place to gather the books, poems, essays and curiosities that matter to you, and share them with whoever you like.',
+    body: 'Your own corner of the internet, a place to gather the books, poems, essays you love and discover works loved by others.',
   },
   {
     title: 'How it works',
@@ -19,23 +20,23 @@ const SLIDES = [
   },
   {
     title: 'Your toolkit',
-    body: 'Everything you need is on the page — here are the controls you\'ll see:',
+    body: 'Everything you need to create your garden is on the page.',
     hints: [
       ['+ Add a category', 'Creates a new shelf in your garden'],
       ['+ Add a work', 'Adds a book, essay, poem or curiosity to a category'],
       ['Edit / Delete', 'Appear on your own categories and works'],
       ['\u25B2 \u25BC arrows', 'Drag categories and works into your preferred order'],
-      ['Commentary', 'Optional — a few words on why something matters to you'],
-      ['Share garden', 'Copies a link to your garden so you can send it to anyone'],
+      ['Commentary', 'Add optional commentary on the work'],
+      ['Share garden', 'Copies a link to the garden to make it easy to share'],
     ],
   },
   {
     title: 'Beyond the garden',
-    body: 'You can also save quotes that have stayed with you, and re-recommend works that others have shared with you. Follow gardens you admire, and explore what the community is reading.',
+    body: 'Use our explore pages to discover what the community is reading, save works to your reading list, follow gardens you admire and find short works to read on the go.',
   },
   {
     title: 'One last thing',
-    body: 'There are no algorithms here, no feeds, no notifications fighting for your attention. Just a quiet place to curate what you love. Start by adding your first category.',
+    body: (<>Read about why we are building <Link href="/about"><em>awalledgarden.org</em></Link> here, or start now by adding your first category.</>),
   },
 ];
 
