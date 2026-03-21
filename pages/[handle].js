@@ -85,7 +85,7 @@ export default function ProfilePage({
       setTimeout(() => {
         const el = document.getElementById(item);
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
           el.classList.add('share-highlight');
           setTimeout(() => el.classList.remove('share-highlight'), 3000);
         }
