@@ -6,7 +6,7 @@ export default function FollowingTab({ isOwner, following, profileName }) {
     return (
       <p style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--color-ink-faint)', fontStyle: 'italic' }}>
         {isOwner
-          ? "You're not following anyone yet. Visit other gardens and follow the ones you like."
+          ? "You're not following anyone yet."
           : `${profileName} isn't following anyone yet.`}
       </p>
     );

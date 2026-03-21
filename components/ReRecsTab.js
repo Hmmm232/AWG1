@@ -91,31 +91,8 @@ function ReRecForm({ initial, onSave, onCancel }) {
 
 export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
   const [rerecs, setRerecs] = useState(initialReRecs || []);
-  const [showNewReRec, setShowNewReRec] = useState(false);
   const [editingReRecId, setEditingReRecId] = useState(null);
   const [error, setError] = useState('');
-
-  async function addReRec({ work_title, original_recommender, commentary, source_url }) {
-    setError('');
-    const limit = await checkDailyLimit(userId, 'rerecs');
-    if (!limit.allowed) { setError(limit.message); return; }
-    const mod = await moderateFields({ work_title, original_recommender, commentary });
-    if (!mod.allowed) { setError(mod.reason); return; }
-    const sortOrder = rerecs.length;
-    const { error: insertErr } = await supabase
-      .from('rerecs')
-      .insert({ user_id: userId, work_title, original_recommender, commentary, source_url, sort_order: sortOrder });
-    if (insertErr) { setError(insertErr.message); return; }
-
-    // Fetch fresh re-recs after successful insert
-    const { data: freshReRecs } = await supabase
-      .from('rerecs')
-      .select('*')
-      .eq('user_id', userId)
-      .order('sort_order', { ascending: true });
-    setRerecs(freshReRecs || []);
-    setShowNewReRec(false);
-  }
 
   async function updateReRec(id, { work_title, original_recommender, commentary, source_url }) {
     setError('');
@@ -171,18 +148,9 @@ export default function ReRecsTab({ userId, isOwner, initialReRecs }) {
     <div>
       {error && <p className={gardenStyles.error}>{error}</p>}
 
-      {isOwner && !showNewReRec && (
-        <button className={`${gardenStyles.addBtn} ${gardenStyles.addCategoryBtn}`} onClick={() => setShowNewReRec(true)}>
-          + Add a re-rec
-        </button>
-      )}
-      {isOwner && showNewReRec && (
-        <ReRecForm onSave={addReRec} onCancel={() => setShowNewReRec(false)} />
-      )}
-
-      {rerecs.length === 0 && isOwner && !showNewReRec && (
+      {rerecs.length === 0 && isOwner && (
         <p style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--color-ink-faint)', fontStyle: 'italic' }}>
-          No re-recs yet. Share a recommendation you received that deserves a wider audience.
+          No re-recs yet.
         </p>
       )}
 

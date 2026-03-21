@@ -216,7 +216,7 @@ export default function QuotesTab({ userId, isOwner, profileHandle, profileName,
 
       {quotes.length === 0 && isOwner && !showNewQuote && (
         <p style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--color-ink-faint)', fontStyle: 'italic' }}>
-          No quotes yet. Start collecting the words that stay with you.
+          No quotes yet. Add a quote using the button above.
         </p>
       )}
 
