@@ -34,11 +34,9 @@ export default function ExploreGardens({ gardens }) {
                   </p>
                   {g.bio && <p className={styles.cardBody}>{g.bio}</p>}
                   {g.categories && g.categories.length > 0 && (
-                    <div className={styles.cardCategories}>
-                      {g.categories.map((name, i) => (
-                        <span key={i} className={styles.cardCategoryTag}>{name}</span>
-                      ))}
-                    </div>
+                    <p className={styles.cardCategories}>
+                      {g.categories.join(' · ')}
+                    </p>
                   )}
                 </Link>
               </div>

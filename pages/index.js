@@ -158,9 +158,7 @@ export default function Home({ gardens, categories, works, quotes }) {
                       {g.bio && <span className={styles.gardenBio}>{g.bio}</span>}
                       {g.categories && g.categories.length > 0 && (
                         <span className={styles.gardenCategories}>
-                          {g.categories.map((name, i) => (
-                            <span key={i} className={styles.gardenCategoryTag}>{name}</span>
-                          ))}
+                          {g.categories.join(' · ')}
                         </span>
                       )}
                     </Link>
