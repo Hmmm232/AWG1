@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { scoreGarden, scoreCategory, scoreWork, scoreQuote, rank } from '@/lib/ranking';
 import styles from '@/styles/Home.module.css';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.com';
 
 const jsonLd = {
   '@context': 'https://schema.org',

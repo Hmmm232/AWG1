@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { moderateFields } from '@/lib/moderation';
+import { checkDailyLimit } from '@/lib/rateLimits';
 import styles from '@/styles/Garden.module.css';
 
 export default function ReRecButton({ workTitle, recommenderHandle, recommenderName, tab, itemId }) {
@@ -24,6 +25,13 @@ export default function ReRecButton({ workTitle, recommenderHandle, recommenderN
     setStatus('saving');
 
     try {
+      const limit = await checkDailyLimit(user.id, 'rerecs');
+      if (!limit.allowed) {
+        alert(limit.message);
+        setStatus('composing');
+        return;
+      }
+
       const { count } = await supabase
         .from('rerecs')
         .select('*', { count: 'exact', head: true })
