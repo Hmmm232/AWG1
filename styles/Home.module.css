@@ -140,10 +140,11 @@
 .cardInner {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding: var(--space-lg);
   color: var(--color-ink);
   height: 100%;
+  overflow: hidden;
 }
 
 .cardInner:hover {
@@ -235,9 +236,7 @@
   font-size: 0.9rem;
   color: var(--color-ink-light);
   line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  flex: 1;
   overflow: hidden;
 }
 
