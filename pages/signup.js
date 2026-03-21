@@ -84,6 +84,7 @@ export default function SignUp() {
 
         <div className={styles.field}>
           <label htmlFor="handle">Handle</label>
+          <small style={{ display: 'block', color: 'var(--color-ink-faint)', fontFamily: 'var(--font-sans)', fontSize: '0.78rem', marginBottom: '0.35rem' }}>Your handle is your @</small>
           <input
             id="handle"
             type="text"

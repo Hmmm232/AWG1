@@ -6,6 +6,7 @@ import { scoreWork, rank, buildLikeMap } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import LikeButton from '@/components/LikeButton';
 import SaveButton from '@/components/SaveButton';
+import ReRecButton from '@/components/ReRecButton';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreWorks({ works }) {
@@ -53,6 +54,15 @@ export default function ExploreWorks({ works }) {
                 <div className={styles.cardActions}>
                   <LikeButton itemId={w.id} itemType="work" />
                   <SaveButton itemId={w.id} itemType="work" />
+                  {w.profiles?.handle && (
+                    <ReRecButton
+                      workTitle={w.title}
+                      recommenderHandle={w.profiles.handle}
+                      recommenderName={w.profiles.display_name}
+                      tab="garden"
+                      itemId={w.id}
+                    />
+                  )}
                   {w.profiles?.handle && (
                     <Link
                       href={`/${w.profiles.handle}?tab=garden&item=${w.id}`}

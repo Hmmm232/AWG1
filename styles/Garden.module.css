@@ -225,6 +225,35 @@
   background: var(--color-accent-light);
 }
 
+.rerecCompose {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.rerecTextarea {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 6px;
+  resize: none;
+  line-height: 1.5;
+  color: var(--color-ink);
+  background: var(--color-white);
+}
+
+.rerecTextarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.rerecActions {
+  display: flex;
+  gap: 0.3rem;
+}
+
 .likeBtn {
   color: var(--color-ink-faint);
 }

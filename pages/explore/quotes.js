@@ -6,6 +6,7 @@ import { scoreQuote, rank, buildLikeMap } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import LikeButton from '@/components/LikeButton';
 import SaveButton from '@/components/SaveButton';
+import ReRecButton from '@/components/ReRecButton';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreQuotes({ quotes }) {
@@ -53,6 +54,15 @@ export default function ExploreQuotes({ quotes }) {
                 <div className={styles.cardActions}>
                   <LikeButton itemId={q.id} itemType="quote" />
                   <SaveButton itemId={q.id} itemType="quote" />
+                  {q.profiles?.handle && (
+                    <ReRecButton
+                      workTitle={`"${q.quote_text.slice(0, 80)}${q.quote_text.length > 80 ? '...' : ''}"`}
+                      recommenderHandle={q.profiles.handle}
+                      recommenderName={q.profiles.display_name}
+                      tab="quotes"
+                      itemId={q.id}
+                    />
+                  )}
                   {q.profiles?.handle && (
                     <Link
                       href={`/${q.profiles.handle}?tab=quotes&item=${q.id}`}
