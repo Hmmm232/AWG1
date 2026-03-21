@@ -108,6 +108,12 @@
   overflow: hidden;
 }
 
+.cardBodyExpanded {
+  font-size: 0.9rem;
+  color: var(--color-ink-light);
+  line-height: 1.6;
+}
+
 .cardBodyItalic {
   composes: cardBody;
   font-style: italic;
@@ -125,10 +131,67 @@
   overflow: hidden;
 }
 
+.cardQuoteExpanded {
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: var(--space-sm);
+}
+
 .cardAttr {
   font-size: 0.85rem;
   color: var(--color-ink-light);
   font-style: normal;
+}
+
+/* Read more toggle */
+.readMore {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.readMore:hover {
+  text-decoration: underline;
+}
+
+/* Go-to link */
+.goToLink {
+  margin-left: auto;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-accent);
+}
+
+.goToLink:hover {
+  text-decoration: underline;
+}
+
+/* Category tags on garden cards */
+.cardCategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: var(--space-sm);
+}
+
+.cardCategoryTag {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--color-ink-faint);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: 100px;
+  padding: 0.15rem 0.55rem;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Card action buttons (like, save) */

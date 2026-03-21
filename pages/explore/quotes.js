@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -8,6 +9,10 @@ import SaveButton from '@/components/SaveButton';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreQuotes({ quotes }) {
+  const [expanded, setExpanded] = useState({});
+
+  const toggle = (id) => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+
   return (
     <>
       <Head>
@@ -28,11 +33,10 @@ export default function ExploreQuotes({ quotes }) {
           <div className={styles.grid}>
             {quotes.map((q) => (
               <div key={q.id} className={styles.card}>
-                <Link
-                  href={q.profiles?.handle ? `/${q.profiles.handle}?tab=quotes&item=${q.id}` : '#'}
-                  className={styles.cardLink}
-                >
-                  <p className={styles.cardQuote}>&ldquo;{q.quote_text}&rdquo;</p>
+                <div className={styles.cardLink}>
+                  <p className={expanded[q.id] ? styles.cardQuoteExpanded : styles.cardQuote}>
+                    &ldquo;{q.quote_text}&rdquo;
+                  </p>
                   {q.attribution && (
                     <p className={styles.cardAttr}>
                       &mdash; {q.attribution}
@@ -42,10 +46,21 @@ export default function ExploreQuotes({ quotes }) {
                   <p className={styles.cardMeta} style={{ marginTop: 'var(--space-sm)' }}>
                     Shared by {q.profiles?.display_name || q.profiles?.handle || 'Unknown'}
                   </p>
-                </Link>
+                  <button className={styles.readMore} onClick={() => toggle(q.id)}>
+                    {expanded[q.id] ? 'Show less' : 'Read more'}
+                  </button>
+                </div>
                 <div className={styles.cardActions}>
                   <LikeButton itemId={q.id} itemType="quote" />
                   <SaveButton itemId={q.id} itemType="quote" />
+                  {q.profiles?.handle && (
+                    <Link
+                      href={`/${q.profiles.handle}?tab=quotes&item=${q.id}`}
+                      className={styles.goToLink}
+                    >
+                      Go to quote &rarr;
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}

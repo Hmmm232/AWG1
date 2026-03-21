@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -8,6 +9,10 @@ import SaveButton from '@/components/SaveButton';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreWorks({ works }) {
+  const [expanded, setExpanded] = useState({});
+
+  const toggle = (id) => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+
   return (
     <>
       <Head>
@@ -28,20 +33,34 @@ export default function ExploreWorks({ works }) {
           <div className={styles.grid}>
             {works.map((w) => (
               <div key={w.id} className={styles.card}>
-                <Link
-                  href={w.profiles?.handle ? `/${w.profiles.handle}?tab=garden&item=${w.id}` : '#'}
-                  className={styles.cardLink}
-                >
+                <div className={styles.cardLink}>
                   <p className={styles.cardTitle}>{w.title}</p>
                   <p className={styles.cardMeta}>
                     {w.profiles?.display_name || w.profiles?.handle || 'Unknown'}
                     {w.category_name && ` · ${w.category_name}`}
                   </p>
-                  {w.commentary && <p className={styles.cardBody}>{w.commentary}</p>}
-                </Link>
+                  {w.commentary && (
+                    <>
+                      <p className={expanded[w.id] ? styles.cardBodyExpanded : styles.cardBody}>
+                        {w.commentary}
+                      </p>
+                      <button className={styles.readMore} onClick={() => toggle(w.id)}>
+                        {expanded[w.id] ? 'Show less' : 'Read more'}
+                      </button>
+                    </>
+                  )}
+                </div>
                 <div className={styles.cardActions}>
                   <LikeButton itemId={w.id} itemType="work" />
                   <SaveButton itemId={w.id} itemType="work" />
+                  {w.profiles?.handle && (
+                    <Link
+                      href={`/${w.profiles.handle}?tab=garden&item=${w.id}`}
+                      className={styles.goToLink}
+                    >
+                      Go to work &rarr;
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}

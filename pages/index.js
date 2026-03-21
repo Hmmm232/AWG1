@@ -156,6 +156,13 @@ export default function Home({ gardens, categories, works, quotes }) {
                       <span className={styles.gardenName}>{g.display_name || g.handle}</span>
                       <span className={styles.gardenHandle}>@{g.handle}</span>
                       {g.bio && <span className={styles.gardenBio}>{g.bio}</span>}
+                      {g.categories && g.categories.length > 0 && (
+                        <span className={styles.gardenCategories}>
+                          {g.categories.map((name, i) => (
+                            <span key={i} className={styles.gardenCategoryTag}>{name}</span>
+                          ))}
+                        </span>
+                      )}
                     </Link>
                   </li>
                 ))}
@@ -265,6 +272,7 @@ export async function getStaticProps() {
     { data: followerCounts },
     { data: workCounts },
     { data: categoryCounts },
+    { data: categoryNameData },
   ] = await Promise.all([
     supabase
       .from('profiles')
@@ -286,6 +294,7 @@ export async function getStaticProps() {
     supabase.from('follows').select('following_id'),
     supabase.from('works').select('category_id, user_id'),
     supabase.from('categories').select('user_id'),
+    supabase.from('categories').select('user_id, name, sort_order').order('sort_order', { ascending: true }),
   ]);
 
   // Build lookup maps
@@ -306,9 +315,16 @@ export async function getStaticProps() {
     catsPerUser[c.user_id] = (catsPerUser[c.user_id] || 0) + 1;
   }
 
+  const userCategories = {};
+  for (const c of (categoryNameData || [])) {
+    if (!userCategories[c.user_id]) userCategories[c.user_id] = [];
+    userCategories[c.user_id].push(c.name);
+  }
+
   // Score and rank gardens
   const scoredGardens = (profiles || []).map((g) => ({
     ...g,
+    categories: userCategories[g.id] || [],
     follower_count: followerMap[g.id] || 0,
     category_count: catsPerUser[g.id] || 0,
     work_count: worksPerUser[g.id] || 0,

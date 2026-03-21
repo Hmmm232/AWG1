@@ -33,6 +33,13 @@ export default function ExploreGardens({ gardens }) {
                     {g.follower_count > 0 && ` · ${g.follower_count} ${g.follower_count === 1 ? 'follower' : 'followers'}`}
                   </p>
                   {g.bio && <p className={styles.cardBody}>{g.bio}</p>}
+                  {g.categories && g.categories.length > 0 && (
+                    <div className={styles.cardCategories}>
+                      {g.categories.map((name, i) => (
+                        <span key={i} className={styles.cardCategoryTag}>{name}</span>
+                      ))}
+                    </div>
+                  )}
                 </Link>
               </div>
             ))}
@@ -53,11 +60,13 @@ export async function getStaticProps() {
     { data: followerCounts },
     { data: workCounts },
     { data: categoryCounts },
+    { data: categoryNames },
   ] = await Promise.all([
     supabase.from('profiles').select('id, handle, display_name, bio, featured'),
     supabase.from('follows').select('following_id'),
     supabase.from('works').select('user_id'),
     supabase.from('categories').select('user_id'),
+    supabase.from('categories').select('user_id, name, sort_order').order('sort_order', { ascending: true }),
   ]);
 
   const followerMap = {};
@@ -73,6 +82,12 @@ export async function getStaticProps() {
     catsMap[c.user_id] = (catsMap[c.user_id] || 0) + 1;
   }
 
+  const userCategories = {};
+  for (const c of (categoryNames || [])) {
+    if (!userCategories[c.user_id]) userCategories[c.user_id] = [];
+    userCategories[c.user_id].push(c.name);
+  }
+
   const scored = (profiles || []).map((p) => {
     const enriched = {
       ...p,
@@ -80,7 +95,7 @@ export async function getStaticProps() {
       category_count: catsMap[p.id] || 0,
       work_count: worksMap[p.id] || 0,
     };
-    return { ...enriched, _score: scoreGarden(enriched) };
+    return { ...enriched, categories: userCategories[p.id] || [], _score: scoreGarden(enriched) };
   });
 
   const gardens = rank(scored, 'gardens').map(({ _score, category_count, work_count, featured, ...rest }) => rest);
