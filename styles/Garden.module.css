@@ -178,12 +178,15 @@
 }
 
 .iconBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   background: none;
   border: 1px solid var(--color-border-light);
   border-radius: 6px;
   color: var(--color-ink-faint);
   cursor: pointer;
-  padding: 0.25rem 0.45rem;
+  padding: 0.3rem 0.45rem;
   font-size: 0.8rem;
   font-family: var(--font-sans);
   line-height: 1;
