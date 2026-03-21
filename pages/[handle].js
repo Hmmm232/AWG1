@@ -151,8 +151,11 @@ export default function ProfilePage({
         <meta property="og:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
         <meta property="og:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />
         <meta property="og:type" content="profile" />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.com'}/api/og?title=${encodeURIComponent(profile.display_name || profile.handle)}&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`} />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
         <meta name="twitter:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />
+        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.com'}/api/og?title=${encodeURIComponent(profile.display_name || profile.handle)}&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`} />
       </Head>
 
       <div className={styles.header}>

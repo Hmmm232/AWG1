@@ -27,9 +27,13 @@ export default function App({ Component, pageProps }) {
         <meta property="og:title" content="A Walled Garden" />
         <meta property="og:description" content="A place to gather the works that have shaped you — books, essays, poems — and share them with others." />
         <meta property="og:url" content={canonicalUrl} />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:image" content={`${SITE_URL}/api/og`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="A Walled Garden" />
         <meta name="twitter:description" content="A place to gather the works that have shaped you — books, essays, poems — and share them with others." />
+        <meta name="twitter:image" content={`${SITE_URL}/api/og`} />
       </Head>
       <Layout>
         <ErrorBoundary>
