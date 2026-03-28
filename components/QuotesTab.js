@@ -230,48 +230,44 @@ export default function QuotesTab({ userId, isOwner, profileHandle, profileName,
             />
           ) : (
             <>
-              <div className={styles.categoryHeader}>
-                <div style={{ flex: 1 }}>
-                  <blockquote className={styles.quoteBlock}>
-                    &ldquo;{quote.quote_text}&rdquo;
-                  </blockquote>
-                  {(quote.attribution || quote.source) && (
-                    <p className={styles.quoteAttribution}>
-                      {quote.attribution && <span>— {quote.attribution}</span>}
-                      {quote.attribution && quote.source && ', '}
-                      {quote.source && <em>{quote.source}</em>}
-                    </p>
-                  )}
-                  {quote.note && (
-                    <p className={styles.quoteNote}>
-                      {quote.note}
-                    </p>
-                  )}
-                </div>
-                <div className={styles.actions}>
-                  <LikeButton itemId={quote.id} itemType="quote" />
-                  <SaveButton itemId={quote.id} itemType="quote" />
-                  {!isOwner && (
-                    <ReRecButton
-                      workTitle={quote.attribution ? `"${quote.quote_text.slice(0, 80)}${quote.quote_text.length > 80 ? '...' : ''}" — ${quote.attribution}` : `"${quote.quote_text.slice(0, 100)}${quote.quote_text.length > 100 ? '...' : ''}"`}
-                      recommenderHandle={profileHandle}
-                      recommenderName={profileName}
-                      tab="quotes"
-                      itemId={quote.id}
-                    />
-                  )}
-                  <ShareButton tab="quotes" itemId={quote.id} />
-                  {isOwner && (
-                    <>
-                      <div className={styles.reorderGroup}>
-                        <button className={styles.reorderBtn} onClick={() => reorderQuote(index, -1)} disabled={index === 0} title="Move up">&#9650;</button>
-                        <button className={styles.reorderBtn} onClick={() => reorderQuote(index, 1)} disabled={index === quotes.length - 1} title="Move down">&#9660;</button>
-                      </div>
-                      <button className={styles.iconBtn} onClick={() => setEditingQuoteId(quote.id)} title="Edit">Edit</button>
-                      <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteQuote(quote.id)} title="Delete">Delete</button>
-                    </>
-                  )}
-                </div>
+              <blockquote className={styles.quoteBlock}>
+                &ldquo;{quote.quote_text}&rdquo;
+              </blockquote>
+              {(quote.attribution || quote.source) && (
+                <p className={styles.quoteAttribution}>
+                  {quote.attribution && <span>— {quote.attribution}</span>}
+                  {quote.attribution && quote.source && ', '}
+                  {quote.source && <em>{quote.source}</em>}
+                </p>
+              )}
+              {quote.note && (
+                <p className={styles.quoteNote}>
+                  {quote.note}
+                </p>
+              )}
+              <div className={styles.actionsBelow}>
+                <LikeButton itemId={quote.id} itemType="quote" />
+                <SaveButton itemId={quote.id} itemType="quote" />
+                {!isOwner && (
+                  <ReRecButton
+                    workTitle={quote.attribution ? `"${quote.quote_text.slice(0, 80)}${quote.quote_text.length > 80 ? '...' : ''}" — ${quote.attribution}` : `"${quote.quote_text.slice(0, 100)}${quote.quote_text.length > 100 ? '...' : ''}"`}
+                    recommenderHandle={profileHandle}
+                    recommenderName={profileName}
+                    tab="quotes"
+                    itemId={quote.id}
+                  />
+                )}
+                <ShareButton tab="quotes" itemId={quote.id} />
+                {isOwner && (
+                  <>
+                    <div className={styles.reorderGroup}>
+                      <button className={styles.reorderBtn} onClick={() => reorderQuote(index, -1)} disabled={index === 0} title="Move up">&#9650;</button>
+                      <button className={styles.reorderBtn} onClick={() => reorderQuote(index, 1)} disabled={index === quotes.length - 1} title="Move down">&#9660;</button>
+                    </div>
+                    <button className={styles.iconBtn} onClick={() => setEditingQuoteId(quote.id)} title="Edit">Edit</button>
+                    <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteQuote(quote.id)} title="Delete">Delete</button>
+                  </>
+                )}
               </div>
             </>
           )}

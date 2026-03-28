@@ -467,12 +467,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                   ) : (
                     <>
                       <div className={styles.workHeader}>
-                        <div className={styles.workText}>
-                          <p className={styles.workTitle}>{work.title}</p>
-                          {work.commentary && (
-                            <p className={styles.workCommentary}>{work.commentary}</p>
-                          )}
-                        </div>
+                        <p className={styles.workTitle}>{work.title}</p>
                         <div className={styles.actions}>
                           <LikeButton itemId={work.id} itemType="work" />
                           <SaveButton itemId={work.id} itemType="work" />
@@ -512,6 +507,9 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                           )}
                         </div>
                       </div>
+                      {work.commentary && (
+                        <p className={styles.workCommentary}>{work.commentary}</p>
+                      )}
                     </>
                   )}
                 </li>
