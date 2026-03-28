@@ -60,6 +60,9 @@ export default function About({ buildTime }) {
             Build {buildTime}
           </p>
         )}
+        <p style={{ textAlign: 'center', marginTop: '0.5rem', fontSize: '0.65rem', color: '#ccc', letterSpacing: '0.02em' }}>
+          Last updated 2026-03-28 by C
+        </p>
       </div>
     </>
   );
