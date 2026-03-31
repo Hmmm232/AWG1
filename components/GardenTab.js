@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { checkDailyLimit } from '@/lib/rateLimits';
 import { moderateFields } from '@/lib/moderation';
+import { logWriteFailure } from '@/lib/logger';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
 import LikeButton from './LikeButton';
@@ -209,7 +210,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     const { error: insertErr } = await supabase
       .from('categories')
       .insert({ user_id: userId, name, introduction, sort_order: sortOrder });
-    if (insertErr) { setError(insertErr.message); return; }
+    if (insertErr) { logWriteFailure({ action: 'add_category', error: insertErr }); setError(insertErr.message); return; }
 
     // Fetch fresh categories after successful insert
     const { data: freshCategories } = await supabase
@@ -237,7 +238,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
       .from('categories')
       .update({ name, introduction })
       .eq('id', id);
-    if (err) { setError(err.message); return; }
+    if (err) { logWriteFailure({ action: 'update_category', error: err }); setError(err.message); return; }
     setCategories(categories.map((c) => c.id === id ? { ...c, name, introduction } : c));
     setEditingCategoryId(null);
   }
@@ -297,7 +298,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     const { error: insertErr } = await supabase
       .from('works')
       .insert({ category_id: categoryId, user_id: userId, title, commentary, sort_order: sortOrder });
-    if (insertErr) { setError(insertErr.message); return; }
+    if (insertErr) { logWriteFailure({ action: 'add_work', error: insertErr }); setError(insertErr.message); return; }
 
     // Fetch fresh works for this category after successful insert
     const { data: freshWorks } = await supabase
@@ -321,7 +322,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
       .from('works')
       .update({ title, commentary })
       .eq('id', workId);
-    if (err) { setError(err.message); return; }
+    if (err) { logWriteFailure({ action: 'update_work', error: err }); setError(err.message); return; }
     setWorksByCategory({
       ...worksByCategory,
       [categoryId]: worksByCategory[categoryId].map((w) =>

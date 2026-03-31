@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { checkDailyLimit } from '@/lib/rateLimits';
 import { moderateFields } from '@/lib/moderation';
+import { logWriteFailure } from '@/lib/logger';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
 import LikeButton from './LikeButton';
@@ -128,7 +129,7 @@ export default function QuotesTab({ userId, isOwner, profileHandle, profileName,
       .from('quotes')
       .insert(row);
     if (insertErr) {
-      console.error('Quote insert failed:', insertErr);
+      logWriteFailure({ action: 'add_quote', error: insertErr });
       setError(insertErr.message);
       throw new Error(insertErr.message);
     }
@@ -155,7 +156,7 @@ export default function QuotesTab({ userId, isOwner, profileHandle, profileName,
       .update(fields)
       .eq('id', id);
     if (updateErr) {
-      console.error('Quote update failed:', updateErr);
+      logWriteFailure({ action: 'update_quote', error: updateErr });
       setError(updateErr.message);
       throw new Error(updateErr.message);
     }

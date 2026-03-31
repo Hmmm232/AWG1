@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { moderateFields } from '@/lib/moderation';
+import { logWriteFailure } from '@/lib/logger';
 import styles from '@/styles/Settings.module.css';
 
 export default function Settings() {
@@ -53,6 +54,7 @@ export default function Settings() {
         .eq('id', user.id);
 
       if (updateError) {
+        logWriteFailure({ action: 'update_profile', error: updateError });
         setError(updateError.message);
       } else {
         setSaved(true);

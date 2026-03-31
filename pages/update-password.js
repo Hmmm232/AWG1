@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
 import styles from '@/styles/Auth.module.css';
@@ -8,14 +8,29 @@ export default function UpdatePassword() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    // Wait for Supabase to pick up the session from the URL hash tokens.
+    // The PASSWORD_RECOVERY event confirms the reset link was valid.
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event) => {
+        if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
+          setReady(true);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
       setLoading(false);
       return;
     }
@@ -34,6 +49,15 @@ export default function UpdatePassword() {
     router.push('/signin');
   }
 
+  if (!ready) {
+    return (
+      <div className={styles.page}>
+        <h1 className={styles.title}>Set a new password</h1>
+        <p className={styles.subtitle}>Verifying your reset link...</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>Set a new password</h1>
@@ -47,7 +71,7 @@ export default function UpdatePassword() {
           <input
             id="password"
             type="password"
-            placeholder="At least 6 characters"
+            placeholder="At least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
