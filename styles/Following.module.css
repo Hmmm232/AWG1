@@ -65,6 +65,8 @@
   font-size: 0.9rem;
   color: var(--color-ink-light);
   line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 @media (max-width: 640px) {

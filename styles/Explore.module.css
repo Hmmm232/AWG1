@@ -68,6 +68,8 @@
   border-left: 3px solid var(--color-accent);
   border-radius: 10px;
   transition: box-shadow 0.2s ease;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .card:hover {
@@ -78,6 +80,7 @@
   display: block;
   padding: var(--space-lg);
   color: var(--color-ink);
+  overflow: hidden;
 }
 
 .cardLink:hover {
@@ -96,6 +99,8 @@
   font-size: 0.8rem;
   color: var(--color-ink-faint);
   margin-bottom: var(--space-sm);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .cardBody {
@@ -106,12 +111,16 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .cardBodyExpanded {
   font-size: 0.9rem;
   color: var(--color-ink-light);
   line-height: 1.6;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .cardBodyItalic {
