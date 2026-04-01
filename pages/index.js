@@ -245,7 +245,7 @@ export default function Home({ gardens, categories, works, quotes }) {
           <Link href="/explore" className="btn btn-secondary">
             Explore
           </Link>
-          <Link href="/about" className="btn btn-secondary">
+          <Link href="/about#tips" className="btn btn-secondary">
             Guide to creating a garden
           </Link>
         </div>

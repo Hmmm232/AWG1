@@ -109,7 +109,7 @@ export default function SavedPage() {
 
         {totalSaved === 0 ? (
           <p className={styles.empty}>
-            Nothing saved yet. Browse <Link href="/explore">Explore</Link> to discover works, quotes and categories to save.
+            Nothing saved yet. Browse <Link href="/explore">Explore</Link> to discover works, quotes and categories worth saving.
           </p>
         ) : (
           <div className={styles.grid}>

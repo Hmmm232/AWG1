@@ -84,11 +84,11 @@ export default function SignUp() {
 
         <div className={styles.field}>
           <label htmlFor="handle">Handle</label>
-          <small style={{ display: 'block', color: 'var(--color-ink-faint)', fontFamily: 'var(--font-sans)', fontSize: '0.78rem', marginBottom: '0.35rem' }}>Your handle is your @</small>
+          <small style={{ display: 'block', color: 'var(--color-ink-faint)', fontFamily: 'var(--font-sans)', fontSize: '0.78rem', marginBottom: '0.35rem' }}>This is your @ — it&rsquo;s how people find and link to your garden</small>
           <input
             id="handle"
             type="text"
-            placeholder="marcus"
+            placeholder="yourname"
             value={handle}
             onChange={(e) => setHandle(e.target.value)}
             required
@@ -100,7 +100,7 @@ export default function SignUp() {
           <input
             id="displayName"
             type="text"
-            placeholder="Marcus Aurelius"
+            placeholder="Your Name"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             maxLength={100}

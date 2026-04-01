@@ -27,7 +27,7 @@ export default function About({ buildTime }) {
 
           <p style={{ marginTop: '1.25rem' }}>This site is a walled garden, protected from the weeds, pests and predators out there. If successful it will direct you outwards and onwards, to curiosities and works of art that add to life. We will not keep you captive in an endless stream of ephemeral slop that detracts from it.</p>
 
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', fontWeight: 600, marginTop: '2.5rem', marginBottom: '1rem', color: 'var(--color-ink)' }}>A few tips about creating your garden</h2>
+          <h2 id="tips" style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', fontWeight: 600, marginTop: '2.5rem', marginBottom: '1rem', color: 'var(--color-ink)' }}>A few tips about creating your garden</h2>
 
           <p>The selections you make will not be carved on your gravestone, you are free to make as many changes, edits, additions and removals as you please, so creating a garden is most enjoyable when you shoot from the hip.</p>
 
@@ -61,7 +61,7 @@ export default function About({ buildTime }) {
           </p>
         )}
         <p style={{ textAlign: 'center', marginTop: '0.5rem', fontSize: '0.65rem', color: '#ccc', letterSpacing: '0.02em' }}>
-          Last updated 2026-04-01 10:30 by C
+          Last updated 2026-04-01 11:00 by C
         </p>
       </div>
     </>

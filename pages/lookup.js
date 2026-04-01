@@ -79,7 +79,7 @@ export default function LookupAccount() {
             <input
               id="handle"
               type="text"
-              placeholder="e.g. marcus"
+              placeholder="e.g. yourname"
               value={handle}
               onChange={(e) => setHandle(e.target.value)}
               required
