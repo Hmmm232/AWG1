@@ -3,10 +3,10 @@ import Link from 'next/link';
 import styles from '@/styles/Explore.module.css';
 
 const SECTIONS = [
-  { href: '/explore/gardens', label: 'Gardens', desc: 'Browse gardens planted by our community.' },
-  { href: '/explore/categories', label: 'Categories', desc: 'Curated reading lists and collections.' },
   { href: '/explore/works', label: 'Works', desc: 'Books, poems, essays and curiosities.' },
   { href: '/explore/quotes', label: 'Quotes', desc: 'Words that stay with people.' },
+  { href: '/explore/categories', label: 'Categories', desc: 'Curated reading lists and collections.' },
+  { href: '/explore/gardens', label: 'Gardens', desc: 'Browse gardens planted by our community.' },
 ];
 
 export default function ExplorePage() {

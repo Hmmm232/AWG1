@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import styles from '@/styles/Explore.module.css';
 
 const LINKS = [
-  { href: '/explore/gardens', label: 'Gardens' },
-  { href: '/explore/categories', label: 'Categories' },
   { href: '/explore/works', label: 'Works' },
   { href: '/explore/quotes', label: 'Quotes' },
+  { href: '/explore/categories', label: 'Categories' },
+  { href: '/explore/gardens', label: 'Gardens' },
 ];
 
 export default function ExploreNav() {
