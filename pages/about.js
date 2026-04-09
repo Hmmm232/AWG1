@@ -7,6 +7,7 @@ export default function About({ buildTime }) {
     <>
       <Head>
         <title>About — A Walled Garden</title>
+        <meta name="description" content="A Walled Garden is a place to curate and share your favourite books, poems, essays and quotes. Learn how it works and why we built it." />
       </Head>
 
       <div className={styles.page}>
@@ -61,7 +62,7 @@ export default function About({ buildTime }) {
           </p>
         )}
         <p style={{ textAlign: 'center', marginTop: '0.5rem', fontSize: '0.65rem', color: '#ccc', letterSpacing: '0.02em' }}>
-          Last updated 2026-04-01 11:00 by C
+          Last updated 2026-04-09 09:00 by C
         </p>
       </div>
     </>

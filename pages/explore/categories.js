@@ -12,6 +12,7 @@ export default function ExploreCategories({ categories }) {
     <>
       <Head>
         <title>Explore Categories — A Walled Garden</title>
+        <meta name="description" content="Explore curated reading lists and collections from across the A Walled Garden community." />
       </Head>
 
       <div className={styles.page}>
@@ -27,7 +28,7 @@ export default function ExploreCategories({ categories }) {
         ) : (
           <div className={styles.grid}>
             {categories.map((c) => (
-              <div key={c.id} className={styles.card}>
+              <article key={c.id} className={styles.card}>
                 <Link
                   href={c.profiles?.handle ? `/${c.profiles.handle}?tab=garden&item=${c.id}` : '#'}
                   className={styles.cardLink}
@@ -43,7 +44,7 @@ export default function ExploreCategories({ categories }) {
                   <LikeButton itemId={c.id} itemType="category" />
                   <SaveButton itemId={c.id} itemType="category" />
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         )}

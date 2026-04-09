@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /settings
 Disallow: /saved
 
-Sitemap: https://awalledgarden.com/sitemap.xml
+Sitemap: https://awalledgarden.org/sitemap.xml

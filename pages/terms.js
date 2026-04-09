@@ -6,6 +6,7 @@ export default function Terms() {
     <>
       <Head>
         <title>Terms of Service — A Walled Garden</title>
+        <meta name="description" content="Terms of service for A Walled Garden — the rules and guidelines for using the site." />
       </Head>
 
       <div style={{ maxWidth: '640px', margin: '0 auto', padding: 'var(--space-xl) 0' }}>

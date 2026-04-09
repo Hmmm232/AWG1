@@ -6,6 +6,7 @@ export default function Privacy() {
     <>
       <Head>
         <title>Privacy Policy — A Walled Garden</title>
+        <meta name="description" content="Privacy policy for A Walled Garden — how we handle your data, what we collect, and your rights." />
       </Head>
 
       <div style={{ maxWidth: '640px', margin: '0 auto', padding: 'var(--space-xl) 0' }}>

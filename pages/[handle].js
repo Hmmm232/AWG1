@@ -11,6 +11,8 @@ import FollowingTab from '@/components/FollowingTab';
 import OnboardingModal from '@/components/OnboardingModal';
 import styles from '@/styles/Profile.module.css';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
+
 function ShareProfileButton({ handle }) {
   const [copied, setCopied] = useState(false);
 
@@ -151,11 +153,24 @@ export default function ProfilePage({
         <meta property="og:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
         <meta property="og:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />
         <meta property="og:type" content="profile" />
-        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.com'}/api/og?title=${encodeURIComponent(profile.display_name || profile.handle)}&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`} />
+        <meta property="og:image" content={`${SITE_URL}/api/og?title=${encodeURIComponent(profile.display_name || profile.handle)}&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
         <meta name="twitter:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />
-        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.com'}/api/og?title=${encodeURIComponent(profile.display_name || profile.handle)}&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`} />
+        <meta name="twitter:image" content={`${SITE_URL}/api/og?title=${encodeURIComponent(profile.display_name || profile.handle)}&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ProfilePage',
+            mainEntity: {
+              '@type': 'Person',
+              name: profile.display_name || profile.handle,
+              url: `${SITE_URL}/${profile.handle}`,
+              ...(profile.bio && { description: profile.bio }),
+            },
+          }) }}
+        />
       </Head>
 
       <div className={styles.header}>

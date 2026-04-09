@@ -10,6 +10,7 @@ export default function ExploreGardens({ gardens }) {
     <>
       <Head>
         <title>Explore Gardens — A Walled Garden</title>
+        <meta name="description" content="Browse gardens planted by our community — personal collections of favourite books, essays, poems and more." />
       </Head>
 
       <div className={styles.page}>
@@ -25,7 +26,7 @@ export default function ExploreGardens({ gardens }) {
         ) : (
           <div className={styles.grid}>
             {gardens.map((g) => (
-              <div key={g.id} className={styles.card}>
+              <article key={g.id} className={styles.card}>
                 <Link href={`/${g.handle}`} className={styles.cardLink}>
                   <p className={styles.cardTitle}>{g.display_name || g.handle}</p>
                   <p className={styles.cardMeta}>
@@ -39,7 +40,7 @@ export default function ExploreGardens({ gardens }) {
                     </p>
                   )}
                 </Link>
-              </div>
+              </article>
             ))}
           </div>
         )}

@@ -5,7 +5,7 @@ import Layout from '@/components/Layout';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Head from 'next/head';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();

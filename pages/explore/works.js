@@ -18,6 +18,7 @@ export default function ExploreWorks({ works }) {
     <>
       <Head>
         <title>Explore Works — A Walled Garden</title>
+        <meta name="description" content="Discover books, poems, essays and curiosities recommended by the A Walled Garden community." />
       </Head>
 
       <div className={styles.page}>
@@ -33,7 +34,7 @@ export default function ExploreWorks({ works }) {
         ) : (
           <div className={styles.grid}>
             {works.map((w) => (
-              <div key={w.id} className={styles.card}>
+              <article key={w.id} className={styles.card}>
                 <div className={styles.cardLink}>
                   <p className={styles.cardTitle}>{w.title}</p>
                   <p className={styles.cardMeta}>
@@ -72,7 +73,7 @@ export default function ExploreWorks({ works }) {
                     </Link>
                   )}
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         )}

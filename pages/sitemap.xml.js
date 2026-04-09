@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
 
 function escapeXml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

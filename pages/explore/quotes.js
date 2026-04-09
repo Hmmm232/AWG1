@@ -18,6 +18,7 @@ export default function ExploreQuotes({ quotes }) {
     <>
       <Head>
         <title>Explore Quotes — A Walled Garden</title>
+        <meta name="description" content="Quotes that stay with people — words from books, poems, essays and more, shared by the community." />
       </Head>
 
       <div className={styles.page}>
@@ -33,7 +34,7 @@ export default function ExploreQuotes({ quotes }) {
         ) : (
           <div className={styles.grid}>
             {quotes.map((q) => (
-              <div key={q.id} className={styles.card}>
+              <article key={q.id} className={styles.card}>
                 <div className={styles.cardLink}>
                   <p className={expanded[q.id] ? styles.cardQuoteExpanded : styles.cardQuote}>
                     &ldquo;{q.quote_text}&rdquo;
@@ -72,7 +73,7 @@ export default function ExploreQuotes({ quotes }) {
                     </Link>
                   )}
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         )}
