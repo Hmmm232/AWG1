@@ -77,23 +77,9 @@ export default function SignUp() {
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>Create your garden</h1>
-      <p className={styles.subtitle}>Start curating the works that matter to you.</p>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         {error && <div className={styles.error}>{error}</div>}
-
-        <div className={styles.field}>
-          <label htmlFor="handle">Handle</label>
-          <small style={{ display: 'block', color: 'var(--color-ink-faint)', fontFamily: 'var(--font-sans)', fontSize: '0.78rem', marginBottom: '0.35rem' }}>This is your @ — it&rsquo;s how people find and link to your garden</small>
-          <input
-            id="handle"
-            type="text"
-            placeholder="yourname"
-            value={handle}
-            onChange={(e) => setHandle(e.target.value)}
-            required
-          />
-        </div>
 
         <div className={styles.field}>
           <label htmlFor="displayName">Display name</label>
@@ -104,6 +90,18 @@ export default function SignUp() {
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             maxLength={100}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="handle">Handle</label>
+          <input
+            id="handle"
+            type="text"
+            placeholder="This is your @"
+            value={handle}
+            onChange={(e) => setHandle(e.target.value)}
+            required
           />
         </div>
 
