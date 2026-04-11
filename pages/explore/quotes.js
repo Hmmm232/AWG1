@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -10,9 +11,25 @@ import ReRecButton from '@/components/ReRecButton';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreQuotes({ quotes }) {
+  const router = useRouter();
   const [expanded, setExpanded] = useState({});
 
   const toggle = (id) => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  // Scroll to and highlight a specific quote when ?item= is present
+  useEffect(() => {
+    const { item } = router.query;
+    if (item) {
+      setTimeout(() => {
+        const el = document.getElementById(item);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          el.classList.add('share-highlight');
+          setTimeout(() => el.classList.remove('share-highlight'), 3000);
+        }
+      }, 150);
+    }
+  }, [router.query]);
 
   return (
     <>
@@ -34,7 +51,7 @@ export default function ExploreQuotes({ quotes }) {
         ) : (
           <div className={styles.grid}>
             {quotes.map((q) => (
-              <article key={q.id} className={styles.card}>
+              <article key={q.id} id={q.id} className={styles.card}>
                 <div className={styles.cardLink}>
                   <p className={expanded[q.id] ? styles.cardQuoteExpanded : styles.cardQuote}>
                     &ldquo;{q.quote_text}&rdquo;

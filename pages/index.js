@@ -118,7 +118,7 @@ export default function Home({ gardens, categories, works, quotes }) {
                 {quotes.map((q) => (
                   <li key={q.id} className={styles.card}>
                     <Link
-                      href={q.profiles?.handle ? `/${q.profiles.handle}?tab=quotes&item=${q.id}` : '#'}
+                      href={`/explore/quotes?item=${q.id}`}
                       className={styles.cardInner}
                     >
                       <blockquote className={styles.quoteText}>
