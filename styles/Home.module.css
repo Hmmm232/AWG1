@@ -184,8 +184,9 @@
   line-height: 1.6;
   overflow: hidden;
   word-break: break-word;
-  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
-  mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 .gardenCategories {
@@ -229,8 +230,9 @@
   font-style: italic;
   line-height: 1.6;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
-  mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 /* ─── Card text: work ─────────────────────────────────────── */
@@ -241,8 +243,9 @@
   color: var(--color-ink-light);
   line-height: 1.6;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
-  mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 
 /* ─── Card text: quote ────────────────────────────────────── */
@@ -254,8 +257,9 @@
   font-size: 0.95rem;
   line-height: 1.7;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
-  mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 
 .quoteAttr {
