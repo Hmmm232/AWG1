@@ -1,6 +1,19 @@
+import { rateLimit, getClientIp } from '@/lib/rateLimit';
+
+export const config = {
+  api: { bodyParser: { sizeLimit: '16kb' } },
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Rate limit: 20 moderation requests per minute per IP
+  const ip = getClientIp(req);
+  const { allowed: withinLimit } = rateLimit(`moderate:${ip}`, 20, 60_000);
+  if (!withinLimit) {
+    return res.status(429).json({ error: 'Too many requests', allowed: true });
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
