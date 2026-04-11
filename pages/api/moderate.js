@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   const ip = getClientIp(req);
   const { allowed: withinLimit } = rateLimit(`moderate:${ip}`, 20, 60_000);
   if (!withinLimit) {
-    return res.status(429).json({ error: 'Too many requests', allowed: true });
+    return res.status(429).json({ error: 'Too many requests', allowed: false, reason: 'You are doing this too quickly. Please wait a moment and try again.' });
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
