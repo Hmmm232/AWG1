@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }) {
   return (
     <AuthProvider>
       <Head>
-        <title>A Walled Garden</title>
+        <title>A Walled Garden | Books, Poems, Essays &amp; Quotes</title>
         <meta name="description" content="Curate your favourite works. Build your garden." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -24,14 +24,14 @@ export default function App({ Component, pageProps }) {
         {/* Open Graph defaults — individual pages can override */}
         <meta property="og:site_name" content="A Walled Garden" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="A Walled Garden" />
+        <meta property="og:title" content="A Walled Garden | Books, Poems, Essays &amp; Quotes" />
         <meta property="og:description" content="A place to gather the works that have shaped you — books, essays, poems — and share them with others." />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content={`${SITE_URL}/api/og`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="A Walled Garden" />
+        <meta name="twitter:title" content="A Walled Garden | Books, Poems, Essays &amp; Quotes" />
         <meta name="twitter:description" content="A place to gather the works that have shaped you — books, essays, poems — and share them with others." />
         <meta name="twitter:image" content={`${SITE_URL}/api/og`} />
       </Head>
