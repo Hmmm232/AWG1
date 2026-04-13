@@ -177,8 +177,6 @@
 }
 
 .gardenBio {
-  flex: 1;
-  min-height: 0;
   font-size: 0.9rem;
   color: var(--color-ink-light);
   line-height: 1.6;
@@ -223,8 +221,6 @@
 }
 
 .cardIntro {
-  flex: 1;
-  min-height: 0;
   font-size: 0.9rem;
   color: var(--color-ink-light);
   font-style: italic;
@@ -237,8 +233,6 @@
 
 /* ─── Card text: work ─────────────────────────────────────── */
 .workCommentary {
-  flex: 1;
-  min-height: 0;
   font-size: 0.9rem;
   color: var(--color-ink-light);
   line-height: 1.6;
@@ -250,8 +244,6 @@
 
 /* ─── Card text: quote ────────────────────────────────────── */
 .quoteText {
-  flex: 1;
-  min-height: 0;
   margin: 0;
   font-style: italic;
   font-size: 0.95rem;
