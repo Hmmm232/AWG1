@@ -538,6 +538,13 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
           ) : null}
         </div>
       ))}
+
+      {/* Owner: Bottom add category button (when categories exist) */}
+      {isOwner && categories.length > 0 && !showNewCategory && (
+        <button className={`${styles.addBtn} ${styles.addCategoryBtn}`} onClick={() => setShowNewCategory(true)}>
+          + Add a category
+        </button>
+      )}
     </div>
   );
 }
