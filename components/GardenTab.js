@@ -466,52 +466,50 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                       onCancel={() => setEditingWorkId(null)}
                     />
                   ) : (
-                    <>
-                      <div className={styles.workHeader}>
-                        <p className={styles.workTitle}>{work.title}</p>
-                        <div className={styles.actions}>
-                          <LikeButton itemId={work.id} itemType="work" />
-                          <SaveButton itemId={work.id} itemType="work" />
-                          {!isOwner && (
-                            <ReRecButton
-                              workTitle={work.title}
-                              recommenderHandle={profileHandle}
-                              recommenderName={profileName}
-                              tab="garden"
-                              itemId={work.id}
-                            />
-                          )}
-                          <ShareButton tab="garden" itemId={work.id} />
-                          {isOwner && (
-                            <>
-                              <div className={styles.reorderGroup}>
-                                <button
-                                  className={styles.reorderBtn}
-                                  onClick={() => reorderWork(category.id, workIndex, -1)}
-                                  disabled={workIndex === 0}
-                                  title="Move up"
-                                >&#9650;</button>
-                                <button
-                                  className={styles.reorderBtn}
-                                  onClick={() => reorderWork(category.id, workIndex, 1)}
-                                  disabled={workIndex === worksByCategory[category.id].length - 1}
-                                  title="Move down"
-                                >&#9660;</button>
-                              </div>
-                              <button className={styles.iconBtn} onClick={() => setEditingWorkId(work.id)} title="Edit">
-                                Edit
-                              </button>
-                              <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteWork(category.id, work.id)} title="Delete">
-                                Delete
-                              </button>
-                            </>
-                          )}
-                        </div>
+                    <div className={styles.workLayout}>
+                      <p className={styles.workTitle}>{work.title}</p>
+                      <div className={styles.workActions}>
+                        <LikeButton itemId={work.id} itemType="work" />
+                        <SaveButton itemId={work.id} itemType="work" />
+                        {!isOwner && (
+                          <ReRecButton
+                            workTitle={work.title}
+                            recommenderHandle={profileHandle}
+                            recommenderName={profileName}
+                            tab="garden"
+                            itemId={work.id}
+                          />
+                        )}
+                        <ShareButton tab="garden" itemId={work.id} />
+                        {isOwner && (
+                          <>
+                            <div className={styles.reorderGroup}>
+                              <button
+                                className={styles.reorderBtn}
+                                onClick={() => reorderWork(category.id, workIndex, -1)}
+                                disabled={workIndex === 0}
+                                title="Move up"
+                              >&#9650;</button>
+                              <button
+                                className={styles.reorderBtn}
+                                onClick={() => reorderWork(category.id, workIndex, 1)}
+                                disabled={workIndex === worksByCategory[category.id].length - 1}
+                                title="Move down"
+                              >&#9660;</button>
+                            </div>
+                            <button className={styles.iconBtn} onClick={() => setEditingWorkId(work.id)} title="Edit">
+                              Edit
+                            </button>
+                            <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => deleteWork(category.id, work.id)} title="Delete">
+                              Delete
+                            </button>
+                          </>
+                        )}
                       </div>
                       {work.commentary && (
                         <p className={styles.workCommentary}>{work.commentary}</p>
                       )}
-                    </>
+                    </div>
                   )}
                 </li>
               ))}
