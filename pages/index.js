@@ -21,6 +21,28 @@ const jsonLd = {
   },
 };
 
+function OrnateRule({ soft = false }) {
+  return (
+    <div className={soft ? styles.ornateRuleSoft : styles.ornateRule} aria-hidden="true">
+      <span className={styles.ornateLine} />
+      <svg width="6" height="6" viewBox="0 0 6 6">
+        <rect x="3" y="0" width="4.24" height="4.24" transform="rotate(45 3 3)" fill="currentColor" />
+      </svg>
+      <span className={styles.ornateLine} />
+    </div>
+  );
+}
+
+function Leaf() {
+  return (
+    <svg className={styles.leaf} width="11" height="11" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2 C 6 6, 4 12, 4 20 C 10 20, 18 16, 20 8 C 16 6, 14 4, 12 2 Z"
+            fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="M6 18 Q 12 12, 18 8" fill="none" stroke="currentColor" strokeWidth="1.1" />
+    </svg>
+  );
+}
+
 export default function Home({ gardens, categories, works, quotes }) {
   const { user, profile } = useAuth();
 
@@ -82,22 +104,37 @@ export default function Home({ gardens, categories, works, quotes }) {
             </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
-                {works.map((w) => (
-                  <li key={w.id} className={styles.card}>
-                    <Link
-                      href={w.profiles?.handle ? `/${w.profiles.handle}?tab=garden&item=${w.id}` : '#'}
-                      className={styles.cardInner}
-                    >
-                      <span className={styles.cardName}>{w.title}</span>
-                      <span className={styles.cardBy}>
-                        {w.profiles?.display_name || w.profiles?.handle || 'Unknown'}
-                      </span>
-                      {w.commentary && (
-                        <span className={styles.workCommentary}>{w.commentary}</span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
+                {works.map((w) => {
+                  const owner = w.profiles?.display_name || w.profiles?.handle || 'Unknown';
+                  const href = w.profiles?.handle
+                    ? `/${w.profiles.handle}?tab=garden&item=${w.id}`
+                    : '#';
+                  const tag = w.category_name || 'A Work';
+                  return (
+                    <li key={w.id} className={styles.workCard}>
+                      <Link href={href} className={styles.workCardInner}>
+                        <div className={styles.eyebrow}>{tag}</div>
+                        <div className={styles.workTitle}>{w.title}</div>
+                        <div className={styles.workAuthor}>kept by {owner}</div>
+                        {w.commentary ? (
+                          <>
+                            <OrnateRule />
+                            <div className={styles.workNote}>
+                              <span className={styles.dropCap}>{w.commentary.charAt(0)}</span>
+                              {w.commentary.slice(1)}
+                            </div>
+                          </>
+                        ) : (
+                          <div className={styles.workNote} aria-hidden="true" />
+                        )}
+                        <div className={styles.workFooter}>
+                          <span className={styles.eyebrow}>{owner}</span>
+                          <span className={styles.readArrow}>read &rarr;</span>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </section>
@@ -115,24 +152,32 @@ export default function Home({ gardens, categories, works, quotes }) {
             </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
-                {quotes.map((q) => (
-                  <li key={q.id} className={styles.card}>
-                    <Link
-                      href={`/explore/quotes?item=${q.id}`}
-                      className={styles.cardInner}
-                    >
-                      <blockquote className={styles.quoteText}>
-                        &ldquo;{q.quote_text}&rdquo;
-                      </blockquote>
-                      {q.attribution && (
-                        <p className={styles.quoteAttr}>
-                          &mdash; {q.attribution}
-                          {q.source && <span>, <em>{q.source}</em></span>}
-                        </p>
-                      )}
-                    </Link>
-                  </li>
-                ))}
+                {quotes.map((q) => {
+                  const curator = q.profiles?.handle || 'someone';
+                  return (
+                    <li key={q.id} className={styles.quoteCard}>
+                      <Link
+                        href={`/explore/quotes?item=${q.id}`}
+                        className={styles.quoteCardInner}
+                      >
+                        <span className={styles.quoteMark} aria-hidden="true">&ldquo;</span>
+                        <blockquote className={styles.quoteText}>{q.quote_text}</blockquote>
+                        <OrnateRule />
+                        {(q.attribution || q.source) && (
+                          <div className={styles.quoteAttr}>
+                            {q.attribution && <>&mdash; <b>{q.attribution}</b></>}
+                            {q.source && (
+                              <div className={styles.quoteSource}>
+                                <em>{q.source}</em>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <div className={styles.eyebrow}>saved by @{curator}</div>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </section>
@@ -150,20 +195,45 @@ export default function Home({ gardens, categories, works, quotes }) {
             </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
-                {gardens.map((g) => (
-                  <li key={g.id} className={styles.card}>
-                    <Link href={`/${g.handle}`} className={styles.cardInner}>
-                      <span className={styles.gardenName}>{g.display_name || g.handle}</span>
-                      <span className={styles.gardenHandle}>@{g.handle}</span>
-                      {g.bio && <span className={styles.gardenBio}>{g.bio}</span>}
-                      {g.categories && g.categories.length > 0 && (
-                        <span className={styles.gardenCategories}>
-                          {g.categories.join(' · ')}
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
+                {gardens.map((g) => {
+                  const name = g.display_name || g.handle;
+                  const cats = (g.categories || []).slice(0, 3);
+                  return (
+                    <li key={g.id} className={styles.gardenCard}>
+                      <Link href={`/${g.handle}`} className={styles.gardenCardInner}>
+                        <div className={styles.gardenHeader}>
+                          <span className={styles.gardenName}>{name}</span>
+                          <span className={styles.gardenHandle}>@{g.handle}</span>
+                        </div>
+                        {g.bio && <div className={styles.gardenBio}>{g.bio}</div>}
+                        {cats.length > 0 && (
+                          <>
+                            <div className={styles.eyebrow}>A peek inside</div>
+                            <ul className={styles.gardenPeek}>
+                              {cats.map((c, i) => (
+                                <li key={i} className={styles.gardenPeekRow}>
+                                  <span className={styles.gardenPeekNum}>
+                                    {String(i + 1).padStart(2, '0')}
+                                  </span>
+                                  <span className={styles.gardenPeekName}>{c}</span>
+                                  <Leaf />
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                        <div className={styles.gardenFooter}>
+                          <span className={styles.gardenCounts}>
+                            <b>{g.works_count ?? 0}</b>&middot;works
+                            &nbsp;
+                            <b>{g.quotes_count ?? 0}</b>&middot;quotes
+                          </span>
+                          <span className={styles.readArrow}>visit &rarr;</span>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </section>
@@ -181,24 +251,44 @@ export default function Home({ gardens, categories, works, quotes }) {
             </div>
             <div className={styles.scrollContainer}>
               <ul className={styles.scrollRow}>
-                {categories.map((c) => (
-                  <li key={c.id} className={styles.card}>
-                    <Link
-                      href={c.profiles?.handle ? `/${c.profiles.handle}?tab=garden&item=${c.id}` : '#'}
-                      className={styles.cardInner}
-                    >
-                      <span className={styles.cardName}>{c.name}</span>
-                      {c.profiles && (
-                        <span className={styles.cardBy}>
-                          {c.profiles.display_name || c.profiles.handle}
-                        </span>
-                      )}
-                      {c.introduction && (
-                        <span className={styles.cardIntro}>{c.introduction}</span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
+                {categories.map((c) => {
+                  const owner = c.profiles?.display_name || c.profiles?.handle || 'someone';
+                  const sample = (c.sample || []).slice(0, 4);
+                  const href = c.profiles?.handle
+                    ? `/${c.profiles.handle}?tab=garden&item=${c.id}`
+                    : '#';
+                  return (
+                    <li key={c.id} className={styles.categoryCard}>
+                      <Link href={href} className={styles.categoryCardInner}>
+                        <div className={styles.eyebrow}>
+                          {c.works_count ?? 0} works &middot; {owner}
+                        </div>
+                        <div className={styles.categoryName}>{c.name}</div>
+                        {c.introduction && (
+                          <div className={styles.categoryNote}>{c.introduction}</div>
+                        )}
+                        <OrnateRule />
+                        <div className={styles.eyebrow}>Contents</div>
+                        <ul className={styles.categoryContents}>
+                          {sample.length > 0 ? (
+                            sample.map((t, i) => (
+                              <li key={i} className={styles.categoryContentsRow}>
+                                <span className={styles.categoryContentsNum}>
+                                  {String(i + 1).padStart(2, '0')}
+                                </span>
+                                <span className={styles.categoryContentsTitle}>{t}</span>
+                              </li>
+                            ))
+                          ) : (
+                            <li className={styles.categoryContentsEmpty}>
+                              &mdash; empty plot &mdash;
+                            </li>
+                          )}
+                        </ul>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </section>
@@ -268,9 +358,10 @@ export async function getStaticProps() {
     { data: siteWorks },
     { data: siteQuotes },
     { data: followerCounts },
-    { data: workCounts },
+    { data: workRows },
     { data: categoryCounts },
     { data: categoryNameData },
+    { data: quoteCounts },
   ] = await Promise.all([
     supabase
       .from('profiles')
@@ -282,7 +373,7 @@ export async function getStaticProps() {
       .limit(60),
     supabase
       .from('works')
-      .select('id, title, commentary, user_id, featured, profiles!user_id(handle, display_name)')
+      .select('id, title, commentary, user_id, featured, category_id, categories!category_id(name), profiles!user_id(handle, display_name)')
       .limit(60),
     supabase
       .from('quotes')
@@ -290,9 +381,10 @@ export async function getStaticProps() {
       .neq('attribution', '')
       .limit(60),
     supabase.from('follows').select('following_id'),
-    supabase.from('works').select('category_id, user_id'),
+    supabase.from('works').select('id, title, category_id, user_id, sort_order').order('sort_order', { ascending: true }),
     supabase.from('categories').select('user_id'),
     supabase.from('categories').select('user_id, name, sort_order').order('sort_order', { ascending: true }),
+    supabase.from('quotes').select('user_id'),
   ]);
 
   // Build lookup maps
@@ -303,14 +395,26 @@ export async function getStaticProps() {
 
   const worksPerCategory = {};
   const worksPerUser = {};
-  for (const w of (workCounts || [])) {
+  const titlesPerCategory = {};
+  for (const w of (workRows || [])) {
     worksPerCategory[w.category_id] = (worksPerCategory[w.category_id] || 0) + 1;
     worksPerUser[w.user_id] = (worksPerUser[w.user_id] || 0) + 1;
+    if (w.category_id && w.title) {
+      if (!titlesPerCategory[w.category_id]) titlesPerCategory[w.category_id] = [];
+      if (titlesPerCategory[w.category_id].length < 6) {
+        titlesPerCategory[w.category_id].push(w.title);
+      }
+    }
   }
 
   const catsPerUser = {};
   for (const c of (categoryCounts || [])) {
     catsPerUser[c.user_id] = (catsPerUser[c.user_id] || 0) + 1;
+  }
+
+  const quotesPerUser = {};
+  for (const q of (quoteCounts || [])) {
+    quotesPerUser[q.user_id] = (quotesPerUser[q.user_id] || 0) + 1;
   }
 
   const userCategories = {};
@@ -323,9 +427,9 @@ export async function getStaticProps() {
   const scoredGardens = (profiles || []).map((g) => ({
     ...g,
     categories: userCategories[g.id] || [],
-    follower_count: followerMap[g.id] || 0,
-    category_count: catsPerUser[g.id] || 0,
-    work_count: worksPerUser[g.id] || 0,
+    works_count: worksPerUser[g.id] || 0,
+    quotes_count: quotesPerUser[g.id] || 0,
+    categories_count: catsPerUser[g.id] || 0,
     _score: scoreGarden({
       ...g,
       follower_count: followerMap[g.id] || 0,
@@ -339,7 +443,7 @@ export async function getStaticProps() {
   const scoredCategories = (siteCategories || []).map((c) => ({
     ...c,
     works_count: worksPerCategory[c.id] || 0,
-    owner_followers: followerMap[c.user_id] || 0,
+    sample: titlesPerCategory[c.id] || [],
     _score: scoreCategory({
       ...c,
       works_count: worksPerCategory[c.id] || 0,
@@ -351,7 +455,7 @@ export async function getStaticProps() {
   // Score and rank works
   const scoredWorks = (siteWorks || []).map((w) => ({
     ...w,
-    owner_followers: followerMap[w.user_id] || 0,
+    category_name: w.categories?.name || null,
     _score: scoreWork({
       ...w,
       owner_followers: followerMap[w.user_id] || 0,
@@ -362,7 +466,6 @@ export async function getStaticProps() {
   // Score and rank quotes
   const scoredQuotes = (siteQuotes || []).map((q) => ({
     ...q,
-    owner_followers: followerMap[q.user_id] || 0,
     _score: scoreQuote({
       ...q,
       owner_followers: followerMap[q.user_id] || 0,
@@ -370,15 +473,21 @@ export async function getStaticProps() {
   }));
   const quotes = rank(scoredQuotes, 'quotes').slice(0, 10);
 
-  // Strip internal scoring fields before sending to client
-  const clean = (arr) => arr.map(({ _score, owner_followers, follower_count, category_count, work_count, works_count, ...rest }) => rest);
+  // Strip internal-only scoring fields before sending to client
+  const strip = (arr, extra = []) =>
+    arr.map((item) => {
+      const copy = { ...item };
+      delete copy._score;
+      for (const k of extra) delete copy[k];
+      return copy;
+    });
 
   return {
     props: {
-      gardens: clean(gardens),
-      categories: clean(categories),
-      works: clean(works),
-      quotes: clean(quotes),
+      gardens: strip(gardens),
+      categories: strip(categories),
+      works: strip(works, ['categories']),
+      quotes: strip(quotes),
     },
     revalidate: 120,
   };

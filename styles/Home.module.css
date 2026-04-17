@@ -1,5 +1,21 @@
 /* Landing / Home page */
 
+/* ─── Local palette (scoped to home-page cards) ─────────────── */
+/* Designed to sit alongside the site palette; these are card-only */
+.scrollContainer {
+  --awg-green: var(--color-accent);
+  --awg-green-dark: var(--color-accent-hover);
+  --awg-green-light: #d9e7de;
+  --awg-green-pale: #eef3ef;
+  --awg-ink: var(--color-ink);
+  --awg-ink-soft: #4a4540;
+  --awg-ink-mute: #8a837c;
+  --awg-rule: rgba(26, 23, 20, 0.14);
+  --awg-rule-soft: rgba(26, 23, 20, 0.08);
+  --awg-paper: #fbfaf6;
+  --awg-cream: #f7f1e4;
+}
+
 /* ─── Hero ─────────────────────────────────────────────────── */
 .hero {
   text-align: center;
@@ -102,7 +118,7 @@
   -webkit-overflow-scrolling: touch;
   list-style: none;
   margin: 0;
-  padding: 0 48px var(--space-sm) 0;
+  padding: var(--space-xs) 48px var(--space-sm) 0;
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-light) transparent;
 }
@@ -120,149 +136,411 @@
   border-radius: 2px;
 }
 
-
 /* ─── Shared card base ─────────────────────────────────────── */
-.card {
-  flex: 0 0 280px;
-  max-width: 280px;
-  height: 240px;
+.workCard,
+.gardenCard,
+.categoryCard,
+.quoteCard {
+  flex: 0 0 320px;
+  width: 320px;
+  height: 400px;
   scroll-snap-align: start;
-  background: var(--color-white);
-  border: 1px solid var(--color-border-light);
-  border-radius: 10px;
-  border-left: 3px solid var(--color-accent);
-  transition: box-shadow 0.2s ease;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+.workCard:hover,
+.gardenCard:hover,
+.categoryCard:hover,
+.quoteCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-.cardInner {
+.workCardInner,
+.gardenCardInner,
+.categoryCardInner,
+.quoteCardInner {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  padding: var(--space-lg);
-  color: var(--color-ink);
   height: 100%;
-  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--awg-ink);
 }
 
-.cardInner:hover {
-  color: var(--color-ink);
+.workCardInner:hover,
+.gardenCardInner:hover,
+.categoryCardInner:hover,
+.quoteCardInner:hover {
+  color: var(--awg-ink);
 }
 
-/* ─── Garden cards ─────────────────────────────────────────── */
+/* ─── Shared ornaments ─────────────────────────────────────── */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--awg-ink-mute);
+  line-height: 1.4;
+}
 
-.gardenName {
-  display: block;
+.ornateRule,
+.ornateRuleSoft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--awg-rule);
+  margin: 0.6rem 0;
+}
+
+.ornateRuleSoft {
+  color: var(--awg-rule-soft);
+}
+
+.ornateLine {
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+}
+
+.leaf {
+  color: var(--awg-green);
   flex-shrink: 0;
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 1.05rem;
-  margin-bottom: 0.15rem;
+}
+
+.readArrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--awg-green);
+  letter-spacing: 0.04em;
+}
+
+/* ─── Work card (V1) ───────────────────────────────────────── */
+.workCard {
+  background: #fff;
+  border: 1px solid var(--color-border-light);
+  border-left: 2px solid var(--awg-green);
+}
+
+.workCardInner {
+  padding: 1.4rem 1.5rem;
+}
+
+.workTitle {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0.55rem 0 0.3rem;
+  overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+.workAuthor {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.825rem;
+  color: var(--awg-ink-soft);
+  margin-bottom: 0.15rem;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.workNote {
+  flex: 1;
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--awg-ink-soft);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+.dropCap {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 0.85;
+  font-weight: 700;
+  color: var(--awg-green);
+  padding: 0.2rem 0.35rem 0 0;
+}
+
+.workFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--awg-rule-soft);
+}
+
+/* ─── Garden card (V4) ─────────────────────────────────────── */
+.gardenCard {
+  background: #fff;
+  border-top: 3px solid var(--awg-green);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.gardenCardInner {
+  padding: 1.4rem 1.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.gardenHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: 0.15rem;
+  min-width: 0;
+}
+
+.gardenName {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
 }
 
 .gardenHandle {
-  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--awg-green);
   flex-shrink: 0;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: var(--color-ink-faint);
-  margin-bottom: var(--space-sm);
 }
 
 .gardenBio {
-  font-size: 0.9rem;
-  color: var(--color-ink-light);
-  line-height: 1.6;
-  overflow: hidden;
-  word-break: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-}
-
-.gardenCategories {
-  flex-shrink: 0;
-  margin-top: var(--space-xs);
   font-family: var(--font-serif);
-  font-size: 0.78rem;
-  color: var(--color-ink-faint);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--awg-ink-soft);
+  margin-bottom: 0.9rem;
+  line-height: 1.5;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ─── Card text: category & work titles ──────────────────── */
-.cardName {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
+}
+
+.gardenPeek {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gardenPeekRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--awg-rule-soft);
+  min-width: 0;
+}
+
+.gardenPeekRow:last-child {
+  border-bottom: none;
+}
+
+.gardenPeekNum {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--awg-ink-mute);
+  min-width: 1.2rem;
   flex-shrink: 0;
+}
+
+.gardenPeekName {
+  flex: 1;
   font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 1.05rem;
-  margin-bottom: 0.15rem;
-}
-
-.cardBy {
-  display: block;
-  flex-shrink: 0;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: var(--color-ink-faint);
-  margin-bottom: var(--space-sm);
-}
-
-.cardIntro {
-  font-size: 0.9rem;
-  color: var(--color-ink-light);
-  font-style: italic;
-  line-height: 1.6;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-}
-
-/* ─── Card text: work ─────────────────────────────────────── */
-.workCommentary {
-  font-size: 0.9rem;
-  color: var(--color-ink-light);
-  line-height: 1.6;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-}
-
-/* ─── Card text: quote ────────────────────────────────────── */
-.quoteText {
-  margin: 0;
-  font-style: italic;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-}
-
-.quoteAttr {
-  flex-shrink: 0;
-  margin-top: var(--space-sm);
   font-size: 0.85rem;
-  color: var(--color-ink-light);
-  font-style: normal;
+  font-weight: 500;
+  color: var(--awg-ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
+}
+
+.gardenFooter {
+  margin-top: 0.5rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--awg-rule-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.gardenCounts {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--awg-ink-mute);
+}
+
+.gardenCounts b {
+  color: var(--awg-ink);
+  font-weight: 600;
+}
+
+/* ─── Category card (V1) ───────────────────────────────────── */
+.categoryCard {
+  background: #fff;
+  border: 1px solid var(--color-border-light);
+  border-left: 2px solid var(--awg-green);
+}
+
+.categoryCardInner {
+  padding: 1.4rem 1.5rem;
+}
+
+.categoryName {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0.55rem 0 0.6rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.categoryNote {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--awg-ink-soft);
+  line-height: 1.5;
+  margin-bottom: 0.1rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.categoryContents {
+  list-style: none;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryContentsRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.8;
+  min-width: 0;
+}
+
+.categoryContentsNum {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--awg-ink-mute);
+  flex-shrink: 0;
+}
+
+.categoryContentsTitle {
+  flex: 1;
+  border-bottom: 1px dotted var(--awg-rule);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  font-family: var(--font-serif);
+  color: var(--awg-ink);
+}
+
+.categoryContentsEmpty {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--awg-ink-mute);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+/* ─── Quote card (V1) ──────────────────────────────────────── */
+.quoteCard {
+  background: #fff;
+  border: 1px solid var(--color-border-light);
+  border-left: 2px solid var(--awg-green);
+}
+
+.quoteCardInner {
+  padding: 1.6rem 1.6rem 1.3rem;
+  position: relative;
+}
+
+.quoteMark {
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  line-height: 0.6;
+  color: var(--awg-green-light);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.quoteText {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--awg-ink);
+  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  font-weight: 600;
+}
+
+.quoteAttr {
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  color: var(--awg-ink-soft);
+}
+
+.quoteAttr b {
+  color: var(--awg-ink);
+  font-weight: 600;
+}
+
+.quoteSource {
+  font-style: italic;
+  color: var(--awg-ink-mute);
+  margin-top: 0.15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quoteCardInner .eyebrow {
+  margin-top: 0.6rem;
 }
 
 /* ─── Divider — centered ornamental dots ───────────────────── */
@@ -317,10 +595,41 @@
     padding: var(--space-xs) 0;
   }
 
-  .card {
-    flex: 0 0 240px;
-    max-width: 240px;
-    height: 220px;
+  .workCard,
+  .gardenCard,
+  .categoryCard,
+  .quoteCard {
+    flex: 0 0 280px;
+    width: 280px;
+    height: 380px;
+  }
+
+  .workCardInner,
+  .gardenCardInner,
+  .categoryCardInner {
+    padding: 1.2rem 1.25rem;
+  }
+
+  .quoteCardInner {
+    padding: 1.3rem 1.3rem 1.1rem;
+  }
+
+  .workTitle,
+  .categoryName {
+    font-size: 1.3rem;
+  }
+
+  .gardenName {
+    font-size: 1.35rem;
+  }
+
+  .quoteText {
+    font-size: 0.95rem;
+    -webkit-line-clamp: 6;
+  }
+
+  .quoteMark {
+    font-size: 3.75rem;
   }
 
   .about {
