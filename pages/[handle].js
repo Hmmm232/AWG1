@@ -183,10 +183,6 @@ export default function ProfilePage({
             <Link href="/settings">Add a bio</Link> to tell visitors about yourself and what you read.
           </p>
         ) : null}
-        <div className={styles.stats}>
-          <span><span className={styles.statCount}>{followerCount}</span> {followerCount === 1 ? 'follower' : 'followers'}</span>
-          <span><span className={styles.statCount}>{initialFollowingCount || 0}</span> following</span>
-        </div>
         {!isOwner && user && (
           <button
             onClick={handleFollow}

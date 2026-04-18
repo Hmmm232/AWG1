@@ -156,6 +156,7 @@
   overflow-wrap: break-word;
   word-break: break-word;
   order: 1;
+  margin: 0;
 }
 
 .workCommentary {
@@ -166,7 +167,7 @@
   word-break: break-word;
   flex-basis: 100%;
   order: 3;
-  margin-top: 0.15rem;
+  margin: 0;
 }
 
 /* Action buttons (edit, delete, reorder) */

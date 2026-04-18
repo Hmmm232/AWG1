@@ -199,11 +199,21 @@
   line-height: 1.6;
   color: var(--awg-ink-soft);
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
+  max-height: calc(0.88rem * 1.6 * 5);
+  position: relative;
   overflow-wrap: break-word;
   word-break: break-word;
+}
+
+.workNote::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1.3em;
+  background: linear-gradient(transparent, #fff);
+  pointer-events: none;
 }
 
 .dropCap {

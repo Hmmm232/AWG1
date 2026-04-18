@@ -254,9 +254,19 @@
   line-height: 1.55;
   color: var(--awg-ink-soft);
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 6;
-  -webkit-box-orient: vertical;
+  max-height: calc(0.85rem * 1.55 * 6);
+  position: relative;
+}
+
+.workNote::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1.3em;
+  background: linear-gradient(transparent, #fff);
+  pointer-events: none;
 }
 
 .dropCap {
