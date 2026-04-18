@@ -46,7 +46,6 @@ export default function ExploreQuotes({ quotes }) {
             &ldquo;I quote others only in order the better to express myself.&rdquo;
             <span className={styles.pageDescAttr}>&mdash; Michel de Montaigne</span>
           </p>
-          <div className={styles.browseHeading}>Browse Quotes &rarr;</div>
         </div>
 
         <ExploreNav />

@@ -29,7 +29,6 @@ export default function ExploreWorks({ works }) {
             &ldquo;Because life is too short to read bad books.&rdquo;
             <span className={styles.pageDescAttr}>&mdash; Unknown</span>
           </p>
-          <div className={styles.browseHeading}>Browse Works &rarr;</div>
         </div>
 
         <ExploreNav />

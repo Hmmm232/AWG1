@@ -195,7 +195,7 @@ export default function Home({ gardens, categories, works, quotes }) {
                         {g.bio && <div className={styles.gardenBio}>{g.bio}</div>}
                         {cats.length > 0 && (
                           <>
-                            <div className={styles.eyebrow}>A peek inside</div>
+                            <OrnateRule />
                             <ul className={styles.gardenPeek}>
                               {cats.map((c, i) => (
                                 <li key={i} className={styles.gardenPeekRow}>

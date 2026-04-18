@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { scoreGarden, rank } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
-import { Leaf } from '@/components/CardOrnaments';
+import { Leaf, OrnateRule } from '@/components/CardOrnaments';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreGardens({ gardens }) {
@@ -21,7 +21,6 @@ export default function ExploreGardens({ gardens }) {
             &ldquo;A garden to walk in and immensity to dream in &mdash; what more could he ask? A few flowers at his feet and above him the stars.&rdquo;
             <span className={styles.pageDescAttr}>&mdash; Victor Hugo</span>
           </p>
-          <div className={styles.browseHeading}>Browse Gardens &rarr;</div>
         </div>
 
         <ExploreNav />
@@ -44,7 +43,7 @@ export default function ExploreGardens({ gardens }) {
                     {g.bio && <p className={styles.gardenBio}>{g.bio}</p>}
                     {cats.length > 0 && (
                       <>
-                        <div className={styles.eyebrow}>A peek inside</div>
+                        <OrnateRule className={styles.ornateRule} />
                         <ul className={styles.gardenPeek}>
                           {cats.map((c, i) => (
                             <li key={i} className={styles.gardenPeekRow}>

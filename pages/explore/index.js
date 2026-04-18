@@ -3,10 +3,30 @@ import Link from 'next/link';
 import styles from '@/styles/Explore.module.css';
 
 const SECTIONS = [
-  { href: '/explore/works', label: 'Works', desc: 'Books, poems, essays and curiosities.' },
-  { href: '/explore/quotes', label: 'Quotes', desc: 'Words that stay with people.' },
-  { href: '/explore/categories', label: 'Categories', desc: 'Curated reading lists and collections.' },
-  { href: '/explore/gardens', label: 'Gardens', desc: 'Browse gardens planted by our community.' },
+  {
+    href: '/explore/works',
+    label: 'Works',
+    quote: '\u201CBecause life is too short to read bad books.\u201D',
+    attr: 'Unknown',
+  },
+  {
+    href: '/explore/quotes',
+    label: 'Quotes',
+    quote: '\u201CI quote others only in order the better to express myself.\u201D',
+    attr: 'Michel de Montaigne',
+  },
+  {
+    href: '/explore/categories',
+    label: 'Categories',
+    quote: '\u201CWe walk the corridors, searching the shelves and rearranging them, looking for lines of meaning amid leagues of cacophony and incoherence.\u201D',
+    attr: 'Borges',
+  },
+  {
+    href: '/explore/gardens',
+    label: 'Gardens',
+    quote: '\u201CA garden to walk in and immensity to dream in \u2014 what more could he ask? A few flowers at his feet and above him the stars.\u201D',
+    attr: 'Victor Hugo',
+  },
 ];
 
 export default function ExplorePage() {
@@ -31,7 +51,9 @@ export default function ExplorePage() {
             <div key={s.href} className={styles.card}>
               <Link href={s.href} className={styles.cardLink}>
                 <p className={styles.cardTitle}>{s.label}</p>
-                <p className={styles.cardBody}>{s.desc}</p>
+                <p className={styles.cardQuoteDesc}>{s.quote}</p>
+                <p className={styles.cardQuoteAttr}>&mdash; {s.attr}</p>
+                <span className={styles.browseHeading}>Browse {s.label} &rarr;</span>
               </Link>
             </div>
           ))}

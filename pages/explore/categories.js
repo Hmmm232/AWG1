@@ -23,7 +23,6 @@ export default function ExploreCategories({ categories }) {
             &ldquo;We walk the corridors, searching the shelves and rearranging them, looking for lines of meaning amid leagues of cacophony and incoherence.&rdquo;
             <span className={styles.pageDescAttr}>&mdash; Borges</span>
           </p>
-          <div className={styles.browseHeading}>Browse Categories &rarr;</div>
         </div>
 
         <ExploreNav />
