@@ -17,7 +17,11 @@ export default function ExploreGardens({ gardens }) {
       <div className={styles.page}>
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Gardens</h1>
-          <p className={styles.pageDesc}>Browse gardens planted by our community.</p>
+          <p className={styles.pageDesc}>
+            &ldquo;A garden to walk in and immensity to dream in &mdash; what more could he ask? A few flowers at his feet and above him the stars.&rdquo;
+            <span className={styles.pageDescAttr}>&mdash; Victor Hugo</span>
+          </p>
+          <div className={styles.browseHeading}>Browse Gardens &rarr;</div>
         </div>
 
         <ExploreNav />

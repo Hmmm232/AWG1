@@ -42,7 +42,11 @@ export default function ExploreQuotes({ quotes }) {
       <div className={styles.page}>
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Quotes</h1>
-          <p className={styles.pageDesc}>Words that stay with people.</p>
+          <p className={styles.pageDesc}>
+            &ldquo;I quote others only in order the better to express myself.&rdquo;
+            <span className={styles.pageDescAttr}>&mdash; Michel de Montaigne</span>
+          </p>
+          <div className={styles.browseHeading}>Browse Quotes &rarr;</div>
         </div>
 
         <ExploreNav />

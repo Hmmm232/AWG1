@@ -20,7 +20,10 @@ export default function ExplorePage() {
       <div className={styles.page}>
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Explore</h1>
-          <p className={styles.pageDesc}>Discover what the community is reading, collecting and sharing.</p>
+          <p className={styles.pageDesc}>
+            &ldquo;The many great gardens of the world, of literature and poetry, of painting and music, of religion and architecture, all make the point as clear as possible: The soul cannot thrive in the absence of a garden.&rdquo;
+            <span className={styles.pageDescAttr}>&mdash; Sir Thomas More</span>
+          </p>
         </div>
 
         <div className={styles.grid}>

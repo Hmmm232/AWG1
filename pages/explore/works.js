@@ -25,7 +25,11 @@ export default function ExploreWorks({ works }) {
       <div className={styles.page}>
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Works</h1>
-          <p className={styles.pageDesc}>Books, poems, essays and curiosities from across the community.</p>
+          <p className={styles.pageDesc}>
+            &ldquo;Because life is too short to read bad books.&rdquo;
+            <span className={styles.pageDescAttr}>&mdash; Unknown</span>
+          </p>
+          <div className={styles.browseHeading}>Browse Works &rarr;</div>
         </div>
 
         <ExploreNav />

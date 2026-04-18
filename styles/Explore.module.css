@@ -28,6 +28,27 @@
 .pageDesc {
   color: var(--color-ink-light);
   font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.7;
+  max-width: 540px;
+}
+
+.pageDescAttr {
+  display: block;
+  font-style: normal;
+  font-size: 0.82rem;
+  color: var(--color-ink-faint);
+  margin-top: 0.2rem;
+}
+
+.browseHeading {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-top: var(--space-lg);
 }
 
 /* ─── Navigation ─────────────────────────────────────────────── */
