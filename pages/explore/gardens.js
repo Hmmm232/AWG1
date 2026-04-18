@@ -136,7 +136,7 @@ export async function getStaticProps() {
     };
   });
 
-  const gardens = rank(scored, 'gardens').map(({ _score, category_count, work_count, featured, ...rest }) => rest);
+  const gardens = rank(scored, 'gardens').map(({ _score, category_count, work_count, follower_count, featured, ...rest }) => rest);
 
   return { props: { gardens }, revalidate: 120 };
 }
