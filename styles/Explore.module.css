@@ -1,4 +1,17 @@
 /* Explore pages */
+
+/* ─── Local palette ──────────────────────────────────────────── */
+.grid {
+  --awg-green: var(--color-accent);
+  --awg-green-light: #d9e7de;
+  --awg-ink: var(--color-ink);
+  --awg-ink-soft: #4a4540;
+  --awg-ink-mute: #8a837c;
+  --awg-rule: rgba(26, 23, 20, 0.14);
+  --awg-rule-soft: rgba(26, 23, 20, 0.08);
+}
+
+/* ─── Page layout ────────────────────────────────────────────── */
 .page {
   padding-top: var(--space-lg);
 }
@@ -17,7 +30,7 @@
   font-size: 0.95rem;
 }
 
-/* Navigation between explore sub-pages */
+/* ─── Navigation ─────────────────────────────────────────────── */
 .nav {
   display: flex;
   gap: var(--space-sm);
@@ -54,106 +67,70 @@
   border-color: var(--color-accent-hover);
 }
 
-/* Grid of items */
+/* ─── Grid of items ──────────────────────────────────────────── */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 340px));
   gap: var(--space-lg);
 }
 
-/* Card — shared across all explore pages */
-.card {
-  background: var(--color-white);
-  border: 1px solid var(--color-border-light);
-  border-left: 3px solid var(--color-accent);
-  border-radius: 10px;
-  transition: box-shadow 0.2s ease;
-  min-width: 0;
-  overflow: hidden;
+/* ─── Shared ornaments ───────────────────────────────────────── */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--awg-ink-mute);
+  line-height: 1.4;
 }
 
-.card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+.ornateRule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--awg-rule);
+  margin: 0.6rem 0;
 }
 
-.cardLink {
+.leaf {
+  color: var(--awg-green);
+  flex-shrink: 0;
+}
+
+.readArrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--awg-green);
+  letter-spacing: 0.04em;
+}
+
+.moreIndicator {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--awg-ink-mute);
+  font-style: italic;
+  margin-top: 0.15rem;
   display: block;
-  padding: var(--space-lg);
-  color: var(--color-ink);
-  overflow: hidden;
 }
 
-.cardLink:hover {
-  color: var(--color-ink);
-}
-
+/* ─── Shared card elements ───────────────────────────────────── */
 .cardTitle {
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: 1.05rem;
-  margin-bottom: 0.15rem;
-}
-
-.cardMeta {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: var(--color-ink-faint);
-  margin-bottom: var(--space-sm);
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-
-.cardBody {
-  font-size: 0.9rem;
-  color: var(--color-ink-light);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  word-break: break-word;
+  font-size: 1.2rem;
+  margin: 0.4rem 0 0.2rem;
+  line-height: 1.2;
 }
 
 .cardBodyExpanded {
-  font-size: 0.9rem;
-  color: var(--color-ink-light);
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  color: var(--awg-ink-soft);
   line-height: 1.6;
   overflow-wrap: break-word;
   word-break: break-word;
 }
 
-.cardBodyItalic {
-  composes: cardBody;
-  font-style: italic;
-}
-
-/* Quote-specific: full blockquote styling */
-.cardQuote {
-  font-style: italic;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin-bottom: var(--space-sm);
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.cardQuoteExpanded {
-  font-style: italic;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin-bottom: var(--space-sm);
-}
-
-.cardAttr {
-  font-size: 0.85rem;
-  color: var(--color-ink-light);
-  font-style: normal;
-}
-
-/* Read more toggle */
 .readMore {
   background: none;
   border: none;
@@ -169,11 +146,10 @@
   text-decoration: underline;
 }
 
-/* Go-to link */
 .goToLink {
   margin-left: auto;
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   color: var(--color-accent);
 }
 
@@ -181,23 +157,379 @@
   text-decoration: underline;
 }
 
-/* Category tags on garden cards */
-.cardCategories {
-  margin-top: var(--space-sm);
-  font-family: var(--font-serif);
-  font-size: 0.82rem;
-  color: var(--color-ink-faint);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Card action buttons (like, save) */
 .cardActions {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
   padding: 0 var(--space-lg) var(--space-md);
+}
+
+/* ─── Work card ──────────────────────────────────────────────── */
+.workCard {
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-left: 2px solid var(--awg-green);
+  min-width: 0;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.workCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.workCardBody {
+  display: block;
+  padding: var(--space-lg);
+  color: var(--awg-ink);
+  overflow: hidden;
+}
+
+.workAuthor {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--awg-ink-soft);
+  margin-bottom: 0.1rem;
+}
+
+.workNote {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--awg-ink-soft);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.dropCap {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  line-height: 0.8;
+  font-weight: 700;
+  color: var(--awg-green);
+  padding: 0.15rem 0.3rem 0 0;
+}
+
+/* ─── Garden card ────────────────────────────────────────────── */
+.gardenCard {
+  background: var(--color-white);
+  border-top: 3px solid var(--awg-green);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
+  min-width: 0;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.gardenCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.gardenCardBody {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  color: var(--awg-ink);
+  overflow: hidden;
+}
+
+.gardenCardBody:hover {
+  color: var(--awg-ink);
+}
+
+.gardenHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: 0.15rem;
+  min-width: 0;
+}
+
+.gardenName {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.gardenHandle {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--awg-green);
+  flex-shrink: 0;
+}
+
+.gardenBio {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--awg-ink-soft);
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.gardenPeek {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.gardenPeekRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--awg-rule-soft);
+  min-width: 0;
+}
+
+.gardenPeekRow:last-child {
+  border-bottom: none;
+}
+
+.gardenPeekNum {
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  color: var(--awg-ink-mute);
+  min-width: 1.2rem;
+  flex-shrink: 0;
+}
+
+.gardenPeekName {
+  flex: 1;
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--awg-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.gardenFooter {
+  margin-top: 0.6rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--awg-rule-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.gardenCounts {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--awg-ink-mute);
+}
+
+.gardenCounts b {
+  color: var(--awg-ink);
+  font-weight: 600;
+}
+
+/* ─── Category card ──────────────────────────────────────────── */
+.categoryCard {
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-left: 2px solid var(--awg-green);
+  min-width: 0;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.categoryCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.categoryCardBody {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  color: var(--awg-ink);
+  overflow: hidden;
+}
+
+.categoryCardBody:hover {
+  color: var(--awg-ink);
+}
+
+.categoryNote {
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--awg-ink-soft);
+  line-height: 1.5;
+  margin-bottom: 0.1rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.categoryContents {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryContentsRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.8;
+  min-width: 0;
+}
+
+.categoryContentsNum {
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  color: var(--awg-ink-mute);
+  flex-shrink: 0;
+}
+
+.categoryContentsTitle {
+  flex: 1;
+  border-bottom: 1px dotted var(--awg-rule);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  font-family: var(--font-serif);
+  color: var(--awg-ink);
+}
+
+.categoryContentsEmpty {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--awg-ink-mute);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+/* ─── Quote card ─────────────────────────────────────────────── */
+.quoteCard {
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-left: 2px solid var(--awg-green);
+  min-width: 0;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.quoteCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.quoteCardBody {
+  display: block;
+  padding: var(--space-lg);
+  color: var(--awg-ink);
+  overflow: hidden;
+}
+
+.quoteMark {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  line-height: 0.6;
+  color: var(--awg-green-light);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.quoteText {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--awg-ink);
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+.quoteTextExpanded {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--awg-ink);
+  margin: 0;
+}
+
+.quoteAttr {
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  color: var(--awg-ink-soft);
+}
+
+.quoteAttr b {
+  color: var(--awg-ink);
+  font-weight: 600;
+}
+
+.quoteSource {
+  font-style: italic;
+  color: var(--awg-ink-mute);
+  margin-top: 0.15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Explore index card (overview) ──────────────────────────── */
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-left: 2px solid var(--awg-green);
+  transition: box-shadow 0.2s ease;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.cardLink {
+  display: block;
+  padding: var(--space-lg);
+  color: var(--color-ink);
+  overflow: hidden;
+}
+
+.cardLink:hover {
+  color: var(--color-ink);
+}
+
+.cardBody {
+  font-size: 0.9rem;
+  color: var(--color-ink-light);
+  line-height: 1.6;
 }
 
 /* Empty state */
@@ -215,5 +547,10 @@
 
   .pageTitle {
     font-size: 1.4rem;
+  }
+
+  .dropCap {
+    font-size: 1.85rem;
+    padding: 0.12rem 0.25rem 0 0;
   }
 }

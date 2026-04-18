@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { scoreGarden, scoreCategory, scoreWork, scoreQuote, rank } from '@/lib/ranking';
+import { OrnateRule as OrnateRuleBase, Leaf as LeafBase } from '@/components/CardOrnaments';
 import styles from '@/styles/Home.module.css';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
@@ -21,26 +22,12 @@ const jsonLd = {
   },
 };
 
-function OrnateRule({ soft = false }) {
-  return (
-    <div className={soft ? styles.ornateRuleSoft : styles.ornateRule} aria-hidden="true">
-      <span className={styles.ornateLine} />
-      <svg width="6" height="6" viewBox="0 0 6 6">
-        <rect x="3" y="0" width="4.24" height="4.24" transform="rotate(45 3 3)" fill="currentColor" />
-      </svg>
-      <span className={styles.ornateLine} />
-    </div>
-  );
+function OrnateRule() {
+  return <OrnateRuleBase className={styles.ornateRule} />;
 }
 
 function Leaf() {
-  return (
-    <svg className={styles.leaf} width="11" height="11" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 2 C 6 6, 4 12, 4 20 C 10 20, 18 16, 20 8 C 16 6, 14 4, 12 2 Z"
-            fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
-      <path d="M6 18 Q 12 12, 18 8" fill="none" stroke="currentColor" strokeWidth="1.1" />
-    </svg>
-  );
+  return <LeafBase className={styles.leaf} />;
 }
 
 export default function Home({ gardens, categories, works, quotes }) {
@@ -220,6 +207,11 @@ export default function Home({ gardens, categories, works, quotes }) {
                                 </li>
                               ))}
                             </ul>
+                            {(g.categories || []).length > 5 && (
+                              <span className={styles.moreIndicator}>
+                                +{(g.categories || []).length - 5} more
+                              </span>
+                            )}
                           </>
                         )}
                         <div className={styles.gardenFooter}>
@@ -285,6 +277,11 @@ export default function Home({ gardens, categories, works, quotes }) {
                             </li>
                           )}
                         </ul>
+                        {(c.works_count ?? 0) > 5 && (
+                          <span className={styles.moreIndicator}>
+                            +{(c.works_count ?? 0) - 5} more
+                          </span>
+                        )}
                       </Link>
                     </li>
                   );

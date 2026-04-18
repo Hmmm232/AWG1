@@ -7,6 +7,7 @@ import ExploreNav from '@/components/ExploreNav';
 import LikeButton from '@/components/LikeButton';
 import SaveButton from '@/components/SaveButton';
 import ReRecButton from '@/components/ReRecButton';
+import { OrnateRule } from '@/components/CardOrnaments';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreWorks({ works }) {
@@ -33,48 +34,56 @@ export default function ExploreWorks({ works }) {
           <p className={styles.empty}>No works yet.</p>
         ) : (
           <div className={styles.grid}>
-            {works.map((w) => (
-              <article key={w.id} className={styles.card}>
-                <div className={styles.cardLink}>
-                  <p className={styles.cardTitle}>{w.title}</p>
-                  <p className={styles.cardMeta}>
-                    {w.profiles?.display_name || w.profiles?.handle || 'Unknown'}
-                    {w.category_name && ` · ${w.category_name}`}
-                  </p>
-                  {w.commentary && (
-                    <>
-                      <p className={expanded[w.id] ? styles.cardBodyExpanded : styles.cardBody}>
-                        {w.commentary}
-                      </p>
-                      <button className={styles.readMore} onClick={() => toggle(w.id)}>
-                        {expanded[w.id] ? 'Show less' : 'Read more'}
-                      </button>
-                    </>
-                  )}
-                </div>
-                <div className={styles.cardActions}>
-                  <LikeButton itemId={w.id} itemType="work" />
-                  <SaveButton itemId={w.id} itemType="work" />
-                  {w.profiles?.handle && (
-                    <ReRecButton
-                      workTitle={w.title}
-                      recommenderHandle={w.profiles.handle}
-                      recommenderName={w.profiles.display_name}
-                      tab="garden"
-                      itemId={w.id}
-                    />
-                  )}
-                  {w.profiles?.handle && (
-                    <Link
-                      href={`/${w.profiles.handle}?tab=garden&item=${w.id}`}
-                      className={styles.goToLink}
-                    >
-                      Go to work &rarr;
-                    </Link>
-                  )}
-                </div>
-              </article>
-            ))}
+            {works.map((w) => {
+              const owner = w.profiles?.display_name || w.profiles?.handle || 'Unknown';
+              const tag = w.category_name || 'A Work';
+              return (
+                <article key={w.id} className={styles.workCard}>
+                  <div className={styles.workCardBody}>
+                    <div className={styles.eyebrow}>{tag}</div>
+                    <p className={styles.cardTitle}>{w.title}</p>
+                    <p className={styles.workAuthor}>kept by {owner}</p>
+                    {w.commentary && (
+                      <>
+                        <OrnateRule className={styles.ornateRule} />
+                        <p className={expanded[w.id] ? styles.cardBodyExpanded : styles.workNote}>
+                          {!expanded[w.id] && w.commentary.length > 0 && (
+                            <span className={styles.dropCap}>{w.commentary.charAt(0)}</span>
+                          )}
+                          {expanded[w.id] ? w.commentary : w.commentary.slice(1)}
+                        </p>
+                        {w.commentary.length > 180 && (
+                          <button className={styles.readMore} onClick={() => toggle(w.id)}>
+                            {expanded[w.id] ? 'Show less' : 'Read more'}
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <div className={styles.cardActions}>
+                    <LikeButton itemId={w.id} itemType="work" />
+                    <SaveButton itemId={w.id} itemType="work" />
+                    {w.profiles?.handle && (
+                      <ReRecButton
+                        workTitle={w.title}
+                        recommenderHandle={w.profiles.handle}
+                        recommenderName={w.profiles.display_name}
+                        tab="garden"
+                        itemId={w.id}
+                      />
+                    )}
+                    {w.profiles?.handle && (
+                      <Link
+                        href={`/${w.profiles.handle}?tab=garden&item=${w.id}`}
+                        className={styles.goToLink}
+                      >
+                        Go to work &rarr;
+                      </Link>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
       </div>

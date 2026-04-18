@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { scoreGarden, rank } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
+import { Leaf } from '@/components/CardOrnaments';
 import styles from '@/styles/Explore.module.css';
 
 export default function ExploreGardens({ gardens }) {
@@ -25,23 +26,49 @@ export default function ExploreGardens({ gardens }) {
           <p className={styles.empty}>No gardens yet.</p>
         ) : (
           <div className={styles.grid}>
-            {gardens.map((g) => (
-              <article key={g.id} className={styles.card}>
-                <Link href={`/${g.handle}`} className={styles.cardLink}>
-                  <p className={styles.cardTitle}>{g.display_name || g.handle}</p>
-                  <p className={styles.cardMeta}>
-                    @{g.handle}
-                    {g.follower_count > 0 && ` · ${g.follower_count} ${g.follower_count === 1 ? 'follower' : 'followers'}`}
-                  </p>
-                  {g.bio && <p className={styles.cardBody}>{g.bio}</p>}
-                  {g.categories && g.categories.length > 0 && (
-                    <p className={styles.cardCategories}>
-                      {g.categories.join(' · ')}
-                    </p>
-                  )}
-                </Link>
-              </article>
-            ))}
+            {gardens.map((g) => {
+              const name = g.display_name || g.handle;
+              const cats = (g.categories || []).slice(0, 5);
+              const totalCats = (g.categories || []).length;
+              return (
+                <article key={g.id} className={styles.gardenCard}>
+                  <Link href={`/${g.handle}`} className={styles.gardenCardBody}>
+                    <div className={styles.gardenHeader}>
+                      <span className={styles.gardenName}>{name}</span>
+                      <span className={styles.gardenHandle}>@{g.handle}</span>
+                    </div>
+                    {g.bio && <p className={styles.gardenBio}>{g.bio}</p>}
+                    {cats.length > 0 && (
+                      <>
+                        <div className={styles.eyebrow}>A peek inside</div>
+                        <ul className={styles.gardenPeek}>
+                          {cats.map((c, i) => (
+                            <li key={i} className={styles.gardenPeekRow}>
+                              <span className={styles.gardenPeekNum}>
+                                {String(i + 1).padStart(2, '0')}
+                              </span>
+                              <span className={styles.gardenPeekName}>{c}</span>
+                              <Leaf className={styles.leaf} />
+                            </li>
+                          ))}
+                        </ul>
+                        {totalCats > 5 && (
+                          <span className={styles.moreIndicator}>+{totalCats - 5} more</span>
+                        )}
+                      </>
+                    )}
+                    <div className={styles.gardenFooter}>
+                      <span className={styles.gardenCounts}>
+                        <b>{g.works_count ?? 0}</b>&middot;works
+                        &nbsp;
+                        <b>{g.quotes_count ?? 0}</b>&middot;quotes
+                      </span>
+                      <span className={styles.readArrow}>visit &rarr;</span>
+                    </div>
+                  </Link>
+                </article>
+              );
+            })}
           </div>
         )}
       </div>
@@ -60,12 +87,14 @@ export async function getStaticProps() {
     { data: workCounts },
     { data: categoryCounts },
     { data: categoryNames },
+    { data: quoteCounts },
   ] = await Promise.all([
     supabase.from('profiles').select('id, handle, display_name, bio, featured'),
     supabase.from('follows').select('following_id'),
     supabase.from('works').select('user_id'),
     supabase.from('categories').select('user_id'),
     supabase.from('categories').select('user_id, name, sort_order').order('sort_order', { ascending: true }),
+    supabase.from('quotes').select('user_id'),
   ]);
 
   const followerMap = {};
@@ -79,6 +108,10 @@ export async function getStaticProps() {
   const catsMap = {};
   for (const c of (categoryCounts || [])) {
     catsMap[c.user_id] = (catsMap[c.user_id] || 0) + 1;
+  }
+  const quotesMap = {};
+  for (const q of (quoteCounts || [])) {
+    quotesMap[q.user_id] = (quotesMap[q.user_id] || 0) + 1;
   }
 
   const userCategories = {};
@@ -94,7 +127,13 @@ export async function getStaticProps() {
       category_count: catsMap[p.id] || 0,
       work_count: worksMap[p.id] || 0,
     };
-    return { ...enriched, categories: userCategories[p.id] || [], _score: scoreGarden(enriched) };
+    return {
+      ...enriched,
+      categories: userCategories[p.id] || [],
+      works_count: worksMap[p.id] || 0,
+      quotes_count: quotesMap[p.id] || 0,
+      _score: scoreGarden(enriched),
+    };
   });
 
   const gardens = rank(scored, 'gardens').map(({ _score, category_count, work_count, featured, ...rest }) => rest);
