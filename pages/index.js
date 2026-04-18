@@ -197,7 +197,7 @@ export default function Home({ gardens, categories, works, quotes }) {
               <ul className={styles.scrollRow}>
                 {gardens.map((g) => {
                   const name = g.display_name || g.handle;
-                  const cats = (g.categories || []).slice(0, 3);
+                  const cats = (g.categories || []).slice(0, 5);
                   return (
                     <li key={g.id} className={styles.gardenCard}>
                       <Link href={`/${g.handle}`} className={styles.gardenCardInner}>
@@ -253,7 +253,7 @@ export default function Home({ gardens, categories, works, quotes }) {
               <ul className={styles.scrollRow}>
                 {categories.map((c) => {
                   const owner = c.profiles?.display_name || c.profiles?.handle || 'someone';
-                  const sample = (c.sample || []).slice(0, 4);
+                  const sample = (c.sample || []).slice(0, 5);
                   const href = c.profiles?.handle
                     ? `/${c.profiles.handle}?tab=garden&item=${c.id}`
                     : '#';
