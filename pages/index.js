@@ -192,7 +192,13 @@ export default function Home({ gardens, categories, works, quotes }) {
                           <span className={styles.gardenName}>{name}</span>
                           <span className={styles.gardenHandle}>@{g.handle}</span>
                         </div>
-                        {g.bio && <div className={styles.gardenBio}>{g.bio}</div>}
+                        {g.bio && (
+                          <div className={styles.gardenBio}>
+                            {g.bio.length > 90
+                              ? g.bio.slice(0, g.bio.lastIndexOf(' ', 90)) + '…'
+                              : g.bio}
+                          </div>
+                        )}
                         {cats.length > 0 && (
                           <>
                             <OrnateRule />

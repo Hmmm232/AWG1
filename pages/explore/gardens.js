@@ -40,7 +40,13 @@ export default function ExploreGardens({ gardens }) {
                       <span className={styles.gardenName}>{name}</span>
                       <span className={styles.gardenHandle}>@{g.handle}</span>
                     </div>
-                    {g.bio && <p className={styles.gardenBio}>{g.bio}</p>}
+                    {g.bio && (
+                      <p className={styles.gardenBio}>
+                        {g.bio.length > 90
+                          ? g.bio.slice(0, g.bio.lastIndexOf(' ', 90)) + '…'
+                          : g.bio}
+                      </p>
+                    )}
                     {cats.length > 0 && (
                       <>
                         <OrnateRule className={styles.ornateRule} />
