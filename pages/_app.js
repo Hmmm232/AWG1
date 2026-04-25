@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import { useRouter } from 'next/router';
+import { Analytics } from '@vercel/analytics/next';
 import { AuthProvider } from '@/lib/AuthContext';
 import Layout from '@/components/Layout';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -40,6 +41,7 @@ export default function App({ Component, pageProps }) {
           <Component {...pageProps} />
         </ErrorBoundary>
       </Layout>
+      <Analytics />
     </AuthProvider>
   );
 }
