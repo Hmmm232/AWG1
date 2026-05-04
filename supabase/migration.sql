@@ -290,3 +290,36 @@ $$ language plpgsql security definer;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- ─── 14 Reads (editorially curated short works) ─────────────────────
+create table featured_reads (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  author text not null,
+  publication text not null default '',
+  introduction text not null default '',
+  quote text not null default '',
+  read_minutes integer not null default 5,
+  source_url text not null default '',
+  source_label text not null default '',
+  position integer not null default 0,
+  active boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+create index idx_featured_reads_active on featured_reads(active);
+create index idx_featured_reads_position on featured_reads(position);
+
+alter table featured_reads enable row level security;
+
+create policy "Featured reads are publicly readable"
+  on featured_reads for select using (true);
+
+-- Extend likes and saves to support featured_read item type
+alter table likes drop constraint if exists likes_item_type_check;
+alter table likes add constraint likes_item_type_check
+  check (item_type in ('work', 'quote', 'category', 'featured_read'));
+
+alter table saves drop constraint if exists saves_item_type_check;
+alter table saves add constraint saves_item_type_check
+  check (item_type in ('work', 'quote', 'category', 'featured_read'));

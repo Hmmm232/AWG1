@@ -4,27 +4,33 @@ import styles from '@/styles/Explore.module.css';
 
 const SECTIONS = [
   {
+    href: '/explore/reads',
+    label: '14 Reads',
+    quote: '“Read in order to live.”',
+    attr: 'Gustave Flaubert',
+  },
+  {
     href: '/explore/works',
     label: 'Works',
-    quote: '\u201CBecause life is too short to read bad books.\u201D',
+    quote: '“Because life is too short to read bad books.”',
     attr: 'Unknown',
   },
   {
     href: '/explore/quotes',
     label: 'Quotes',
-    quote: '\u201CI quote others only in order the better to express myself.\u201D',
+    quote: '“I quote others only in order the better to express myself.”',
     attr: 'Michel de Montaigne',
   },
   {
     href: '/explore/categories',
     label: 'Categories',
-    quote: '\u201CWe walk the corridors, searching the shelves and rearranging them, looking for lines of meaning amid leagues of cacophony and incoherence.\u201D',
+    quote: '“We walk the corridors, searching the shelves and rearranging them, looking for lines of meaning amid leagues of cacophony and incoherence.”',
     attr: 'Borges',
   },
   {
     href: '/explore/gardens',
     label: 'Gardens',
-    quote: '\u201CA garden to walk in and immensity to dream in \u2014 what more could he ask? A few flowers at his feet and above him the stars.\u201D',
+    quote: '“A garden to walk in and immensity to dream in — what more could he ask? A few flowers at his feet and above him the stars.”',
     attr: 'Victor Hugo',
   },
 ];

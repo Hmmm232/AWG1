@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import styles from '@/styles/Explore.module.css';
 
 const LINKS = [
+  { href: '/explore/reads', label: '14 Reads' },
   { href: '/explore/works', label: 'Works' },
   { href: '/explore/quotes', label: 'Quotes' },
   { href: '/explore/categories', label: 'Categories' },

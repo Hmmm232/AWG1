@@ -1,0 +1,176 @@
+/* 14 Reads — editorially curated short works */
+
+.page {
+  padding-top: var(--space-lg);
+}
+
+.header {
+  margin-bottom: var(--space-xl);
+}
+
+.title {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-xs);
+}
+
+.subtitle {
+  color: var(--color-ink-light);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.6;
+  max-width: 480px;
+}
+
+/* ─── Grid — magazine-style, 2-col desktop, 1-col mobile ────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--space-xl);
+}
+
+/* ─── Individual read card ───────────────────────────────────── */
+.readCard {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.readCard:first-child {
+  padding-top: 0;
+}
+
+.readCard:last-child {
+  border-bottom: none;
+}
+
+/* ─── Position number ────────────────────────────────────────── */
+.readNum {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 2.2rem;
+  padding-top: 0.15rem;
+  opacity: 0.5;
+}
+
+/* ─── Card body ──────────────────────────────────────────────── */
+.readBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.readTitle {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.15rem;
+}
+
+.readAuthor {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  color: var(--color-ink-light);
+  margin: 0 0 0.35rem;
+}
+
+.readPub {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-ink-faint);
+  letter-spacing: 0.02em;
+  margin: 0 0 0.5rem;
+}
+
+.readTime {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 100px;
+  padding: 0.2rem 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.readIntro {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--color-ink-light);
+  margin: 0 0 0.65rem;
+}
+
+/* ─── Pull quote from the work ───────────────────────────────── */
+.readQuote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-ink);
+  margin: 0 0 0.75rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--color-accent);
+}
+
+/* ─── Footer: actions + source link ──────────────────────────── */
+.readFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.readActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.readLink {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+
+.readLink:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* ─── Empty state ────────────────────────────────────────────── */
+.empty {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-ink-faint);
+  font-style: italic;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .readNum {
+    font-size: 1.4rem;
+    width: 1.8rem;
+  }
+
+  .readTitle {
+    font-size: 1.05rem;
+  }
+}
