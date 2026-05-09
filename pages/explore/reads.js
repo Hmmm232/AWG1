@@ -20,8 +20,8 @@ export default function ExploreReads({ reads }) {
         <div className={styles.header}>
           <h1 className={styles.title}>{reads.length} Reads</h1>
           <p className={styles.subtitle}>
-            Short works you can read right now&mdash;on your commute,
-            over coffee, between meetings. Handpicked and updated regularly.
+            Great short works you can read right now, ranging from five
+            minutes to two hours. Handpicked and updated regularly.
           </p>
         </div>
 

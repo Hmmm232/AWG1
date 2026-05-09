@@ -194,8 +194,8 @@ export default function Home({ gardens, categories, works, quotes }) {
                         </div>
                         {g.bio && (
                           <div className={styles.gardenBio}>
-                            {g.bio.length > 90
-                              ? g.bio.slice(0, g.bio.lastIndexOf(' ', 90)) + '…'
+                            {g.bio.length > 70
+                              ? g.bio.slice(0, g.bio.lastIndexOf(' ', 70)) + '…'
                               : g.bio}
                           </div>
                         )}

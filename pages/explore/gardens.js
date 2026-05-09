@@ -42,8 +42,8 @@ export default function ExploreGardens({ gardens }) {
                     </div>
                     {g.bio && (
                       <p className={styles.gardenBio}>
-                        {g.bio.length > 90
-                          ? g.bio.slice(0, g.bio.lastIndexOf(' ', 90)) + '…'
+                        {g.bio.length > 70
+                          ? g.bio.slice(0, g.bio.lastIndexOf(' ', 70)) + '…'
                           : g.bio}
                       </p>
                     )}

@@ -271,11 +271,11 @@
 .dropCap {
   float: left;
   font-family: var(--font-serif);
-  font-size: 2.25rem;
-  line-height: 0.8;
+  font-size: 2.4rem;
+  line-height: 1;
   font-weight: 700;
   color: var(--awg-green);
-  padding: 0.15rem 0.3rem 0 0;
+  padding: 0.15rem 0.4rem 0 0;
 }
 
 .workFooter {
@@ -645,8 +645,8 @@
   }
 
   .dropCap {
-    font-size: 1.85rem;
-    padding: 0.12rem 0.25rem 0 0;
+    font-size: 2rem;
+    padding: 0.12rem 0.3rem 0 0;
   }
 
   .about {
