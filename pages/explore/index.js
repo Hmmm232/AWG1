@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { Leaf } from '@/components/CardOrnaments';
 import styles from '@/styles/Explore.module.css';
 
 const SECTIONS = [
@@ -54,18 +55,21 @@ export default function ExplorePage({ readsCount }) {
         </div>
 
         <div className={styles.indexGrid}>
-          {SECTIONS.map((s, i) => {
+          {SECTIONS.map((s) => {
             const label = s.labelKey === 'reads' ? `${readsCount} Reads` : s.label;
             return (
               <Link key={s.href} href={s.href} className={styles.indexCard}>
-                <span className={styles.indexNum}>{String(i + 1).padStart(2, '0')}</span>
+                <span className={styles.indexLeaf} aria-hidden="true">
+                  <Leaf className={styles.indexLeafSvg} />
+                </span>
                 <div className={styles.indexContent}>
                   <h2 className={styles.indexTitle}>{label}</h2>
-                  <div className={styles.indexRule} />
                   <p className={styles.indexQuote}>{s.quote}</p>
                   <p className={styles.indexAttr}>&mdash; {s.attr}</p>
                 </div>
-                <span className={styles.indexArrow}>&rarr;</span>
+                <span className={styles.indexBrowse}>
+                  Browse {label} <span className={styles.indexArrow}>&rarr;</span>
+                </span>
               </Link>
             );
           })}

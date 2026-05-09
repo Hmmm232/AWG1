@@ -564,21 +564,26 @@
   border-bottom: none;
 }
 
-.indexNum {
-  font-family: var(--font-serif);
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--awg-green);
-  opacity: 0.25;
-  line-height: 1;
+.indexLeaf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   width: 2.8rem;
-  text-align: center;
-  transition: opacity 0.2s ease;
+  color: var(--awg-green);
+  opacity: 0.45;
+  transform: rotate(-18deg);
+  transition: opacity 0.25s ease, transform 0.35s ease;
 }
 
-.indexCard:hover .indexNum {
-  opacity: 0.5;
+.indexLeafSvg {
+  width: 28px;
+  height: 28px;
+}
+
+.indexCard:hover .indexLeaf {
+  opacity: 0.9;
+  transform: rotate(-2deg);
 }
 
 .indexContent {
@@ -591,22 +596,8 @@
   font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.25rem;
   line-height: 1.2;
-}
-
-.indexRule {
-  width: 32px;
-  height: 2px;
-  background: var(--awg-green);
-  opacity: 0.4;
-  margin-bottom: 0.5rem;
-  transition: width 0.3s ease, opacity 0.3s ease;
-}
-
-.indexCard:hover .indexRule {
-  width: 56px;
-  opacity: 0.7;
 }
 
 .indexQuote {
@@ -615,7 +606,7 @@
   font-style: italic;
   color: var(--color-ink-light);
   line-height: 1.6;
-  margin: 0 0 0.2rem;
+  margin: 0 0 0.15rem;
 }
 
 .indexAttr {
@@ -624,18 +615,24 @@
   margin: 0;
 }
 
-.indexArrow {
-  font-size: 1.1rem;
+.indexBrowse {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
   color: var(--awg-green);
   flex-shrink: 0;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  align-self: flex-end;
+  white-space: nowrap;
+}
+
+.indexArrow {
+  display: inline-block;
+  margin-left: 0.25rem;
+  transition: transform 0.2s ease;
 }
 
 .indexCard:hover .indexArrow {
-  opacity: 1;
-  transform: translateX(0);
+  transform: translateX(3px);
 }
 
 /* Empty state */
@@ -666,21 +663,26 @@
   }
 
   .indexCard {
-    gap: 1rem;
+    gap: 0.85rem;
     padding: 1.25rem 1rem;
+    flex-wrap: wrap;
   }
 
-  .indexNum {
-    font-size: 1.6rem;
+  .indexLeaf {
     width: 2rem;
+  }
+
+  .indexLeafSvg {
+    width: 22px;
+    height: 22px;
   }
 
   .indexTitle {
     font-size: 1.15rem;
   }
 
-  .indexArrow {
-    opacity: 1;
-    transform: translateX(0);
+  .indexBrowse {
+    margin-left: 2.85rem;
+    align-self: flex-start;
   }
 }
