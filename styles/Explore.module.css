@@ -41,18 +41,6 @@
   margin-top: 0.2rem;
 }
 
-.browseHeading {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  text-transform: none;
-  color: var(--color-accent);
-  margin-top: var(--space-lg);
-  display: block;
-  text-align: right;
-}
-
 /* ─── Navigation ─────────────────────────────────────────────── */
 .nav {
   display: flex;
@@ -532,49 +520,122 @@
   white-space: nowrap;
 }
 
-/* ─── Explore index card (overview) ──────────────────────────── */
-.card {
-  background: var(--color-white);
-  border: 1px solid var(--color-border-light);
-  border-left: 2px solid var(--awg-green);
-  transition: box-shadow 0.2s ease;
+/* ─── Explore index cards (overview page) ───────────────────── */
+.indexGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 720px;
+}
+
+.indexCard {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.75rem 1.5rem;
+  color: var(--color-ink);
+  border-bottom: 1px solid var(--color-border-light);
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.indexCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--awg-green);
+  transform: scaleY(0);
+  transition: transform 0.25s ease;
+}
+
+.indexCard:hover {
+  background: rgba(74, 103, 65, 0.03);
+  color: var(--color-ink);
+}
+
+.indexCard:hover::before {
+  transform: scaleY(1);
+}
+
+.indexCard:last-child {
+  border-bottom: none;
+}
+
+.indexNum {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--awg-green);
+  opacity: 0.25;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 2.8rem;
+  text-align: center;
+  transition: opacity 0.2s ease;
+}
+
+.indexCard:hover .indexNum {
+  opacity: 0.5;
+}
+
+.indexContent {
+  flex: 1;
   min-width: 0;
-  overflow: hidden;
 }
 
-.card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+.indexTitle {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
 }
 
-.cardLink {
-  display: block;
-  padding: var(--space-lg);
-  color: var(--color-ink);
-  overflow: hidden;
+.indexRule {
+  width: 32px;
+  height: 2px;
+  background: var(--awg-green);
+  opacity: 0.4;
+  margin-bottom: 0.5rem;
+  transition: width 0.3s ease, opacity 0.3s ease;
 }
 
-.cardLink:hover {
-  color: var(--color-ink);
+.indexCard:hover .indexRule {
+  width: 56px;
+  opacity: 0.7;
 }
 
-.cardBody {
-  font-size: 0.9rem;
-  color: var(--color-ink-light);
-  line-height: 1.6;
-}
-
-.cardQuoteDesc {
+.indexQuote {
+  font-family: var(--font-serif);
   font-size: 0.88rem;
   font-style: italic;
   color: var(--color-ink-light);
-  line-height: 1.65;
-  margin-bottom: 0.3rem;
+  line-height: 1.6;
+  margin: 0 0 0.2rem;
 }
 
-.cardQuoteAttr {
+.indexAttr {
   font-size: 0.78rem;
   color: var(--color-ink-faint);
-  margin-bottom: 0;
+  margin: 0;
+}
+
+.indexArrow {
+  font-size: 1.1rem;
+  color: var(--awg-green);
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.indexCard:hover .indexArrow {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* Empty state */
@@ -602,5 +663,24 @@
   .navLink {
     font-size: 0.8rem;
     padding: 0.35rem 0.75rem;
+  }
+
+  .indexCard {
+    gap: 1rem;
+    padding: 1.25rem 1rem;
+  }
+
+  .indexNum {
+    font-size: 1.6rem;
+    width: 2rem;
+  }
+
+  .indexTitle {
+    font-size: 1.15rem;
+  }
+
+  .indexArrow {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

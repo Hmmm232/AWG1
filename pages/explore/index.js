@@ -53,18 +53,20 @@ export default function ExplorePage({ readsCount }) {
           </p>
         </div>
 
-        <div className={styles.grid}>
-          {SECTIONS.map((s) => {
+        <div className={styles.indexGrid}>
+          {SECTIONS.map((s, i) => {
             const label = s.labelKey === 'reads' ? `${readsCount} Reads` : s.label;
             return (
-              <div key={s.href} className={styles.card}>
-                <Link href={s.href} className={styles.cardLink}>
-                  <p className={styles.cardTitle}>{label}</p>
-                  <p className={styles.cardQuoteDesc}>{s.quote}</p>
-                  <p className={styles.cardQuoteAttr}>&mdash; {s.attr}</p>
-                  <span className={styles.browseHeading}>Browse {label} &rarr;</span>
-                </Link>
-              </div>
+              <Link key={s.href} href={s.href} className={styles.indexCard}>
+                <span className={styles.indexNum}>{String(i + 1).padStart(2, '0')}</span>
+                <div className={styles.indexContent}>
+                  <h2 className={styles.indexTitle}>{label}</h2>
+                  <div className={styles.indexRule} />
+                  <p className={styles.indexQuote}>{s.quote}</p>
+                  <p className={styles.indexAttr}>&mdash; {s.attr}</p>
+                </div>
+                <span className={styles.indexArrow}>&rarr;</span>
+              </Link>
             );
           })}
         </div>
