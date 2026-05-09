@@ -45,10 +45,6 @@ export default function ExploreReads({ reads }) {
                     <p className={styles.readPub}>{r.publication}</p>
                   )}
 
-                  <div className={styles.readTime}>
-                    {r.read_minutes} min read
-                  </div>
-
                   {r.introduction && (
                     <p className={styles.readIntro}>{r.introduction}</p>
                   )}
