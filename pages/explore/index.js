@@ -5,12 +5,6 @@ import styles from '@/styles/Explore.module.css';
 
 const SECTIONS = [
   {
-    href: '/explore/reads',
-    labelKey: 'reads',
-    quote: '”Read in order to live.”',
-    attr: 'Gustave Flaubert',
-  },
-  {
     href: '/explore/works',
     label: 'Works',
     quote: '”Because life is too short to read bad books.”',
@@ -33,6 +27,12 @@ const SECTIONS = [
     label: 'Gardens',
     quote: '”A garden to walk in and immensity to dream in — what more could he ask? A few flowers at his feet and above him the stars.”',
     attr: 'Victor Hugo',
+  },
+  {
+    href: '/explore/reads',
+    labelKey: 'reads',
+    quote: '”Read in order to live.”',
+    attr: 'Gustave Flaubert',
   },
 ];
 
