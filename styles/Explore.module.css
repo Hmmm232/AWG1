@@ -564,28 +564,6 @@
   border-bottom: none;
 }
 
-.indexLeaf {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 2.8rem;
-  color: var(--awg-green);
-  opacity: 0.45;
-  transform: rotate(-18deg);
-  transition: opacity 0.25s ease, transform 0.35s ease;
-}
-
-.indexLeafSvg {
-  width: 28px;
-  height: 28px;
-}
-
-.indexCard:hover .indexLeaf {
-  opacity: 0.9;
-  transform: rotate(-2deg);
-}
-
 .indexContent {
   flex: 1;
   min-width: 0;
@@ -668,21 +646,7 @@
     flex-wrap: wrap;
   }
 
-  .indexLeaf {
-    width: 2rem;
-  }
-
-  .indexLeafSvg {
-    width: 22px;
-    height: 22px;
-  }
-
   .indexTitle {
     font-size: 1.15rem;
-  }
-
-  .indexBrowse {
-    margin-left: 2.85rem;
-    align-self: flex-start;
   }
 }

@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { Leaf } from '@/components/CardOrnaments';
 import styles from '@/styles/Explore.module.css';
 
 const SECTIONS = [
@@ -21,7 +20,7 @@ const SECTIONS = [
     href: '/explore/categories',
     label: 'Categories',
     quote: '”We walk the corridors, searching the shelves and rearranging them, looking for lines of meaning amid leagues of cacophony and incoherence.”',
-    attr: 'Borges',
+    attr: 'Jorge Luis Borges',
   },
   {
     href: '/explore/gardens',
@@ -32,8 +31,8 @@ const SECTIONS = [
   {
     href: '/explore/reads',
     labelKey: 'reads',
-    quote: '”Read in order to live.”',
-    attr: 'Gustave Flaubert',
+    quote: '”Everywhere I go I find a poet has been there before me.”',
+    attr: 'Sigmund Freud',
   },
 ];
 
@@ -59,9 +58,6 @@ export default function ExplorePage({ readsCount }) {
             const label = s.labelKey === 'reads' ? `${readsCount} Reads` : s.label;
             return (
               <Link key={s.href} href={s.href} className={styles.indexCard}>
-                <span className={styles.indexLeaf} aria-hidden="true">
-                  <Leaf className={styles.indexLeafSvg} />
-                </span>
                 <div className={styles.indexContent}>
                   <h2 className={styles.indexTitle}>{label}</h2>
                   <p className={styles.indexQuote}>{s.quote}</p>
