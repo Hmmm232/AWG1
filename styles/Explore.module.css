@@ -1,7 +1,8 @@
 /* Explore pages */
 
 /* ─── Local palette ──────────────────────────────────────────── */
-.grid {
+.grid,
+.indexGrid {
   --awg-green: var(--color-accent);
   --awg-green-light: #d9e7de;
   --awg-ink: var(--color-ink);
