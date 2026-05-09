@@ -9,7 +9,7 @@ export default function ExploreReads({ reads }) {
   return (
     <>
       <Head>
-        <title>14 Reads — A Walled Garden</title>
+        <title>{reads.length} Reads — A Walled Garden</title>
         <meta
           name="description"
           content="Short works you can read right now — handpicked essays, stories, poems and speeches, updated regularly."
@@ -18,7 +18,7 @@ export default function ExploreReads({ reads }) {
 
       <div className={styles.page}>
         <div className={styles.header}>
-          <h1 className={styles.title}>14 Reads</h1>
+          <h1 className={styles.title}>{reads.length} Reads</h1>
           <p className={styles.subtitle}>
             Short works you can read right now&mdash;on your commute,
             over coffee, between meetings. Handpicked and updated regularly.
