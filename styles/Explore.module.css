@@ -110,7 +110,7 @@
   align-items: center;
   gap: 8px;
   color: var(--awg-rule);
-  margin: 0.35rem 0;
+  margin: 0.25rem 0 0.2rem;
 }
 
 .leaf {
@@ -156,7 +156,8 @@
   background: none;
   border: none;
   padding: 0;
-  margin-top: 0.2rem;
+  margin-top: 0.15rem;
+  margin-bottom: 0;
   font-family: var(--font-sans);
   font-size: 0.8rem;
   color: var(--color-accent);
@@ -469,11 +470,12 @@
 
 .quoteMark {
   font-family: var(--font-serif);
-  font-size: 2.4rem;
-  line-height: 0.6;
-  color: var(--awg-green-light);
+  font-size: 2.8rem;
+  line-height: 0.5;
+  color: var(--awg-green);
+  opacity: 0.35;
   display: block;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.1rem;
 }
 
 .quoteText {
@@ -523,14 +525,19 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-sm);
-  margin-top: 0.3rem;
+  margin-top: 0.15rem;
   padding-top: 0;
 }
 
 .quoteFooterActions {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
+}
+
+.quoteFooterActions button {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.35rem;
 }
 
 /* ─── Explore index cards (overview page) ───────────────────── */
