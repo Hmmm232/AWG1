@@ -110,7 +110,7 @@
   align-items: center;
   gap: 8px;
   color: var(--awg-rule);
-  margin: 0.25rem 0 0.2rem;
+  margin: 0.2rem 0 0.1rem;
 }
 
 .leaf {
@@ -463,7 +463,7 @@
 
 .quoteCardBody {
   display: block;
-  padding: var(--space-md) var(--space-lg) var(--space-sm);
+  padding: 0.5rem var(--space-lg) 0.4rem;
   color: var(--awg-ink);
   overflow: hidden;
 }
@@ -475,7 +475,7 @@
   color: var(--awg-green);
   opacity: 0.35;
   display: block;
-  margin-bottom: 0.1rem;
+  margin-bottom: -0.15rem;
 }
 
 .quoteText {
@@ -504,7 +504,8 @@
   font-family: var(--font-serif);
   font-size: 0.85rem;
   color: var(--awg-ink-soft);
-  line-height: 1.4;
+  line-height: 1.2;
+  margin-bottom: 0;
 }
 
 .quoteAttr b {
@@ -525,7 +526,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-sm);
-  margin-top: 0.15rem;
+  margin-top: 0.05rem;
   padding-top: 0;
 }
 
