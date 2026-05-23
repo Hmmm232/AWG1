@@ -6,7 +6,6 @@ import { supabase } from '@/lib/supabase';
 import { scoreQuote, rank, buildLikeMap } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import LikeButton from '@/components/LikeButton';
-import SaveButton from '@/components/SaveButton';
 import ShareButton from '@/components/ShareButton';
 import ReRecButton from '@/components/ReRecButton';
 import { OrnateRule } from '@/components/CardOrnaments';
@@ -73,42 +72,40 @@ export default function ExploreQuotes({ quotes }) {
                     {(q.attribution || q.source) && (
                       <div className={styles.quoteAttr}>
                         {q.attribution && <>&mdash; <b>{q.attribution}</b></>}
-                        {q.source && (
-                          <div className={styles.quoteSource}><em>{q.source}</em></div>
-                        )}
+                        {q.attribution && q.source && <span className={styles.quoteAttrSep}> / </span>}
+                        {q.source && <em className={styles.quoteSourceInline}>{q.source}</em>}
                       </div>
                     )}
-                    <div className={styles.eyebrow} style={{ marginTop: '0.25rem' }}>
-                      saved by @{q.profiles?.handle || 'someone'}
+                    <div className={styles.quoteFooter}>
+                      <div className={styles.eyebrow}>
+                        saved by @{q.profiles?.handle || 'someone'}
+                      </div>
+                      <div className={styles.quoteFooterActions}>
+                        <LikeButton itemId={q.id} itemType="quote" />
+                        <ShareButton
+                          handle={q.profiles?.handle}
+                          tab="quotes"
+                          itemId={q.id}
+                        />
+                        {q.profiles?.handle && (
+                          <ReRecButton
+                            workTitle={`"${q.quote_text.slice(0, 80)}${q.quote_text.length > 80 ? '...' : ''}"`}
+                            recommenderHandle={q.profiles.handle}
+                            recommenderName={q.profiles.display_name}
+                            tab="quotes"
+                            itemId={q.id}
+                          />
+                        )}
+                        {q.profiles?.handle && (
+                          <Link
+                            href={`/${q.profiles.handle}?tab=quotes&item=${q.id}`}
+                            className={styles.goToLink}
+                          >
+                            Go to quote &rarr;
+                          </Link>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.cardActions}>
-                    <LikeButton itemId={q.id} itemType="quote" />
-                    <SaveButton itemId={q.id} itemType="quote" />
-                    {q.profiles?.handle && (
-                      <ShareButton
-                        handle={q.profiles.handle}
-                        tab="quotes"
-                        itemId={q.id}
-                      />
-                    )}
-                    {q.profiles?.handle && (
-                      <ReRecButton
-                        workTitle={`"${q.quote_text.slice(0, 80)}${q.quote_text.length > 80 ? '...' : ''}"`}
-                        recommenderHandle={q.profiles.handle}
-                        recommenderName={q.profiles.display_name}
-                        tab="quotes"
-                        itemId={q.id}
-                      />
-                    )}
-                    {q.profiles?.handle && (
-                      <Link
-                        href={`/${q.profiles.handle}?tab=quotes&item=${q.id}`}
-                        className={styles.goToLink}
-                      >
-                        Go to quote &rarr;
-                      </Link>
-                    )}
                   </div>
                 </article>
               );

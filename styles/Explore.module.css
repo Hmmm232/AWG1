@@ -500,8 +500,9 @@
 
 .quoteAttr {
   font-family: var(--font-serif);
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: var(--awg-ink-soft);
+  line-height: 1.4;
 }
 
 .quoteAttr b {
@@ -509,13 +510,27 @@
   font-weight: 600;
 }
 
-.quoteSource {
-  font-style: italic;
+.quoteAttrSep {
   color: var(--awg-ink-mute);
-  margin-top: 0.15rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+.quoteSourceInline {
+  color: var(--awg-ink-mute);
+}
+
+.quoteFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: 0.3rem;
+  padding-top: 0;
+}
+
+.quoteFooterActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
 /* ─── Explore index cards (overview page) ───────────────────── */
