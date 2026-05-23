@@ -50,7 +50,7 @@ export default function ExploreWorks({ works }) {
                     {w.commentary && (
                       <>
                         <OrnateRule className={styles.ornateRule} />
-                        <p className={expanded[w.id] ? styles.cardBodyExpanded : styles.workNote}>
+                        <p className={expanded[w.id] || w.commentary.length <= 400 ? styles.cardBodyExpanded : styles.workNote}>
                           {w.commentary.length > 0 && (
                             <span className={styles.dropCap}>{w.commentary.charAt(0)}</span>
                           )}

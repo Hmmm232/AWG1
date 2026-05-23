@@ -61,7 +61,7 @@ export default function ExploreQuotes({ quotes }) {
                 <article key={q.id} id={q.id} className={styles.quoteCard}>
                   <div className={styles.quoteCardBody}>
                     <span className={styles.quoteMark} aria-hidden="true">&ldquo;</span>
-                    <blockquote className={expanded[q.id] ? styles.quoteTextExpanded : styles.quoteText}>
+                    <blockquote className={expanded[q.id] || q.quote_text.length <= 400 ? styles.quoteTextExpanded : styles.quoteText}>
                       {q.quote_text}
                     </blockquote>
                     {q.quote_text.length > 400 && (
