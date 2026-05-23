@@ -110,7 +110,7 @@
   align-items: center;
   gap: 8px;
   color: var(--awg-rule);
-  margin: 0.6rem 0;
+  margin: 0.35rem 0;
 }
 
 .leaf {
@@ -139,7 +139,7 @@
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: 1.2rem;
-  margin: 0.4rem 0 0.2rem;
+  margin: 0.2rem 0 0.15rem;
   line-height: 1.2;
 }
 
@@ -156,7 +156,7 @@
   background: none;
   border: none;
   padding: 0;
-  margin-top: var(--space-xs);
+  margin-top: 0.2rem;
   font-family: var(--font-sans);
   font-size: 0.8rem;
   color: var(--color-accent);
@@ -182,7 +182,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: 0 var(--space-lg) var(--space-md);
+  padding: 0 var(--space-lg) var(--space-sm);
 }
 
 /* ─── Work card ──────────────────────────────────────────────── */
@@ -201,7 +201,7 @@
 
 .workCardBody {
   display: block;
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg) var(--space-sm);
   color: var(--awg-ink);
   overflow: hidden;
 }
@@ -474,18 +474,18 @@
 
 .quoteCardBody {
   display: block;
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg) var(--space-sm);
   color: var(--awg-ink);
   overflow: hidden;
 }
 
 .quoteMark {
   font-family: var(--font-serif);
-  font-size: 3rem;
+  font-size: 2.4rem;
   line-height: 0.6;
   color: var(--awg-green-light);
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.15rem;
 }
 
 .quoteText {

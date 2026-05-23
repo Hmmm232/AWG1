@@ -64,7 +64,7 @@ export default function ExploreQuotes({ quotes }) {
                     <blockquote className={expanded[q.id] ? styles.quoteTextExpanded : styles.quoteText}>
                       {q.quote_text}
                     </blockquote>
-                    {q.quote_text.length > 200 && (
+                    {q.quote_text.length > 400 && (
                       <button className={styles.readMore} onClick={() => toggle(q.id)}>
                         {expanded[q.id] ? 'Show less' : 'Read more'}
                       </button>
@@ -78,7 +78,7 @@ export default function ExploreQuotes({ quotes }) {
                         )}
                       </div>
                     )}
-                    <div className={styles.eyebrow} style={{ marginTop: '0.5rem' }}>
+                    <div className={styles.eyebrow} style={{ marginTop: '0.25rem' }}>
                       saved by @{q.profiles?.handle || 'someone'}
                     </div>
                   </div>

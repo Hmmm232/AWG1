@@ -51,12 +51,12 @@ export default function ExploreWorks({ works }) {
                       <>
                         <OrnateRule className={styles.ornateRule} />
                         <p className={expanded[w.id] ? styles.cardBodyExpanded : styles.workNote}>
-                          {!expanded[w.id] && w.commentary.length > 0 && (
+                          {w.commentary.length > 0 && (
                             <span className={styles.dropCap}>{w.commentary.charAt(0)}</span>
                           )}
-                          {expanded[w.id] ? w.commentary : w.commentary.slice(1)}
+                          {expanded[w.id] ? w.commentary.slice(1) : w.commentary.slice(1)}
                         </p>
-                        {w.commentary.length > 180 && (
+                        {w.commentary.length > 400 && (
                           <button className={styles.readMore} onClick={() => toggle(w.id)}>
                             {expanded[w.id] ? 'Show less' : 'Read more'}
                           </button>
