@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import styles from '@/styles/Garden.module.css';
 
-export default function ShareButton({ tab, itemId }) {
+export default function ShareButton({ tab, itemId, handle }) {
   const [copied, setCopied] = useState(false);
 
   function handleShare() {
-    const url = `${window.location.origin}${window.location.pathname}?tab=${tab}&item=${itemId}`;
+    const path = handle ? `/${handle}` : window.location.pathname;
+    const url = `${window.location.origin}${path}?tab=${tab}&item=${itemId}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);

@@ -7,6 +7,7 @@ import { scoreQuote, rank, buildLikeMap } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import LikeButton from '@/components/LikeButton';
 import SaveButton from '@/components/SaveButton';
+import ShareButton from '@/components/ShareButton';
 import ReRecButton from '@/components/ReRecButton';
 import { OrnateRule } from '@/components/CardOrnaments';
 import styles from '@/styles/Explore.module.css';
@@ -53,7 +54,7 @@ export default function ExploreQuotes({ quotes }) {
         {quotes.length === 0 ? (
           <p className={styles.empty}>No quotes yet.</p>
         ) : (
-          <div className={styles.grid}>
+          <div className={styles.listGrid}>
             {quotes.map((q) => {
               const curator = q.profiles?.display_name || q.profiles?.handle || 'Unknown';
               return (
@@ -84,6 +85,13 @@ export default function ExploreQuotes({ quotes }) {
                   <div className={styles.cardActions}>
                     <LikeButton itemId={q.id} itemType="quote" />
                     <SaveButton itemId={q.id} itemType="quote" />
+                    {q.profiles?.handle && (
+                      <ShareButton
+                        handle={q.profiles.handle}
+                        tab="quotes"
+                        itemId={q.id}
+                      />
+                    )}
                     {q.profiles?.handle && (
                       <ReRecButton
                         workTitle={`"${q.quote_text.slice(0, 80)}${q.quote_text.length > 80 ? '...' : ''}"`}

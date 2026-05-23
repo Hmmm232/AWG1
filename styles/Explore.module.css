@@ -2,7 +2,8 @@
 
 /* ─── Local palette ──────────────────────────────────────────── */
 .grid,
-.indexGrid {
+.indexGrid,
+.listGrid {
   --awg-green: var(--color-accent);
   --awg-green-light: #d9e7de;
   --awg-ink: var(--color-ink);
@@ -84,6 +85,14 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 340px));
   gap: var(--space-lg);
+}
+
+/* Single-column wide list — used by works & quotes for richer layouts */
+.listGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: 760px;
 }
 
 /* ─── Shared ornaments ───────────────────────────────────────── */

@@ -6,6 +6,7 @@ import { scoreWork, rank, buildLikeMap } from '@/lib/ranking';
 import ExploreNav from '@/components/ExploreNav';
 import LikeButton from '@/components/LikeButton';
 import SaveButton from '@/components/SaveButton';
+import ShareButton from '@/components/ShareButton';
 import ReRecButton from '@/components/ReRecButton';
 import { OrnateRule } from '@/components/CardOrnaments';
 import styles from '@/styles/Explore.module.css';
@@ -36,7 +37,7 @@ export default function ExploreWorks({ works }) {
         {works.length === 0 ? (
           <p className={styles.empty}>No works yet.</p>
         ) : (
-          <div className={styles.grid}>
+          <div className={styles.listGrid}>
             {works.map((w) => {
               const owner = w.profiles?.display_name || w.profiles?.handle || 'Unknown';
               const tag = w.category_name || 'A Work';
@@ -66,6 +67,13 @@ export default function ExploreWorks({ works }) {
                   <div className={styles.cardActions}>
                     <LikeButton itemId={w.id} itemType="work" />
                     <SaveButton itemId={w.id} itemType="work" />
+                    {w.profiles?.handle && (
+                      <ShareButton
+                        handle={w.profiles.handle}
+                        tab="garden"
+                        itemId={w.id}
+                      />
+                    )}
                     {w.profiles?.handle && (
                       <ReRecButton
                         workTitle={w.title}
