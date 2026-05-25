@@ -82,23 +82,27 @@ export default function ExploreQuotes({ quotes }) {
                     >
                       {q.quote_text}
                     </blockquote>
-                    {(q.attribution || q.source) && (
-                      <div className={styles.quoteAttr}>
-                        {q.attribution && <>&mdash; <b>{q.attribution}</b></>}
-                        {q.attribution && q.source && <span className={styles.quoteAttrSep}> / </span>}
-                        {q.source && <em className={styles.quoteSourceInline}>{q.source}</em>}
+                    <div className={styles.quoteAttrRow}>
+                      <div>
+                        {!expanded[q.id] && overflowing[q.id] && (
+                          <button className={styles.readMore} onClick={() => toggle(q.id)}>
+                            Read more
+                          </button>
+                        )}
+                        {expanded[q.id] && (
+                          <button className={styles.readMore} onClick={() => toggle(q.id)}>
+                            Show less
+                          </button>
+                        )}
                       </div>
-                    )}
-                    {!expanded[q.id] && overflowing[q.id] && (
-                      <button className={styles.readMore} onClick={() => toggle(q.id)}>
-                        Read more
-                      </button>
-                    )}
-                    {expanded[q.id] && (
-                      <button className={styles.readMore} onClick={() => toggle(q.id)}>
-                        Show less
-                      </button>
-                    )}
+                      {(q.attribution || q.source) && (
+                        <div className={styles.quoteAttr}>
+                          {q.attribution && <>&mdash; <b>{q.attribution}</b></>}
+                          {q.attribution && q.source && <span className={styles.quoteAttrSep}> / </span>}
+                          {q.source && <em className={styles.quoteSourceInline}>{q.source}</em>}
+                        </div>
+                      )}
+                    </div>
                     <OrnateRule className={styles.ornateRule} />
                     <div className={styles.quoteFooter}>
                       <div className={styles.eyebrow}>

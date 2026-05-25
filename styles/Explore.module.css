@@ -157,12 +157,12 @@
   background: none;
   border: none;
   padding: 0;
-  margin-top: 0.15rem;
-  margin-bottom: 0;
+  margin: 0;
   font-family: var(--font-sans);
   font-size: 0.8rem;
   color: var(--color-accent);
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .readMore:hover {
@@ -475,19 +475,20 @@
 
 .quoteCardBody {
   display: block;
-  padding: 0.6rem var(--space-lg) 0.4rem;
+  padding: 0.4rem var(--space-lg) 0.4rem;
   color: var(--awg-ink);
-  overflow: hidden;
 }
 
 .quoteMark {
   font-family: var(--font-serif);
   font-size: 3.2rem;
-  line-height: 0.5;
+  line-height: 1;
+  height: 1.6rem;
+  overflow: visible;
   color: var(--awg-green);
   opacity: 0.5;
   display: block;
-  margin-bottom: 0.25rem;
+  margin: 0.3rem 0 0.35rem;
 }
 
 .quoteText {
@@ -512,14 +513,24 @@
   margin: 0;
 }
 
+.quoteAttrRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: 0.15rem;
+}
+
 .quoteAttr {
   font-family: var(--font-serif);
   font-size: 0.82rem;
   color: var(--awg-ink-soft);
   line-height: 1.2;
   text-align: right;
-  margin-top: 0.3rem;
-  margin-bottom: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 75%;
 }
 
 .quoteAttr b {
