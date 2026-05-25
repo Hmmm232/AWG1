@@ -187,6 +187,16 @@
   padding: 0 var(--space-lg) var(--space-sm);
 }
 
+.cardActions button {
+  color: #aaa6a0;
+  border-color: #e2e0dc;
+}
+
+.cardActions button:hover {
+  color: var(--awg-ink-soft);
+  border-color: var(--awg-ink-mute);
+}
+
 /* ─── Work card ──────────────────────────────────────────────── */
 .workCard {
   background: var(--color-white);
@@ -465,19 +475,19 @@
 
 .quoteCardBody {
   display: block;
-  padding: 0.5rem var(--space-lg) 0.4rem;
+  padding: 0.6rem var(--space-lg) 0.4rem;
   color: var(--awg-ink);
   overflow: hidden;
 }
 
 .quoteMark {
   font-family: var(--font-serif);
-  font-size: 2.8rem;
+  font-size: 3.2rem;
   line-height: 0.5;
   color: var(--awg-green);
-  opacity: 0.35;
+  opacity: 0.5;
   display: block;
-  margin-bottom: -0.15rem;
+  margin-bottom: 0.25rem;
 }
 
 .quoteText {
@@ -504,9 +514,11 @@
 
 .quoteAttr {
   font-family: var(--font-serif);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--awg-ink-soft);
   line-height: 1.2;
+  text-align: right;
+  margin-top: 0.3rem;
   margin-bottom: 0;
 }
 
@@ -541,6 +553,13 @@
 .quoteFooterActions button {
   font-size: 0.72rem;
   padding: 0.2rem 0.35rem;
+  color: #aaa6a0;
+  border-color: #e2e0dc;
+}
+
+.quoteFooterActions button:hover {
+  color: var(--awg-ink-soft);
+  border-color: var(--awg-ink-mute);
 }
 
 /* ─── Explore index cards (overview page) ───────────────────── */

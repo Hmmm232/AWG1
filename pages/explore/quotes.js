@@ -82,6 +82,13 @@ export default function ExploreQuotes({ quotes }) {
                     >
                       {q.quote_text}
                     </blockquote>
+                    {(q.attribution || q.source) && (
+                      <div className={styles.quoteAttr}>
+                        {q.attribution && <>&mdash; <b>{q.attribution}</b></>}
+                        {q.attribution && q.source && <span className={styles.quoteAttrSep}> / </span>}
+                        {q.source && <em className={styles.quoteSourceInline}>{q.source}</em>}
+                      </div>
+                    )}
                     {!expanded[q.id] && overflowing[q.id] && (
                       <button className={styles.readMore} onClick={() => toggle(q.id)}>
                         Read more
@@ -93,13 +100,6 @@ export default function ExploreQuotes({ quotes }) {
                       </button>
                     )}
                     <OrnateRule className={styles.ornateRule} />
-                    {(q.attribution || q.source) && (
-                      <div className={styles.quoteAttr}>
-                        {q.attribution && <>&mdash; <b>{q.attribution}</b></>}
-                        {q.attribution && q.source && <span className={styles.quoteAttrSep}> / </span>}
-                        {q.source && <em className={styles.quoteSourceInline}>{q.source}</em>}
-                      </div>
-                    )}
                     <div className={styles.quoteFooter}>
                       <div className={styles.eyebrow}>
                         saved by @{q.profiles?.handle || 'someone'}
