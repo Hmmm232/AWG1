@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -14,8 +14,24 @@ import styles from '@/styles/Explore.module.css';
 export default function ExploreQuotes({ quotes }) {
   const router = useRouter();
   const [expanded, setExpanded] = useState({});
+  const [overflowing, setOverflowing] = useState({});
+  const textRefs = useRef({});
 
   const toggle = (id) => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  const checkOverflows = useCallback(() => {
+    const next = {};
+    for (const [id, el] of Object.entries(textRefs.current)) {
+      if (el) next[id] = el.scrollHeight > el.clientHeight;
+    }
+    setOverflowing(next);
+  }, []);
+
+  useEffect(() => {
+    checkOverflows();
+    window.addEventListener('resize', checkOverflows);
+    return () => window.removeEventListener('resize', checkOverflows);
+  }, [checkOverflows]);
 
   // Scroll to and highlight a specific quote when ?item= is present
   useEffect(() => {
@@ -60,12 +76,20 @@ export default function ExploreQuotes({ quotes }) {
                 <article key={q.id} id={q.id} className={styles.quoteCard}>
                   <div className={styles.quoteCardBody}>
                     <span className={styles.quoteMark} aria-hidden="true">&ldquo;</span>
-                    <blockquote className={expanded[q.id] || q.quote_text.length <= 400 ? styles.quoteTextExpanded : styles.quoteText}>
+                    <blockquote
+                      ref={(el) => { textRefs.current[q.id] = el; }}
+                      className={expanded[q.id] ? styles.quoteTextExpanded : styles.quoteText}
+                    >
                       {q.quote_text}
                     </blockquote>
-                    {q.quote_text.length > 400 && (
+                    {!expanded[q.id] && overflowing[q.id] && (
                       <button className={styles.readMore} onClick={() => toggle(q.id)}>
-                        {expanded[q.id] ? 'Show less' : 'Read more'}
+                        Read more
+                      </button>
+                    )}
+                    {expanded[q.id] && (
+                      <button className={styles.readMore} onClick={() => toggle(q.id)}>
+                        Show less
                       </button>
                     )}
                     <OrnateRule className={styles.ornateRule} />

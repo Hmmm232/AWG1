@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -13,8 +13,24 @@ import styles from '@/styles/Explore.module.css';
 
 export default function ExploreWorks({ works }) {
   const [expanded, setExpanded] = useState({});
+  const [overflowing, setOverflowing] = useState({});
+  const textRefs = useRef({});
 
   const toggle = (id) => setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  const checkOverflows = useCallback(() => {
+    const next = {};
+    for (const [id, el] of Object.entries(textRefs.current)) {
+      if (el) next[id] = el.scrollHeight > el.clientHeight;
+    }
+    setOverflowing(next);
+  }, []);
+
+  useEffect(() => {
+    checkOverflows();
+    window.addEventListener('resize', checkOverflows);
+    return () => window.removeEventListener('resize', checkOverflows);
+  }, [checkOverflows]);
 
   return (
     <>
@@ -50,15 +66,23 @@ export default function ExploreWorks({ works }) {
                     {w.commentary && (
                       <>
                         <OrnateRule className={styles.ornateRule} />
-                        <p className={expanded[w.id] || w.commentary.length <= 400 ? styles.cardBodyExpanded : styles.workNote}>
+                        <p
+                          ref={(el) => { textRefs.current[w.id] = el; }}
+                          className={expanded[w.id] ? styles.cardBodyExpanded : styles.workNote}
+                        >
                           {w.commentary.length > 0 && (
                             <span className={styles.dropCap}>{w.commentary.charAt(0)}</span>
                           )}
-                          {expanded[w.id] ? w.commentary.slice(1) : w.commentary.slice(1)}
+                          {w.commentary.slice(1)}
                         </p>
-                        {w.commentary.length > 400 && (
+                        {!expanded[w.id] && overflowing[w.id] && (
                           <button className={styles.readMore} onClick={() => toggle(w.id)}>
-                            {expanded[w.id] ? 'Show less' : 'Read more'}
+                            Read more
+                          </button>
+                        )}
+                        {expanded[w.id] && (
+                          <button className={styles.readMore} onClick={() => toggle(w.id)}>
+                            Show less
                           </button>
                         )}
                       </>
