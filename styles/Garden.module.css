@@ -277,20 +277,20 @@
 }
 
 .likeBtn:hover {
-  color: #c0392b;
-  border-color: #c0392b;
-  background: #fdf0ef;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
 }
 
 .likeBtnActive {
-  color: #c0392b;
-  border-color: #e8c4c0;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .likeBtnActive:hover {
-  color: #c0392b;
-  border-color: #c0392b;
-  background: #fdf0ef;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
 }
 
 .saveBtn {

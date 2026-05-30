@@ -6,29 +6,18 @@ import styles from '@/styles/Garden.module.css';
 export default function LikeButton({ itemId, itemType }) {
   const { user } = useAuth();
   const [liked, setLiked] = useState(false);
-  const [count, setCount] = useState(0);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!itemId) return;
+    if (!itemId || !user) return;
 
-    // Fetch public like count
     supabase
       .from('likes')
-      .select('user_id', { count: 'exact', head: true })
+      .select('user_id')
+      .eq('user_id', user.id)
       .eq('item_id', itemId)
-      .then(({ count: c }) => setCount(c || 0));
-
-    // Check if current user has liked
-    if (user) {
-      supabase
-        .from('likes')
-        .select('user_id')
-        .eq('user_id', user.id)
-        .eq('item_id', itemId)
-        .single()
-        .then(({ data }) => setLiked(!!data));
-    }
+      .single()
+      .then(({ data }) => setLiked(!!data));
   }, [itemId, user]);
 
   async function handleToggle() {
@@ -44,7 +33,6 @@ export default function LikeButton({ itemId, itemType }) {
           .eq('item_id', itemId);
         if (!error) {
           setLiked(false);
-          setCount((c) => Math.max(0, c - 1));
         }
       } else {
         const { error } = await supabase
@@ -52,7 +40,6 @@ export default function LikeButton({ itemId, itemType }) {
           .insert({ user_id: user.id, item_id: itemId, item_type: itemType });
         if (!error) {
           setLiked(true);
-          setCount((c) => c + 1);
         }
       }
     } catch (err) {
@@ -71,7 +58,7 @@ export default function LikeButton({ itemId, itemType }) {
     >
       <svg width="14" height="14" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
-      </svg>{count > 0 ? ` ${count}` : ''}
+      </svg>
     </button>
   );
 }
