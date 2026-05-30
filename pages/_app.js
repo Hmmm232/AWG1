@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { AuthProvider } from '@/lib/AuthContext';
 import Layout from '@/components/Layout';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import RecoveryGuard from '@/components/RecoveryGuard';
 import Head from 'next/head';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
@@ -36,6 +37,7 @@ export default function App({ Component, pageProps }) {
         <meta name="twitter:description" content="A place to gather the works that have shaped you — books, essays, poems — and share them with others." />
         <meta name="twitter:image" content={`${SITE_URL}/api/og`} />
       </Head>
+      <RecoveryGuard />
       <Layout>
         <ErrorBoundary>
           <Component {...pageProps} />

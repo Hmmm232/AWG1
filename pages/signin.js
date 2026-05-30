@@ -4,6 +4,11 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import styles from '@/styles/Auth.module.css';
 
+const RESET_NOTICES = {
+  success: 'Your password has been updated. Please sign in with your new password.',
+  incomplete: 'For your security, your reset link expired before a new password was set. Request a new link if you still need to reset.',
+};
+
 export default function SignIn() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -11,10 +16,15 @@ export default function SignIn() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const notice = RESET_NOTICES[router.query.reset];
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     setLoading(true);
+
+    // Defensively clear any leftover recovery quarantine before a real login.
+    if (typeof window !== 'undefined') localStorage.removeItem('awg_password_recovery');
 
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
       email,
@@ -47,6 +57,7 @@ export default function SignIn() {
       <p className={styles.subtitle}>Sign in to your garden.</p>
 
       <form onSubmit={handleSubmit} className={styles.form}>
+        {notice && <div className={styles.success}>{notice}</div>}
         {error && <div className={styles.error}>{error}</div>}
 
         <div className={styles.field}>

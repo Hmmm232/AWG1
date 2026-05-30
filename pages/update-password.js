@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/AuthContext';
 import styles from '@/styles/Auth.module.css';
 
 export default function UpdatePassword() {
   const router = useRouter();
+  const { endRecovery } = useAuth();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -45,8 +47,12 @@ export default function UpdatePassword() {
       return;
     }
 
-    // Redirect to sign in
-    router.push('/signin');
+    // The new password is set — lift the recovery quarantine, then revoke the
+    // reset-link session everywhere (scope: 'global') so it can never be reused
+    // as a login. The user must sign in fresh with their new password.
+    endRecovery();
+    await supabase.auth.signOut({ scope: 'global' });
+    router.push('/signin?reset=success');
   }
 
   if (!ready) {
