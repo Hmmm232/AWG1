@@ -145,7 +145,11 @@ export async function getStaticProps() {
     };
   });
 
-  const gardens = rank(scored, 'gardens').map(({ _score, category_count, work_count, follower_count, featured, ...rest }) => rest);
+  // Only surface gardens that actually have content (works or categories)
+  const plantedGardens = scored.filter(
+    (g) => g.works_count > 0 || (g.categories || []).length > 0
+  );
+  const gardens = rank(plantedGardens, 'gardens').map(({ _score, category_count, work_count, follower_count, featured, ...rest }) => rest);
 
   return { props: { gardens }, revalidate: 120 };
 }

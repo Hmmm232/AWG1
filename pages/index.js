@@ -440,7 +440,11 @@ export async function getStaticProps() {
       work_count: worksPerUser[g.id] || 0,
     }),
   }));
-  const gardens = rank(scoredGardens, 'gardens').slice(0, 12);
+  // Only surface gardens that actually have content (works or categories)
+  const plantedGardens = scoredGardens.filter(
+    (g) => g.works_count > 0 || g.categories_count > 0
+  );
+  const gardens = rank(plantedGardens, 'gardens').slice(0, 12);
 
   // Score and rank categories
   const scoredCategories = (siteCategories || []).map((c) => ({
