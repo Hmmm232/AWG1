@@ -145,9 +145,9 @@ export async function getStaticProps() {
     };
   });
 
-  // Only surface gardens that actually have content (works or categories)
+  // Only surface gardens that actually have content (works or quotes)
   const plantedGardens = scored.filter(
-    (g) => g.works_count > 0 || (g.categories || []).length > 0
+    (g) => g.works_count > 0 || g.quotes_count > 0
   );
   const gardens = rank(plantedGardens, 'gardens').map(({ _score, category_count, work_count, follower_count, featured, ...rest }) => rest);
 
