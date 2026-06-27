@@ -33,7 +33,7 @@ with base as (
 ),
 numbered as (
   select id, b,
-    row_number() over (partition by user_id, b order by created_at, id) as rn
+    row_number() over (partition by user_id, b order by id) as rn
   from base
 )
 update categories c
@@ -61,7 +61,7 @@ with base as (
 ),
 numbered as (
   select id, b,
-    row_number() over (partition by category_id, b order by created_at, id) as rn
+    row_number() over (partition by category_id, b order by id) as rn
   from base
 )
 update works w
