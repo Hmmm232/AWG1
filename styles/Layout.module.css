@@ -27,6 +27,8 @@
   font-weight: 600;
   color: var(--color-ink);
   letter-spacing: 0.01em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .logo:hover {
@@ -36,6 +38,7 @@
 .navLinks {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   gap: var(--space-lg);
 }
 
@@ -43,6 +46,7 @@
   font-family: var(--font-sans);
   font-size: 0.85rem;
   color: var(--color-ink-light);
+  white-space: nowrap;
   transition: color 0.15s ease;
 }
 
@@ -189,8 +193,10 @@
   color: var(--color-ink-faint);
 }
 
-/* ─── Mobile ────────────────────────────────────────────────── */
-@media (max-width: 640px) {
+/* ─── Mobile / compact nav ──────────────────────────────────── */
+/* Switch to the hamburger before the desktop links would crowd the
+   logo (the signed-in row needs ~630px; below ~700px it gets tight). */
+@media (max-width: 768px) {
   .container {
     padding: 0 var(--space-md);
   }
@@ -552,7 +558,7 @@
 }
 
 /* Respect users who prefer reduced motion */
-@media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
   .mobileMenu {
     transition: opacity 0.2s ease;
     transform: none;

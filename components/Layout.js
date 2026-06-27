@@ -54,13 +54,10 @@ export default function Layout({ children }) {
 
         {/* Desktop nav links */}
         <div className={styles.navLinks}>
-          <Link href="/search" className={styles.navLink}>
-            Search
-          </Link>
           <Link href="/explore" className={styles.navLink}>
             Explore
           </Link>
-          {loading ? null : user ? (
+          {!loading && user && (
             <>
               {profile?.handle && (
                 <Link href={`/${profile.handle}`} className={styles.navLink}>
@@ -73,19 +70,25 @@ export default function Layout({ children }) {
               <Link href="/settings" className={styles.navLink}>
                 Settings
               </Link>
-              <button onClick={signOut} className="btn btn-primary btn-small">
-                Sign out
-              </button>
             </>
-          ) : (
-            <>
-              <Link href="/signin" className={styles.navLink}>
-                Sign in
-              </Link>
-              <Link href="/signup" className={`btn btn-primary btn-small`}>
-                Sign up
-              </Link>
-            </>
+          )}
+          {!loading && !user && (
+            <Link href="/signin" className={styles.navLink}>
+              Sign in
+            </Link>
+          )}
+          <Link href="/search" className={styles.navLink}>
+            Search
+          </Link>
+          {!loading && user && (
+            <button onClick={signOut} className="btn btn-primary btn-small">
+              Sign out
+            </button>
+          )}
+          {!loading && !user && (
+            <Link href="/signup" className="btn btn-primary btn-small">
+              Sign up
+            </Link>
           )}
         </div>
 
