@@ -11,25 +11,40 @@ const GREEN = '#3a9b63';
 const RULE = 'rgba(26, 23, 20, 0.14)';
 
 // Brand fonts (Playfair Display for display titles, Lora for body/italic).
-// Fetched once per edge instance and cached; if the fetch fails we fall back
-// to the default font rather than erroring the image.
+// We deliberately use *static* single-weight WOFF files: Satori cannot parse
+// variable fonts (the [wght] axis files) and chokes with a DataView error.
+// Fetched once per edge instance and cached; any problem falls back to the
+// default font rather than breaking the image.
 const FONT_FILES = {
-  playfair: 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf',
-  lora: 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/lora/Lora%5Bwght%5D.ttf',
-  loraItalic: 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/lora/Lora-Italic%5Bwght%5D.ttf',
+  playfair: 'https://cdn.jsdelivr.net/npm/@fontsource/playfair-display@5.0.18/files/playfair-display-latin-700-normal.woff',
+  lora: 'https://cdn.jsdelivr.net/npm/@fontsource/lora@5.0.18/files/lora-latin-400-normal.woff',
+  loraItalic: 'https://cdn.jsdelivr.net/npm/@fontsource/lora@5.0.18/files/lora-latin-400-italic.woff',
 };
+
+// Guard against fetches that 200 with the wrong thing (an HTML error page, a
+// woff2, etc.) — only accept buffers whose magic bytes are a font Satori can
+// read (ttf / otf / woff). woff2 is intentionally rejected.
+function isParseableFont(buf) {
+  if (!buf || buf.byteLength < 4) return false;
+  const b = new Uint8Array(buf.slice(0, 4));
+  const tag = String.fromCharCode(b[0], b[1], b[2], b[3]);
+  if (tag === 'wOFF' || tag === 'OTTO' || tag === 'true' || tag === 'ttcf') return true;
+  if (b[0] === 0x00 && b[1] === 0x01 && b[2] === 0x00 && b[3] === 0x00) return true; // ttf
+  return false;
+}
 
 let fontCache;
 async function loadFonts() {
   if (fontCache !== undefined) return fontCache;
   try {
     const [playfair, lora, loraItalic] = await Promise.all(
-      [FONT_FILES.playfair, FONT_FILES.lora, FONT_FILES.loraItalic].map((url) =>
-        fetch(url).then((r) => {
-          if (!r.ok) throw new Error('font fetch failed');
-          return r.arrayBuffer();
-        })
-      )
+      [FONT_FILES.playfair, FONT_FILES.lora, FONT_FILES.loraItalic].map(async (url) => {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error('font fetch failed');
+        const buf = await r.arrayBuffer();
+        if (!isParseableFont(buf)) throw new Error('not a parseable font');
+        return buf;
+      })
     );
     fontCache = [
       { name: 'Playfair Display', data: playfair, weight: 700, style: 'normal' },

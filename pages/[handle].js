@@ -166,7 +166,7 @@ export default function ProfilePage({
   return (
     <>
       <Head>
-        <title>{profile.display_name || profile.handle} — A Walled Garden</title>
+        <title>{`${profile.display_name || profile.handle} — A Walled Garden`}</title>
         <meta name="description" content={profile.bio || `${profile.display_name || profile.handle}'s garden on A Walled Garden`} />
         <meta property="og:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
         <meta property="og:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />

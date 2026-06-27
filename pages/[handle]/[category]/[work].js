@@ -10,6 +10,16 @@ import styles from '@/styles/Garden.module.css';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
 
+// Keep meta descriptions within the ~155 chars search engines and social
+// cards display, trimming on a word boundary.
+function clampDescription(text, max = 155) {
+  const s = (text || '').replace(/\s+/g, ' ').trim();
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd() + '…';
+}
+
 export default function WorkPage({ profile, category, work }) {
   const { user } = useAuth();
 
@@ -20,9 +30,11 @@ export default function WorkPage({ profile, category, work }) {
   const path = `/${profile.handle}/${category.slug}/${work.slug}`;
   const canonical = `${SITE_URL}${path}`;
 
-  const description =
+  const pageTitle = `${work.title} — ${ownerName} — A Walled Garden`;
+  const description = clampDescription(
     work.commentary ||
-    `${work.title} — kept by ${ownerName} in “${category.name}” on A Walled Garden.`;
+      `${work.title} — kept by ${ownerName} in “${category.name}” on A Walled Garden.`
+  );
 
   const ogImage =
     `${SITE_URL}/api/og?type=work` +
@@ -34,7 +46,7 @@ export default function WorkPage({ profile, category, work }) {
   return (
     <>
       <Head>
-        <title>{work.title} — {ownerName} — A Walled Garden</title>
+        <title>{pageTitle}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={canonical} />
         <meta property="og:title" content={`${work.title} — ${ownerName}`} />
