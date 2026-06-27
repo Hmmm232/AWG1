@@ -15,10 +15,14 @@ create table categories (
   id uuid default gen_random_uuid() primary key,
   user_id uuid references profiles(id) on delete cascade not null,
   name text not null,
+  slug text,
   introduction text not null default '',
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- Pretty-URL slug, unique within a user's garden
+create unique index categories_user_slug_idx on categories (user_id, slug);
 
 -- Works (items within categories)
 create table works (
@@ -26,10 +30,14 @@ create table works (
   category_id uuid references categories(id) on delete cascade not null,
   user_id uuid references profiles(id) on delete cascade not null,
   title text not null,
+  slug text,
   commentary text not null default '',
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- Pretty-URL slug, unique within a category
+create unique index works_category_slug_idx on works (category_id, slug);
 
 -- Quotes
 create table quotes (

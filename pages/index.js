@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
 import { scoreGarden, scoreCategory, scoreWork, scoreQuote, rank } from '@/lib/ranking';
+import { categoryPath, workPath } from '@/lib/links';
 import { OrnateRule as OrnateRuleBase, Leaf as LeafBase } from '@/components/CardOrnaments';
 import styles from '@/styles/Home.module.css';
 
@@ -93,9 +94,7 @@ export default function Home({ gardens, categories, works, quotes }) {
               <ul className={styles.scrollRow}>
                 {works.map((w) => {
                   const owner = w.profiles?.display_name || w.profiles?.handle || 'Unknown';
-                  const href = w.profiles?.handle
-                    ? `/${w.profiles.handle}?tab=garden&item=${w.id}`
-                    : '#';
+                  const href = workPath(w.profiles?.handle, w.category_slug, w.slug, w.id);
                   const tag = w.category_name || 'A Work';
                   return (
                     <li key={w.id} className={styles.workCard}>
@@ -252,9 +251,7 @@ export default function Home({ gardens, categories, works, quotes }) {
                 {categories.map((c) => {
                   const owner = c.profiles?.display_name || c.profiles?.handle || 'someone';
                   const sample = (c.sample || []).slice(0, 5);
-                  const href = c.profiles?.handle
-                    ? `/${c.profiles.handle}?tab=garden&item=${c.id}`
-                    : '#';
+                  const href = categoryPath(c.profiles?.handle, c.slug, c.id);
                   return (
                     <li key={c.id} className={styles.categoryCard}>
                       <Link href={href} className={styles.categoryCardInner}>
@@ -372,11 +369,11 @@ export async function getStaticProps() {
       .limit(60),
     supabase
       .from('categories')
-      .select('id, name, introduction, user_id, featured, profiles!user_id(handle, display_name)')
+      .select('id, name, slug, introduction, user_id, featured, profiles!user_id(handle, display_name)')
       .limit(60),
     supabase
       .from('works')
-      .select('id, title, commentary, user_id, featured, category_id, categories!category_id(name), profiles!user_id(handle, display_name)')
+      .select('id, title, slug, commentary, user_id, featured, category_id, categories!category_id(name, slug), profiles!user_id(handle, display_name)')
       .limit(60),
     supabase
       .from('quotes')
@@ -463,6 +460,7 @@ export async function getStaticProps() {
   const scoredWorks = (siteWorks || []).map((w) => ({
     ...w,
     category_name: w.categories?.name || null,
+    category_slug: w.categories?.slug || null,
     _score: scoreWork({
       ...w,
       owner_followers: followerMap[w.user_id] || 0,

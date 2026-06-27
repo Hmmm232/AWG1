@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { categoryPath, workPath } from '@/lib/links';
 import styles from '@/styles/Explore.module.css';
 import searchStyles from '@/styles/Search.module.css';
 
@@ -38,12 +39,12 @@ export default function SearchPage() {
           .limit(20),
         supabase
           .from('categories')
-          .select('id, name, introduction, user_id, profiles(handle, display_name)')
+          .select('id, name, slug, introduction, user_id, profiles(handle, display_name)')
           .ilike('name', pattern)
           .limit(20),
         supabase
           .from('works')
-          .select('id, title, commentary, category_id, user_id, profiles(handle, display_name), categories(name)')
+          .select('id, title, slug, commentary, category_id, user_id, profiles(handle, display_name), categories(name, slug)')
           .or(`title.ilike.${pattern},commentary.ilike.${pattern}`)
           .limit(20),
         supabase
@@ -128,7 +129,7 @@ export default function SearchPage() {
                 <div className={styles.grid}>
                   {results.categories.map((c) => (
                     <div key={c.id} className={searchStyles.card}>
-                      <Link href={`/${c.profiles?.handle}?tab=garden&item=${c.id}`} className={searchStyles.cardLink}>
+                      <Link href={categoryPath(c.profiles?.handle, c.slug, c.id)} className={searchStyles.cardLink}>
                         <p className={searchStyles.cardTitle}>{c.name}</p>
                         <p className={searchStyles.cardMeta}>by {c.profiles?.display_name || c.profiles?.handle}</p>
                         {c.introduction && <p className={searchStyles.cardBodyItalic}>{c.introduction}</p>}
@@ -146,7 +147,7 @@ export default function SearchPage() {
                 <div className={styles.grid}>
                   {results.works.map((w) => (
                     <div key={w.id} className={searchStyles.card}>
-                      <Link href={`/${w.profiles?.handle}?tab=garden&item=${w.id}`} className={searchStyles.cardLink}>
+                      <Link href={workPath(w.profiles?.handle, w.categories?.slug, w.slug, w.id)} className={searchStyles.cardLink}>
                         <p className={searchStyles.cardTitle}>{w.title}</p>
                         <p className={searchStyles.cardMeta}>
                           {w.categories?.name && <>{w.categories.name} &middot; </>}

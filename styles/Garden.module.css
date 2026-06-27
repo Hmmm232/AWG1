@@ -481,8 +481,83 @@
   cursor: default;
 }
 
+/* ─── Standalone item pages (pretty URLs) ───────────────────── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-ink-faint);
+  margin-bottom: var(--space-lg);
+}
+
+.breadcrumb a {
+  color: var(--color-ink-faint);
+  transition: color 0.15s ease;
+}
+
+.breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+.breadcrumbSep {
+  color: var(--color-border);
+}
+
+.itemPageHeader {
+  margin-bottom: var(--space-lg);
+}
+
+.itemPageTitle {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: var(--space-sm);
+}
+
+.itemPageMeta {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--color-ink-faint);
+}
+
+.itemPageMeta a {
+  color: var(--color-ink-light);
+}
+
+.itemPageMeta a:hover {
+  color: var(--color-accent);
+}
+
+/* A work title that links through to its own page */
+.workTitleLink {
+  color: var(--color-ink);
+  transition: color 0.15s ease;
+}
+
+.workTitleLink:hover {
+  color: var(--color-accent);
+}
+
+/* Footer call-to-action back into the full garden */
+.gardenCta {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border-light);
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+
 /* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 640px) {
+  .itemPageTitle {
+    font-size: 1.5rem;
+  }
+
   .toc {
     margin-bottom: var(--space-md);
   }

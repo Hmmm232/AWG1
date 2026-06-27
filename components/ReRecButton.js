@@ -6,7 +6,7 @@ import { moderateFields } from '@/lib/moderation';
 import { checkDailyLimit } from '@/lib/rateLimits';
 import styles from '@/styles/Garden.module.css';
 
-export default function ReRecButton({ workTitle, recommenderHandle, recommenderName, tab, itemId }) {
+export default function ReRecButton({ workTitle, recommenderHandle, recommenderName, tab, itemId, sourcePath }) {
   const { user } = useAuth();
   const router = useRouter();
   const [status, setStatus] = useState('idle'); // idle | composing | saving | done
@@ -43,7 +43,9 @@ export default function ReRecButton({ workTitle, recommenderHandle, recommenderN
         return;
       }
 
-      const itemUrl = `${window.location.origin}/${recommenderHandle}?tab=${tab}&item=${itemId}`;
+      const itemUrl = sourcePath
+        ? `${window.location.origin}${sourcePath}`
+        : `${window.location.origin}/${recommenderHandle}?tab=${tab}&item=${itemId}`;
 
       const { error } = await supabase
         .from('rerecs')

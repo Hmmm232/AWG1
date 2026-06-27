@@ -6,7 +6,7 @@ function escapeXml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function generateSitemap(handles) {
+function generateSitemap(handles, itemPaths) {
   const staticPages = [
     { path: '', priority: '1.0', changefreq: 'daily' },
     { path: '/explore', priority: '0.8', changefreq: 'daily' },
@@ -42,24 +42,50 @@ ${handles
   </url>`
   )
   .join('\n')}
+${itemPaths
+  .map(
+    (path) => `  <url>
+    <loc>${escapeXml(SITE_URL)}${escapeXml(path)}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>`
+  )
+  .join('\n')}
 </urlset>`;
+}
+
+// Encode each path segment so titles with spaces/punctuation become valid URLs
+function encodePath(...segments) {
+  return '/' + segments.map((s) => encodeURIComponent(s)).join('/');
 }
 
 export async function getServerSideProps({ res }) {
   let handles = [];
+  let itemPaths = [];
 
   if (supabase) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('handle')
-      .order('created_at', { ascending: false });
+    const [{ data: profiles }, { data: categories }, { data: works }] = await Promise.all([
+      supabase.from('profiles').select('handle').order('created_at', { ascending: false }),
+      supabase.from('categories').select('slug, profiles!user_id(handle)'),
+      supabase.from('works').select('slug, categories!category_id(slug), profiles!user_id(handle)'),
+    ]);
 
-    if (data) {
-      handles = data.map((p) => p.handle);
+    if (profiles) {
+      handles = profiles.map((p) => p.handle);
+    }
+
+    for (const c of (categories || [])) {
+      const handle = c.profiles?.handle;
+      if (handle && c.slug) itemPaths.push(encodePath(handle, c.slug));
+    }
+    for (const w of (works || [])) {
+      const handle = w.profiles?.handle;
+      const catSlug = w.categories?.slug;
+      if (handle && catSlug && w.slug) itemPaths.push(encodePath(handle, catSlug, w.slug));
     }
   }
 
-  const sitemap = generateSitemap(handles);
+  const sitemap = generateSitemap(handles, itemPaths);
 
   res.setHeader('Content-Type', 'application/xml');
   res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=600');

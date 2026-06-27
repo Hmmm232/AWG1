@@ -79,6 +79,24 @@ export default function ProfilePage({
   useEffect(() => {
     const TAB_MAP = { garden: 'Garden', quotes: 'Quotes', rerecs: 'Re-recs', following: 'Following' };
     const { tab, item } = router.query;
+
+    // Upgrade old garden deep links (?tab=garden&item=<uuid>) to the new
+    // pretty URLs so previously shared links land on the canonical page.
+    // Quotes are intentionally left on the scroll behaviour for now.
+    if (tab === 'garden' && item) {
+      const cat = (initialCategories || []).find((c) => c.id === item);
+      if (cat?.slug) {
+        router.replace(`/${profile.handle}/${cat.slug}`);
+        return;
+      }
+      const work = (initialWorks || []).find((w) => w.id === item);
+      const workCat = work && (initialCategories || []).find((c) => c.id === work.category_id);
+      if (work?.slug && workCat?.slug) {
+        router.replace(`/${profile.handle}/${workCat.slug}/${work.slug}`);
+        return;
+      }
+    }
+
     if (tab && TAB_MAP[tab]) {
       setActiveTab(TAB_MAP[tab]);
     }

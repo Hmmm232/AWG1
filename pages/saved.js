@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/lib/AuthContext';
+import { categoryPath, workPath } from '@/lib/links';
 import styles from '@/styles/Explore.module.css';
 
 const TABS = ['Works', 'Quotes', 'Categories'];
@@ -44,13 +45,13 @@ export default function SavedPage() {
 
       const [worksRes, quotesRes, categoriesRes] = await Promise.all([
         workIds.length > 0
-          ? supabase.from('works').select('id, title, commentary, profiles!user_id(handle, display_name)').in('id', workIds)
+          ? supabase.from('works').select('id, title, slug, commentary, profiles!user_id(handle, display_name), categories!category_id(slug)').in('id', workIds)
           : { data: [] },
         quoteIds.length > 0
           ? supabase.from('quotes').select('id, quote_text, attribution, source, profiles!user_id(handle, display_name)').in('id', quoteIds)
           : { data: [] },
         categoryIds.length > 0
-          ? supabase.from('categories').select('id, name, introduction, profiles!user_id(handle, display_name)').in('id', categoryIds)
+          ? supabase.from('categories').select('id, name, slug, introduction, profiles!user_id(handle, display_name)').in('id', categoryIds)
           : { data: [] },
       ]);
 
@@ -116,7 +117,7 @@ export default function SavedPage() {
             {activeTab === 'Works' && items.works.map((w) => (
               <div key={w.id} className={styles.card}>
                 <Link
-                  href={w.profiles?.handle ? `/${w.profiles.handle}?tab=garden&item=${w.id}` : '#'}
+                  href={workPath(w.profiles?.handle, w.categories?.slug, w.slug, w.id)}
                   className={styles.cardLink}
                 >
                   <p className={styles.cardTitle}>{w.title}</p>
@@ -151,7 +152,7 @@ export default function SavedPage() {
             {activeTab === 'Categories' && items.categories.map((c) => (
               <div key={c.id} className={styles.card}>
                 <Link
-                  href={c.profiles?.handle ? `/${c.profiles.handle}?tab=garden&item=${c.id}` : '#'}
+                  href={categoryPath(c.profiles?.handle, c.slug, c.id)}
                   className={styles.cardLink}
                 >
                   <p className={styles.cardTitle}>{c.name}</p>

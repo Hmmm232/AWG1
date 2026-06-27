@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { scoreCategory, rank, buildLikeMap } from '@/lib/ranking';
+import { categoryPath } from '@/lib/links';
 import ExploreNav from '@/components/ExploreNav';
 import LikeButton from '@/components/LikeButton';
 import SaveButton from '@/components/SaveButton';
@@ -35,9 +36,7 @@ export default function ExploreCategories({ categories }) {
               const owner = c.profiles?.display_name || c.profiles?.handle || 'Unknown';
               const sample = (c.sample || []).slice(0, 5);
               const worksCount = c.works_count ?? 0;
-              const href = c.profiles?.handle
-                ? `/${c.profiles.handle}?tab=garden&item=${c.id}`
-                : '#';
+              const href = categoryPath(c.profiles?.handle, c.slug, c.id);
               return (
                 <article key={c.id} className={styles.categoryCard}>
                   <Link href={href} className={styles.categoryCardBody}>
@@ -95,7 +94,7 @@ export async function getStaticProps() {
   ] = await Promise.all([
     supabase
       .from('categories')
-      .select('id, name, introduction, user_id, featured, profiles!user_id(handle, display_name)'),
+      .select('id, name, slug, introduction, user_id, featured, profiles!user_id(handle, display_name)'),
     supabase.from('works').select('id, title, category_id, sort_order').order('sort_order', { ascending: true }),
     supabase.from('follows').select('following_id'),
     supabase.from('likes').select('item_id').eq('item_type', 'category'),

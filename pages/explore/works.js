@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { scoreWork, rank, buildLikeMap } from '@/lib/ranking';
+import { workPath } from '@/lib/links';
 import ExploreNav from '@/components/ExploreNav';
 import LikeButton from '@/components/LikeButton';
 import SaveButton from '@/components/SaveButton';
@@ -57,6 +58,7 @@ export default function ExploreWorks({ works }) {
             {works.map((w) => {
               const owner = w.profiles?.display_name || w.profiles?.handle || 'Unknown';
               const tag = w.category_name || 'A Work';
+              const href = workPath(w.profiles?.handle, w.category_slug, w.slug, w.id);
               return (
                 <article key={w.id} className={styles.workCard}>
                   <div className={styles.workCardBody}>
@@ -96,6 +98,7 @@ export default function ExploreWorks({ works }) {
                         handle={w.profiles.handle}
                         tab="garden"
                         itemId={w.id}
+                        path={href}
                       />
                     )}
                     {w.profiles?.handle && (
@@ -105,11 +108,12 @@ export default function ExploreWorks({ works }) {
                         recommenderName={w.profiles.display_name}
                         tab="garden"
                         itemId={w.id}
+                        sourcePath={href}
                       />
                     )}
                     {w.profiles?.handle && (
                       <Link
-                        href={`/${w.profiles.handle}?tab=garden&item=${w.id}`}
+                        href={href}
                         className={styles.goToLink}
                       >
                         Go to work &rarr;
@@ -138,7 +142,7 @@ export async function getStaticProps() {
   ] = await Promise.all([
     supabase
       .from('works')
-      .select('id, title, commentary, category_id, user_id, featured, profiles!user_id(handle, display_name)')
+      .select('id, title, slug, commentary, category_id, user_id, featured, profiles!user_id(handle, display_name)')
       .limit(200),
     supabase.from('follows').select('following_id'),
     supabase.from('likes').select('item_id').eq('item_type', 'work'),
@@ -150,16 +154,16 @@ export async function getStaticProps() {
   }
   const likeMap = buildLikeMap(likesData);
 
-  // Fetch category names for display
+  // Fetch category names + slugs for display and pretty URLs
   const categoryIds = [...new Set((worksData || []).map((w) => w.category_id))];
   let categoryMap = {};
   if (categoryIds.length > 0) {
     const { data: cats } = await supabase
       .from('categories')
-      .select('id, name')
+      .select('id, name, slug')
       .in('id', categoryIds);
     for (const c of (cats || [])) {
-      categoryMap[c.id] = c.name;
+      categoryMap[c.id] = c;
     }
   }
 
@@ -167,7 +171,8 @@ export async function getStaticProps() {
     const enriched = { ...w, owner_followers: followerMap[w.user_id] || 0, like_count: likeMap[w.id] || 0 };
     return {
       ...enriched,
-      category_name: categoryMap[w.category_id] || '',
+      category_name: categoryMap[w.category_id]?.name || '',
+      category_slug: categoryMap[w.category_id]?.slug || null,
       _score: scoreWork(enriched),
     };
   });

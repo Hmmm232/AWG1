@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase';
 import { checkDailyLimit } from '@/lib/rateLimits';
 import { moderateFields } from '@/lib/moderation';
 import { logWriteFailure } from '@/lib/logger';
+import { uniqueSlug } from '@/lib/slug';
+import { categoryPath, workPath } from '@/lib/links';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
 import LikeButton from './LikeButton';
@@ -207,9 +209,10 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     const mod = await moderateFields({ name, introduction });
     if (!mod.allowed) { setError(mod.reason); return; }
     const sortOrder = categories.length;
+    const slug = uniqueSlug(name, categories.map((c) => c.slug).filter(Boolean));
     const { error: insertErr } = await supabase
       .from('categories')
-      .insert({ user_id: userId, name, introduction, sort_order: sortOrder });
+      .insert({ user_id: userId, name, slug, introduction, sort_order: sortOrder });
     if (insertErr) { logWriteFailure({ action: 'add_category', error: insertErr }); setError(insertErr.message); return; }
 
     // Fetch fresh categories after successful insert
@@ -295,9 +298,10 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     if (!mod.allowed) { setError(mod.reason); return; }
     const existingWorks = worksByCategory[categoryId] || [];
     const sortOrder = existingWorks.length;
+    const slug = uniqueSlug(title, existingWorks.map((w) => w.slug).filter(Boolean));
     const { error: insertErr } = await supabase
       .from('works')
-      .insert({ category_id: categoryId, user_id: userId, title, commentary, sort_order: sortOrder });
+      .insert({ category_id: categoryId, user_id: userId, title, slug, commentary, sort_order: sortOrder });
     if (insertErr) { logWriteFailure({ action: 'add_work', error: insertErr }); setError(insertErr.message); return; }
 
     // Fetch fresh works for this category after successful insert
@@ -421,7 +425,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                 <div className={styles.actions}>
                   <LikeButton itemId={category.id} itemType="category" />
                   <SaveButton itemId={category.id} itemType="category" />
-                  <ShareButton tab="garden" itemId={category.id} />
+                  <ShareButton tab="garden" itemId={category.id} handle={profileHandle} path={categoryPath(profileHandle, category.slug, category.id)} />
                   {isOwner && (
                     <>
                       <div className={styles.reorderGroup}>
@@ -478,9 +482,10 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                             recommenderName={profileName}
                             tab="garden"
                             itemId={work.id}
+                            sourcePath={workPath(profileHandle, category.slug, work.slug, work.id)}
                           />
                         )}
-                        <ShareButton tab="garden" itemId={work.id} />
+                        <ShareButton tab="garden" itemId={work.id} handle={profileHandle} path={workPath(profileHandle, category.slug, work.slug, work.id)} />
                         {isOwner && (
                           <>
                             <div className={styles.reorderGroup}>
