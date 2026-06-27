@@ -118,7 +118,9 @@ export default function Layout({ children }) {
                 <path d="M16 20c-2.5 0-5 0.5-7 2 2 1 4.5 1 7-0.5" fill="currentColor" opacity="0.6"/>
                 <path d="M16 20c2.5 0 5 0.5 7 2-2 1-4.5 1-7-0.5" fill="currentColor" opacity="0.4"/>
               </svg>
-              <span className={styles.mobileBrandText}>A Walled Garden</span>
+              <span className={styles.mobileBrandText}>
+                A Walled Garden<span className={styles.mobileBrandSuffix}>.org</span>
+              </span>
             </span>
             <button
               className={styles.mobileClose}
@@ -130,18 +132,23 @@ export default function Layout({ children }) {
           </div>
 
           <nav className={styles.mobileNav}>
-            <Link href="/search" className={`${styles.mobileLink} ${isActive('/search') ? styles.mobileLinkActive : ''}`}>
-              <span className={styles.mobileLinkIcon}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-              </span>
-              Search
-              <span className={styles.mobileLinkChevron} aria-hidden="true">&#8250;</span>
-            </Link>
             <Link href="/explore" className={`${styles.mobileLink} ${isActive('/explore') ? styles.mobileLinkActive : ''}`}>
               <span className={styles.mobileLinkIcon}>&#10047;</span>
               Explore
               <span className={styles.mobileLinkChevron} aria-hidden="true">&#8250;</span>
             </Link>
+            <div className={styles.mobileSubNav}>
+              <Link href="/explore/works" className={`${styles.mobileSubLink} ${isActive('/explore/works') ? styles.mobileSubLinkActive : ''}`}>
+                Works
+              </Link>
+              <Link href="/explore/quotes" className={`${styles.mobileSubLink} ${isActive('/explore/quotes') ? styles.mobileSubLinkActive : ''}`}>
+                Quotes
+              </Link>
+              <Link href="/explore/categories" className={`${styles.mobileSubLink} ${isActive('/explore/categories') ? styles.mobileSubLinkActive : ''}`}>
+                Categories
+              </Link>
+            </div>
+
             {loading ? null : user ? (
               <>
                 {profile?.handle && (
@@ -163,6 +170,30 @@ export default function Layout({ children }) {
                   Settings
                   <span className={styles.mobileLinkChevron} aria-hidden="true">&#8250;</span>
                 </Link>
+              </>
+            ) : (
+              <Link href="/signin" className={`${styles.mobileLink} ${isActive('/signin') ? styles.mobileLinkActive : ''}`}>
+                <span className={styles.mobileLinkIcon}>&#10132;</span>
+                Sign in
+                <span className={styles.mobileLinkChevron} aria-hidden="true">&#8250;</span>
+              </Link>
+            )}
+
+            <Link href="/about" className={`${styles.mobileLink} ${isActive('/about') ? styles.mobileLinkActive : ''}`}>
+              <span className={styles.mobileLinkIcon}>&#10086;</span>
+              About
+              <span className={styles.mobileLinkChevron} aria-hidden="true">&#8250;</span>
+            </Link>
+            <Link href="/search" className={`${styles.mobileLink} ${isActive('/search') ? styles.mobileLinkActive : ''}`}>
+              <span className={styles.mobileLinkIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+              </span>
+              Search
+              <span className={styles.mobileLinkChevron} aria-hidden="true">&#8250;</span>
+            </Link>
+
+            {loading ? null : user ? (
+              <>
                 <div className={styles.mobileMenuDivider} />
                 <button onClick={handleSignOut} className={styles.mobileLinkBtn}>
                   <span className={styles.mobileLinkBtnIcon} aria-hidden="true">
@@ -172,23 +203,11 @@ export default function Layout({ children }) {
                 </button>
               </>
             ) : (
-              <>
-                <Link href="/signin" className={`${styles.mobileLink} ${isActive('/signin') ? styles.mobileLinkActive : ''}`}>
-                  <span className={styles.mobileLinkIcon}>&#10132;</span>
-                  Sign in
-                  <span className={styles.mobileLinkChevron} aria-hidden="true">&#8250;</span>
-                </Link>
-                <Link href="/signup" className={styles.mobileCta}>
-                  Create your garden
-                </Link>
-              </>
+              <Link href="/signup" className={styles.mobileCta}>
+                Create your garden
+              </Link>
             )}
           </nav>
-
-          <div className={styles.mobileMenuFooter} aria-hidden="true">
-            <span className={styles.mobileMenuFleuron}>&#10086;</span>
-            <span className={styles.mobileMenuTagline}>A quiet place to keep what you love</span>
-          </div>
         </div>
       </div>
 
