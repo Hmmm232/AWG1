@@ -134,8 +134,13 @@ export default async function handler(req) {
           A Walled Garden
         </div>
         <Rule width={420} />
-        <div style={{ fontSize: 27, color: INK_SOFT, fontStyle: 'italic', fontFamily: SERIF, lineHeight: 1.5, maxWidth: 760 }}>
-          Curate your favourite books, poems, essays and quotes — and share them with the world.
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 820 }}>
+          <div style={{ fontSize: 28, color: INK_SOFT, fontStyle: 'italic', fontFamily: SERIF, lineHeight: 1.45 }}>
+            A new home for culture on the internet.
+          </div>
+          <div style={{ fontSize: 28, color: INK_SOFT, fontStyle: 'italic', fontFamily: SERIF, lineHeight: 1.45 }}>
+            Curate your favourite books, poems, essays and quotes.
+          </div>
         </div>
         <Domain />
         <div style={{ position: 'absolute', bottom: 46, right: 76, display: 'flex', fontSize: 15, color: INK_FAINT, fontStyle: 'italic', fontFamily: SERIF }}>
@@ -173,7 +178,13 @@ export default async function handler(req) {
         ? [meta, curator && `kept by ${curator}`].filter(Boolean).join('  ·  ')
         : type === 'work'
         ? [curator && `kept by ${curator}`, meta].filter(Boolean).join('  ·  ')
+        : type === 'profile'
+        ? meta
         : '';
+
+    // Show the contents peek for gardens and reading lists; fall back to a
+    // subtitle (commentary / bio) when there are no items to preview.
+    const showItems = (type === 'category' || type === 'profile') && items.length > 0;
 
     body = (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%', height: '100%', padding: '60px 80px 60px 64px' }}>
@@ -187,8 +198,8 @@ export default async function handler(req) {
           </div>
         )}
         <Rule width={360} />
-        {/* Category: a peek at the contents */}
-        {type === 'category' && items.length > 0 && (
+        {/* Gardens & reading lists: a peek at the contents */}
+        {showItems && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 820 }}>
             {items.slice(0, 4).map((it, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -202,8 +213,8 @@ export default async function handler(req) {
             ))}
           </div>
         )}
-        {/* Work / profile: a body line */}
-        {type !== 'category' && (subtitle || type === 'profile') && (
+        {/* Otherwise (works, or content-less gardens): a body line */}
+        {!showItems && subtitle && (
           <div style={{ display: 'flex', fontSize: 24, color: INK_SOFT, fontStyle: 'italic', fontFamily: SERIF, lineHeight: 1.55, maxWidth: 760 }}>
             {truncate(subtitle, 150)}
           </div>

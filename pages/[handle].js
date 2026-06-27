@@ -57,6 +57,23 @@ export default function ProfilePage({
   const profile = initialProfile;
   const isOwner = user && profile && user.id === profile.id;
 
+  // OG card: preview a few work titles from the garden (matching the
+  // reading-list cards), with counts as the meta line and the bio as a
+  // fallback when the garden has no works yet.
+  const gardenName = profile.display_name || profile.handle;
+  const ogPeek = (initialWorks || []).slice(0, 4).map((w) => w.title).filter(Boolean);
+  const ogWorks = (initialWorks || []).length;
+  const ogLists = (initialCategories || []).length;
+  const ogMeta = ogWorks > 0
+    ? `${ogWorks} work${ogWorks === 1 ? '' : 's'} · ${ogLists} list${ogLists === 1 ? '' : 's'}`
+    : `@${profile.handle}`;
+  const ogImageUrl =
+    `${SITE_URL}/api/og?type=profile` +
+    `&title=${encodeURIComponent(gardenName)}` +
+    `&meta=${encodeURIComponent(ogMeta)}` +
+    `&items=${encodeURIComponent(ogPeek.join('|'))}` +
+    `&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`;
+
   // Show onboarding for new users with empty gardens
   useEffect(() => {
     if (!isOwner) return;
@@ -171,11 +188,11 @@ export default function ProfilePage({
         <meta property="og:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
         <meta property="og:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />
         <meta property="og:type" content="profile" />
-        <meta property="og:image" content={`${SITE_URL}/api/og?title=${encodeURIComponent(profile.display_name || profile.handle)}&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`} />
+        <meta property="og:image" content={ogImageUrl} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${profile.display_name || profile.handle} — A Walled Garden`} />
         <meta name="twitter:description" content={profile.bio || `${profile.display_name || profile.handle}'s curated collection of works, quotes, and recommendations.`} />
-        <meta name="twitter:image" content={`${SITE_URL}/api/og?title=${encodeURIComponent(profile.display_name || profile.handle)}&subtitle=${encodeURIComponent(profile.bio || `@${profile.handle}'s curated collection`)}`} />
+        <meta name="twitter:image" content={ogImageUrl} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify({
