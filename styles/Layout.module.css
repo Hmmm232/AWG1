@@ -243,14 +243,17 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 280px;
-    max-width: 80vw;
+    width: 300px;
+    max-width: 84vw;
     height: 100%;
-    background: var(--color-bg);
+    background:
+      radial-gradient(120% 60% at 100% 0%, rgba(58, 155, 99, 0.06) 0%, rgba(58, 155, 99, 0) 60%),
+      linear-gradient(165deg, var(--color-bg) 0%, #f6f5f0 100%);
+    border-left: 1px solid var(--color-border-light);
     z-index: 999;
     transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -16px 0 44px rgba(26, 26, 26, 0.14);
     overflow-y: auto;
   }
 
@@ -259,7 +262,8 @@
   }
 
   .mobileMenuInner {
-    padding: var(--space-lg) var(--space-lg) var(--space-xl);
+    padding: calc(var(--space-md) + env(safe-area-inset-top, 0px)) var(--space-lg)
+             calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
     display: flex;
     flex-direction: column;
     min-height: 100%;
@@ -269,32 +273,56 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-bottom: var(--space-md);
     margin-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border-light);
   }
 
-  .mobileMenuTitle {
-    font-family: var(--font-serif);
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--color-ink-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
+  .mobileBrand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+
+  .mobileBrandMark {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .mobileBrandText {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
   }
 
   .mobileClose {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: var(--color-ink-faint);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-ink-light);
     cursor: pointer;
-    padding: 0.25rem;
+    padding: 0;
     line-height: 1;
-    border-radius: 0;
-    transition: color 0.15s ease;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
   }
 
   .mobileClose:hover {
-    color: var(--color-ink);
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .mobileClose:active {
+    transform: scale(0.92);
   }
 
   .mobileMenuDivider {
@@ -309,21 +337,42 @@
     gap: 0.15rem;
   }
 
+  /* Staggered entrance — each row eases in after the panel slides */
+  .mobileNav > * {
+    opacity: 0;
+    transform: translateX(16px);
+    transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobileMenuOpen .mobileNav > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mobileMenuOpen .mobileNav > *:nth-child(1) { transition-delay: 0.10s; }
+  .mobileMenuOpen .mobileNav > *:nth-child(2) { transition-delay: 0.15s; }
+  .mobileMenuOpen .mobileNav > *:nth-child(3) { transition-delay: 0.20s; }
+  .mobileMenuOpen .mobileNav > *:nth-child(4) { transition-delay: 0.25s; }
+  .mobileMenuOpen .mobileNav > *:nth-child(5) { transition-delay: 0.30s; }
+  .mobileMenuOpen .mobileNav > *:nth-child(6) { transition-delay: 0.35s; }
+  .mobileMenuOpen .mobileNav > *:nth-child(7) { transition-delay: 0.40s; }
+
   .mobileLink {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: 0.7rem;
     font-family: var(--font-serif);
-    font-size: 1.1rem;
+    font-size: 1.08rem;
     color: var(--color-ink);
-    padding: 0.75rem 0.5rem;
+    padding: 0.7rem 0.7rem;
     text-decoration: none;
     background: none;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     text-align: left;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
   }
 
   .mobileLink:hover {
@@ -339,25 +388,83 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     font-size: 0.9rem;
     color: var(--color-accent);
     background: var(--color-accent-light);
-    border-radius: 6px;
+    border: 1px solid rgba(58, 155, 99, 0.12);
+    border-radius: 9px;
     flex-shrink: 0;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .mobileLink:hover .mobileLinkIcon {
+    background: var(--color-accent);
+    color: var(--color-white);
+    border-color: var(--color-accent);
+  }
+
+  /* Chevron — faint, nudges right on hover */
+  .mobileLinkChevron {
+    margin-left: auto;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--color-ink-faint);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  }
+
+  .mobileLink:hover .mobileLinkChevron {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--color-accent);
+  }
+
+  /* Active page — accent wash + left marker bar */
+  .mobileLinkActive {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+  }
+
+  .mobileLinkActive::before {
+    content: '';
+    position: absolute;
+    left: -0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 1.4rem;
+    border-radius: 0 3px 3px 0;
+    background: var(--color-accent);
+  }
+
+  .mobileLinkActive .mobileLinkIcon {
+    background: var(--color-accent);
+    color: var(--color-white);
+    border-color: var(--color-accent);
+  }
+
+  .mobileLinkActive .mobileLinkChevron {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--color-accent);
   }
 
   .mobileLinkBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
     font-family: var(--font-sans);
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     color: var(--color-ink-faint);
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.6rem 0.5rem;
+    padding: 0.7rem;
     text-align: left;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: color 0.2s ease, background 0.2s ease;
   }
 
@@ -366,18 +473,29 @@
     background: var(--color-surface-hover);
   }
 
+  .mobileLinkBtnIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    color: var(--color-ink-faint);
+  }
+
   .mobileCta {
     display: block;
     text-align: center;
     font-family: var(--font-sans);
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-white);
     background: var(--color-accent);
-    padding: 0.7rem var(--space-md);
+    padding: 0.8rem var(--space-md);
     border-radius: 100px;
-    margin-top: var(--space-sm);
-    transition: background 0.2s ease, transform 0.2s ease;
+    margin-top: var(--space-md);
+    box-shadow: 0 8px 20px rgba(58, 155, 99, 0.22);
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   }
 
   .mobileCta:hover {
@@ -387,5 +505,43 @@
 
   .mobileCta:active {
     transform: scale(0.97);
+    box-shadow: 0 4px 12px rgba(58, 155, 99, 0.2);
+  }
+
+  /* Botanical sign-off, anchored to the bottom of the panel */
+  .mobileMenuFooter {
+    margin-top: auto;
+    padding-top: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    text-align: center;
+  }
+
+  .mobileMenuFleuron {
+    font-size: 1rem;
+    color: var(--color-border);
+  }
+
+  .mobileMenuTagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--color-ink-faint);
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+  .mobileMenu {
+    transition: none;
+  }
+
+  .mobileNav > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
