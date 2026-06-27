@@ -109,11 +109,11 @@ export default function SearchPage() {
                 <h2 className={searchStyles.sectionTitle}>Gardens</h2>
                 <div className={styles.grid}>
                   {results.profiles.map((p) => (
-                    <div key={p.id} className={styles.card}>
-                      <Link href={`/${p.handle}`} className={styles.cardLink}>
-                        <p className={styles.cardTitle}>{p.display_name || p.handle}</p>
-                        <p className={styles.cardMeta}>@{p.handle}</p>
-                        {p.bio && <p className={styles.cardBody}>{p.bio}</p>}
+                    <div key={p.id} className={searchStyles.card}>
+                      <Link href={`/${p.handle}`} className={searchStyles.cardLink}>
+                        <p className={searchStyles.cardTitle}>{p.display_name || p.handle}</p>
+                        <p className={searchStyles.cardMeta}>@{p.handle}</p>
+                        {p.bio && <p className={searchStyles.cardBody}>{p.bio}</p>}
                       </Link>
                     </div>
                   ))}
@@ -127,11 +127,11 @@ export default function SearchPage() {
                 <h2 className={searchStyles.sectionTitle}>Categories</h2>
                 <div className={styles.grid}>
                   {results.categories.map((c) => (
-                    <div key={c.id} className={styles.card}>
-                      <Link href={`/${c.profiles?.handle}?tab=garden&item=${c.id}`} className={styles.cardLink}>
-                        <p className={styles.cardTitle}>{c.name}</p>
-                        <p className={styles.cardMeta}>by {c.profiles?.display_name || c.profiles?.handle}</p>
-                        {c.introduction && <p className={styles.cardBodyItalic}>{c.introduction}</p>}
+                    <div key={c.id} className={searchStyles.card}>
+                      <Link href={`/${c.profiles?.handle}?tab=garden&item=${c.id}`} className={searchStyles.cardLink}>
+                        <p className={searchStyles.cardTitle}>{c.name}</p>
+                        <p className={searchStyles.cardMeta}>by {c.profiles?.display_name || c.profiles?.handle}</p>
+                        {c.introduction && <p className={searchStyles.cardBodyItalic}>{c.introduction}</p>}
                       </Link>
                     </div>
                   ))}
@@ -145,14 +145,14 @@ export default function SearchPage() {
                 <h2 className={searchStyles.sectionTitle}>Works</h2>
                 <div className={styles.grid}>
                   {results.works.map((w) => (
-                    <div key={w.id} className={styles.card}>
-                      <Link href={`/${w.profiles?.handle}?tab=garden&item=${w.id}`} className={styles.cardLink}>
-                        <p className={styles.cardTitle}>{w.title}</p>
-                        <p className={styles.cardMeta}>
+                    <div key={w.id} className={searchStyles.card}>
+                      <Link href={`/${w.profiles?.handle}?tab=garden&item=${w.id}`} className={searchStyles.cardLink}>
+                        <p className={searchStyles.cardTitle}>{w.title}</p>
+                        <p className={searchStyles.cardMeta}>
                           {w.categories?.name && <>{w.categories.name} &middot; </>}
                           {w.profiles?.display_name || w.profiles?.handle}
                         </p>
-                        {w.commentary && <p className={styles.cardBody}>{w.commentary}</p>}
+                        {w.commentary && <p className={searchStyles.cardBody}>{w.commentary}</p>}
                       </Link>
                     </div>
                   ))}
@@ -166,10 +166,10 @@ export default function SearchPage() {
                 <h2 className={searchStyles.sectionTitle}>Quotes</h2>
                 <div className={styles.grid}>
                   {results.quotes.map((q) => (
-                    <div key={q.id} className={styles.card}>
-                      <Link href={`/${q.profiles?.handle}?tab=quotes&item=${q.id}`} className={styles.cardLink}>
-                        <p className={styles.cardQuote}>{q.quote_text}</p>
-                        <p className={styles.cardAttr}>
+                    <div key={q.id} className={searchStyles.card}>
+                      <Link href={`/${q.profiles?.handle}?tab=quotes&item=${q.id}`} className={searchStyles.cardLink}>
+                        <p className={searchStyles.cardQuote}>{q.quote_text}</p>
+                        <p className={searchStyles.cardAttr}>
                           {q.attribution}
                           {q.profiles && <> &middot; {q.profiles.display_name || q.profiles.handle}&rsquo;s garden</>}
                         </p>
