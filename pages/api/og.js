@@ -86,8 +86,9 @@ function Eyebrow() {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
       <FernMark size={22} />
-      <div style={{ fontSize: 16, color: GREEN, letterSpacing: 3, fontFamily: SERIF }}>
-        A WALLED GARDEN
+      <div style={{ display: 'flex', alignItems: 'baseline', fontSize: 16, letterSpacing: 3, fontFamily: SERIF }}>
+        <span style={{ color: GREEN }}>A WALLED GARDEN</span>
+        <span style={{ color: INK_FAINT }}>.ORG</span>
       </div>
     </div>
   );
@@ -130,8 +131,9 @@ export default async function handler(req) {
   if (type === 'default') {
     body = (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%', height: '100%', padding: '60px 80px' }}>
-        <div style={{ fontSize: 70, fontWeight: 700, color: INK, fontFamily: DISPLAY, lineHeight: 1.1 }}>
-          A Walled Garden
+        <div style={{ display: 'flex', alignItems: 'baseline', fontFamily: DISPLAY, lineHeight: 1.1 }}>
+          <span style={{ fontSize: 70, fontWeight: 700, color: INK }}>A Walled Garden</span>
+          <span style={{ fontSize: 36, fontWeight: 400, color: INK_FAINT }}>.org</span>
         </div>
         <Rule width={420} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 820 }}>
