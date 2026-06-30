@@ -7,6 +7,7 @@ import SaveButton from '@/components/SaveButton';
 import ShareButton from '@/components/ShareButton';
 import ReRecButton from '@/components/ReRecButton';
 import { workPath } from '@/lib/links';
+import { OrnateRule } from '@/components/CardOrnaments';
 import styles from '@/styles/Garden.module.css';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
@@ -21,7 +22,7 @@ function clampDescription(text, max = 155) {
   return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd() + '…';
 }
 
-export default function CategoryPage({ profile, category, works }) {
+export default function CategoryPage({ profile, category, works, gardenCategories = [], totalWorks = 0 }) {
   const { user } = useAuth();
 
   if (!profile || !category) return null;
@@ -30,6 +31,16 @@ export default function CategoryPage({ profile, category, works }) {
   const ownerName = profile.display_name || profile.handle;
   const path = `/${profile.handle}/${category.slug}`;
   const canonical = `${SITE_URL}${path}`;
+
+  // Sibling categories, for "more lists" + previous/next chapter navigation
+  const currentIndex = gardenCategories.findIndex((c) => c.slug === category.slug);
+  const prevCategory = currentIndex > 0 ? gardenCategories[currentIndex - 1] : null;
+  const nextCategory =
+    currentIndex >= 0 && currentIndex < gardenCategories.length - 1
+      ? gardenCategories[currentIndex + 1]
+      : null;
+  const otherCategories = gardenCategories.filter((c) => c.slug !== category.slug);
+  const listsCount = gardenCategories.length;
 
   const countLabel = `${works.length} work${works.length === 1 ? '' : 's'}`;
   const pageTitle = `${category.name} — ${ownerName} — A Walled Garden`;
@@ -124,9 +135,62 @@ export default function CategoryPage({ profile, category, works }) {
         <p className={styles.emptyWorks}>No works in this category yet.</p>
       )}
 
-      <div className={styles.gardenCta}>
-        <Link href={`/${profile.handle}`}>Explore {ownerName}&rsquo;s full garden &rarr;</Link>
-      </div>
+      {/* Previous / next chapter — walking the paths of the garden */}
+      {(prevCategory || nextCategory) && (
+        <nav className={styles.chapterNav}>
+          {prevCategory ? (
+            <Link href={`/${profile.handle}/${prevCategory.slug}`} className={styles.chapterLink}>
+              <span className={styles.chapterDir}>&larr; Previous list</span>
+              <span className={styles.chapterName}>{prevCategory.name}</span>
+            </Link>
+          ) : <span />}
+          {nextCategory ? (
+            <Link href={`/${profile.handle}/${nextCategory.slug}`} className={`${styles.chapterLink} ${styles.chapterLinkNext}`}>
+              <span className={styles.chapterDir}>Next list &rarr;</span>
+              <span className={styles.chapterName}>{nextCategory.name}</span>
+            </Link>
+          ) : <span />}
+        </nav>
+      )}
+
+      {/* Continue exploring — the gardener and the rest of their garden */}
+      <section className={styles.exploreZone}>
+        <OrnateRule className={styles.exploreRule} />
+
+        <Link href={`/${profile.handle}`} className={styles.gardenerCard}>
+          <span className={styles.gardenerAvatar}>{ownerName.charAt(0).toUpperCase()}</span>
+          <span className={styles.gardenerInfo}>
+            <span className={styles.gardenerName}>{ownerName}</span>
+            {profile.bio && <span className={styles.gardenerBio}>{profile.bio}</span>}
+            <span className={styles.gardenerMeta}>
+              {totalWorks} work{totalWorks === 1 ? '' : 's'} &middot; {listsCount} list{listsCount === 1 ? '' : 's'}
+            </span>
+          </span>
+          <span className={styles.gardenerVisit}>Visit garden &rarr;</span>
+        </Link>
+
+        {otherCategories.length > 0 && (
+          <div className={styles.moreLists}>
+            <p className={styles.exploreLabel}>More lists in {ownerName}&rsquo;s garden</p>
+            <ul className={styles.moreListsGrid}>
+              {otherCategories.map((c) => (
+                <li key={c.slug}>
+                  <Link href={`/${profile.handle}/${c.slug}`} className={styles.moreListLink}>
+                    <span className={styles.moreListName}>{c.name}</span>
+                    <span className={styles.moreListCount}>
+                      {c.worksCount} work{c.worksCount === 1 ? '' : 's'}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <p className={styles.discoverLine}>
+          <Link href="/explore/gardens">Discover other gardens &rarr;</Link>
+        </p>
+      </section>
     </>
   );
 }
@@ -157,14 +221,42 @@ export async function getStaticProps({ params }) {
 
   if (!category) return { notFound: true, revalidate: 60 };
 
-  const { data: works } = await supabase
-    .from('works')
-    .select('*')
-    .eq('category_id', category.id)
-    .order('sort_order', { ascending: true });
+  const [{ data: works }, { data: allCats }, { data: allWorks }] = await Promise.all([
+    supabase
+      .from('works')
+      .select('*')
+      .eq('category_id', category.id)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('categories')
+      .select('id, name, slug, sort_order')
+      .eq('user_id', profile.id)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('works')
+      .select('id, category_id')
+      .eq('user_id', profile.id),
+  ]);
+
+  // Per-category work counts, for the "more lists" previews
+  const countByCat = {};
+  for (const w of (allWorks || [])) {
+    countByCat[w.category_id] = (countByCat[w.category_id] || 0) + 1;
+  }
+  const gardenCategories = (allCats || []).map((c) => ({
+    name: c.name,
+    slug: c.slug,
+    worksCount: countByCat[c.id] || 0,
+  }));
 
   return {
-    props: { profile, category, works: works || [] },
+    props: {
+      profile,
+      category,
+      works: works || [],
+      gardenCategories,
+      totalWorks: (allWorks || []).length,
+    },
     revalidate: 60,
   };
 }

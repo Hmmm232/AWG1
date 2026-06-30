@@ -535,11 +535,15 @@
 /* A work title that links through to its own page */
 .workTitleLink {
   color: var(--color-ink);
+  text-decoration: none;
   transition: color 0.15s ease;
 }
 
 .workTitleLink:hover {
   color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 /* Footer call-to-action back into the full garden */
@@ -552,10 +556,239 @@
   font-size: 0.9rem;
 }
 
+/* ─── Previous / next chapter navigation ─────────────────────── */
+.chapterNav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-2xl);
+}
+
+.chapterLink {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 47%;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.chapterLinkNext {
+  margin-left: auto;
+  text-align: right;
+}
+
+.chapterLink:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.chapterDir {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-faint);
+}
+
+.chapterName {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chapterLink:hover .chapterName {
+  color: var(--color-accent);
+}
+
+/* ─── "Continue exploring" zone ──────────────────────────────── */
+.exploreZone {
+  margin-top: var(--space-2xl);
+}
+
+.exploreRule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-border);
+  margin: 0 0 var(--space-xl);
+}
+
+/* Gardener identity card */
+.gardenerCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.gardenerCard:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.gardenerAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.gardenerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.gardenerName {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.gardenerBio {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--color-ink-light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gardenerMeta {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--color-ink-faint);
+}
+
+.gardenerVisit {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--color-accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* More lists in this garden */
+.exploreLabel {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-faint);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+
+.exploreLabelLink {
+  color: var(--color-accent);
+}
+
+.exploreLabelLink:hover {
+  text-decoration: underline;
+}
+
+.moreListsGrid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: var(--space-sm);
+}
+
+.moreListLink {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.moreListLink:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.moreListName {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.moreListLink:hover .moreListName {
+  color: var(--color-accent);
+}
+
+.moreListCount {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--color-ink-faint);
+  flex-shrink: 0;
+}
+
+.discoverLine {
+  margin-top: var(--space-xl);
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+}
+
 /* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 640px) {
   .itemPageTitle {
     font-size: 1.5rem;
+  }
+
+  .chapterNav {
+    flex-direction: column;
+  }
+
+  .chapterLink,
+  .chapterLinkNext {
+    max-width: none;
+    text-align: left;
+  }
+
+  .gardenerCard {
+    flex-wrap: wrap;
+  }
+
+  .gardenerVisit {
+    width: 100%;
+    margin-left: calc(48px + var(--space-md));
+  }
+
+  .moreListsGrid {
+    grid-template-columns: 1fr;
   }
 
   .toc {
