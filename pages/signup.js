@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { isReservedHandle } from '@/lib/reservedHandles';
 import styles from '@/styles/Auth.module.css';
 
 export default function SignUp() {
@@ -26,6 +27,11 @@ export default function SignUp() {
 
     if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(cleanHandle)) {
       setError('Handle must start and end with a letter or number, and contain only lowercase letters, numbers, and hyphens.');
+      return;
+    }
+
+    if (isReservedHandle(cleanHandle)) {
+      setError('That handle is reserved. Please choose another.');
       return;
     }
 

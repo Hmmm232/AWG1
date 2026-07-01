@@ -17,7 +17,7 @@ function ShareProfileButton({ handle }) {
   const [copied, setCopied] = useState(false);
 
   function handleShare() {
-    const url = `${window.location.origin}/${handle}`;
+    const url = `${SITE_URL}/${handle}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);

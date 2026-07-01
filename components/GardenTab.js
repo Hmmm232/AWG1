@@ -210,9 +210,21 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     if (!mod.allowed) { setError(mod.reason); return; }
     const sortOrder = categories.length;
     const slug = uniqueSlug(name, categories.map((c) => c.slug).filter(Boolean));
-    const { error: insertErr } = await supabase
+    let { error: insertErr } = await supabase
       .from('categories')
       .insert({ user_id: userId, name, slug, introduction, sort_order: sortOrder });
+    if (insertErr?.code === '23505') {
+      // Slug collision (stale local state, e.g. a second tab): regenerate
+      // against the slugs actually in the database and retry once.
+      const { data: existing } = await supabase
+        .from('categories')
+        .select('slug')
+        .eq('user_id', userId);
+      const retrySlug = uniqueSlug(name, (existing || []).map((c) => c.slug).filter(Boolean));
+      ({ error: insertErr } = await supabase
+        .from('categories')
+        .insert({ user_id: userId, name, slug: retrySlug, introduction, sort_order: sortOrder }));
+    }
     if (insertErr) { logWriteFailure({ action: 'add_category', error: insertErr }); setError(insertErr.message); return; }
 
     // Fetch fresh categories after successful insert
@@ -299,9 +311,21 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     const existingWorks = worksByCategory[categoryId] || [];
     const sortOrder = existingWorks.length;
     const slug = uniqueSlug(title, existingWorks.map((w) => w.slug).filter(Boolean));
-    const { error: insertErr } = await supabase
+    let { error: insertErr } = await supabase
       .from('works')
       .insert({ category_id: categoryId, user_id: userId, title, slug, commentary, sort_order: sortOrder });
+    if (insertErr?.code === '23505') {
+      // Slug collision (stale local state, e.g. a second tab): regenerate
+      // against the slugs actually in the database and retry once.
+      const { data: existing } = await supabase
+        .from('works')
+        .select('slug')
+        .eq('category_id', categoryId);
+      const retrySlug = uniqueSlug(title, (existing || []).map((w) => w.slug).filter(Boolean));
+      ({ error: insertErr } = await supabase
+        .from('works')
+        .insert({ category_id: categoryId, user_id: userId, title, slug: retrySlug, commentary, sort_order: sortOrder }));
+    }
     if (insertErr) { logWriteFailure({ action: 'add_work', error: insertErr }); setError(insertErr.message); return; }
 
     // Fetch fresh works for this category after successful insert

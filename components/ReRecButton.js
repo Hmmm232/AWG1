@@ -6,6 +6,11 @@ import { moderateFields } from '@/lib/moderation';
 import { checkDailyLimit } from '@/lib/rateLimits';
 import styles from '@/styles/Garden.module.css';
 
+// source_url is stored in the database, so it must always use the canonical
+// production origin — never window.location.origin, which would permanently
+// record localhost/preview URLs when re-rec'ing from a non-prod host.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://awalledgarden.org';
+
 export default function ReRecButton({ workTitle, recommenderHandle, recommenderName, tab, itemId, sourcePath }) {
   const { user } = useAuth();
   const router = useRouter();
@@ -44,8 +49,8 @@ export default function ReRecButton({ workTitle, recommenderHandle, recommenderN
       }
 
       const itemUrl = sourcePath
-        ? `${window.location.origin}${sourcePath}`
-        : `${window.location.origin}/${recommenderHandle}?tab=${tab}&item=${itemId}`;
+        ? `${SITE_URL}${sourcePath}`
+        : `${SITE_URL}/${recommenderHandle}?tab=${tab}&item=${itemId}`;
 
       const { error } = await supabase
         .from('rerecs')
