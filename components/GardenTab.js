@@ -447,8 +447,12 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
               <div className={styles.categoryHeader}>
                 <h2 className={styles.categoryName}>{category.name}</h2>
                 <div className={styles.actions}>
-                  <LikeButton itemId={category.id} itemType="category" />
-                  <SaveButton itemId={category.id} itemType="category" />
+                  {!isOwner && (
+                    <>
+                      <LikeButton itemId={category.id} itemType="category" />
+                      <SaveButton itemId={category.id} itemType="category" />
+                    </>
+                  )}
                   <ShareButton tab="garden" itemId={category.id} handle={profileHandle} path={categoryPath(profileHandle, category.slug, category.id)} />
                   {isOwner && (
                     <>
@@ -497,8 +501,12 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                     <div className={styles.workLayout}>
                       <p className={styles.workTitle}>{work.title}</p>
                       <div className={styles.workActions}>
-                        <LikeButton itemId={work.id} itemType="work" />
-                        <SaveButton itemId={work.id} itemType="work" />
+                        {!isOwner && (
+                          <>
+                            <LikeButton itemId={work.id} itemType="work" />
+                            <SaveButton itemId={work.id} itemType="work" />
+                          </>
+                        )}
                         {!isOwner && (
                           <ReRecButton
                             workTitle={work.title}

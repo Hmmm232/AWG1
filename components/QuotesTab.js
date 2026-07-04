@@ -247,8 +247,12 @@ export default function QuotesTab({ userId, isOwner, profileHandle, profileName,
                 </p>
               )}
               <div className={styles.actionsBelow}>
-                <LikeButton itemId={quote.id} itemType="quote" />
-                <SaveButton itemId={quote.id} itemType="quote" />
+                {!isOwner && (
+                  <>
+                    <LikeButton itemId={quote.id} itemType="quote" />
+                    <SaveButton itemId={quote.id} itemType="quote" />
+                  </>
+                )}
                 {!isOwner && (
                   <ReRecButton
                     workTitle={quote.attribution ? `"${quote.quote_text.slice(0, 80)}${quote.quote_text.length > 80 ? '...' : ''}" — ${quote.attribution}` : `"${quote.quote_text.slice(0, 100)}${quote.quote_text.length > 100 ? '...' : ''}"`}

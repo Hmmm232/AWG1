@@ -94,8 +94,12 @@ export default function WorkPage({ profile, category, work, siblingWorks = [], t
       )}
 
       <div className={styles.actionsBelow}>
-        <LikeButton itemId={work.id} itemType="work" />
-        <SaveButton itemId={work.id} itemType="work" />
+        {!isOwner && (
+          <>
+            <LikeButton itemId={work.id} itemType="work" />
+            <SaveButton itemId={work.id} itemType="work" />
+          </>
+        )}
         {!isOwner && (
           <ReRecButton
             workTitle={work.title}

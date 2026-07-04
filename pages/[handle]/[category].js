@@ -93,8 +93,12 @@ export default function CategoryPage({ profile, category, works, gardenCategorie
 
       <div className={styles.categoryHeader} style={{ marginBottom: 'var(--space-lg)' }}>
         <div className={styles.actions}>
-          <LikeButton itemId={category.id} itemType="category" />
-          <SaveButton itemId={category.id} itemType="category" />
+          {!isOwner && (
+            <>
+              <LikeButton itemId={category.id} itemType="category" />
+              <SaveButton itemId={category.id} itemType="category" />
+            </>
+          )}
           <ShareButton tab="garden" itemId={category.id} handle={profile.handle} path={path} />
         </div>
       </div>
@@ -110,8 +114,12 @@ export default function CategoryPage({ profile, category, works, gardenCategorie
                   </Link>
                 </p>
                 <div className={styles.workActions}>
-                  <LikeButton itemId={work.id} itemType="work" />
-                  <SaveButton itemId={work.id} itemType="work" />
+                  {!isOwner && (
+                    <>
+                      <LikeButton itemId={work.id} itemType="work" />
+                      <SaveButton itemId={work.id} itemType="work" />
+                    </>
+                  )}
                   {!isOwner && (
                     <ReRecButton
                       workTitle={work.title}
