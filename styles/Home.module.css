@@ -336,7 +336,12 @@
   color: var(--awg-ink-soft);
   margin: 0 0 0.9rem;
   line-height: 1.5;
-  max-height: 2.4rem;
+  /* Clamp at line boundaries — an exact-fit max-height clips the second
+     line mid-glyph whenever real line boxes round taller than the maths
+     (display scaling, zoom, fallback fonts). */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
