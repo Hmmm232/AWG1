@@ -170,6 +170,34 @@
   margin: 0;
 }
 
+/* ─── Drafts — pencil-grey title + dashed chip; green is reserved
+       for the moment of publishing ─────────────────────────────── */
+.workTitleDraft {
+  color: var(--color-ink-light);
+}
+
+.draftChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.55rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 100px;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+  vertical-align: 0.15em;
+}
+
+.draftChipLeaf {
+  color: var(--color-ink-faint);
+}
+
 /* Action buttons (edit, delete, reorder) */
 .actions {
   display: flex;
@@ -221,6 +249,19 @@
   color: var(--color-error);
   border-color: var(--color-error);
   background: var(--color-error-bg);
+}
+
+/* Publishing gets the garden's green — defined after .iconBtn so the
+   accent overrides its default grey */
+.publishBtn {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.publishBtn:hover {
+  color: var(--color-white);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .shareBtn {

@@ -7,6 +7,7 @@ import { uniqueSlug } from '@/lib/slug';
 import { categoryPath, workPath } from '@/lib/links';
 import ShareButton from './ShareButton';
 import ReRecButton from './ReRecButton';
+import { Leaf } from './CardOrnaments';
 import LikeButton from './LikeButton';
 import SaveButton from './SaveButton';
 import styles from '@/styles/Garden.module.css';
@@ -131,15 +132,23 @@ function WorkForm({ initial, onSave, onCancel }) {
   const [commentary, setCommentary] = useState(initial?.commentary || '');
   const [saving, setSaving] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  // Editing an already-published work only offers Save; new works and
+  // drafts offer Publish (primary) or Save draft (secondary).
+  const isEditingPublished = !!initial && !initial.is_draft;
+
+  async function submitWith(isDraft) {
     if (!title.trim()) return;
     setSaving(true);
     try {
-      await onSave({ title: title.trim(), commentary: commentary.trim() });
+      await onSave({ title: title.trim(), commentary: commentary.trim(), isDraft });
     } finally {
       setSaving(false);
     }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    await submitWith(false);
   }
 
   return (
@@ -170,8 +179,18 @@ function WorkForm({ initial, onSave, onCancel }) {
       </div>
       <div className={styles.formActions}>
         <button type="submit" className="btn btn-primary btn-small" disabled={saving}>
-          {saving ? 'Saving...' : initial ? 'Save' : 'Add work'}
+          {saving ? 'Saving...' : isEditingPublished ? 'Save' : 'Publish'}
         </button>
+        {!isEditingPublished && (
+          <button
+            type="button"
+            className="btn btn-secondary btn-small"
+            onClick={() => submitWith(true)}
+            disabled={saving}
+          >
+            Save draft
+          </button>
+        )}
         <button type="button" className={styles.cancelBtn} onClick={onCancel}>
           Cancel
         </button>
@@ -199,6 +218,35 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
   const [addingWorkToCategoryId, setAddingWorkToCategoryId] = useState(null);
   const [editingWorkId, setEditingWorkId] = useState(null);
   const [error, setError] = useState('');
+
+  // Drafts are hidden from the anonymous build-time fetch by RLS, so the
+  // owner's initial props never include them. Once we know the viewer is
+  // the owner, refetch works with their session so drafts appear.
+  useEffect(() => {
+    if (!isOwner) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from('works')
+        .select('*')
+        .eq('user_id', userId)
+        .order('sort_order', { ascending: true });
+      if (cancelled || !data) return;
+      const grouped = {};
+      for (const w of data) {
+        if (!grouped[w.category_id]) grouped[w.category_id] = [];
+        grouped[w.category_id].push(w);
+      }
+      setWorksByCategory((prev) => {
+        const merged = { ...grouped };
+        for (const key of Object.keys(prev)) {
+          if (!merged[key]) merged[key] = [];
+        }
+        return merged;
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [isOwner, userId]);
 
   // ─── Category CRUD ──────────────────────────────────────────
 
@@ -302,7 +350,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
 
   // ─── Work CRUD ────────────────────────────────────────────────
 
-  async function addWork(categoryId, { title, commentary }) {
+  async function addWork(categoryId, { title, commentary, isDraft }) {
     setError('');
     const limit = await checkDailyLimit(userId, 'works');
     if (!limit.allowed) { setError(limit.message); return; }
@@ -311,9 +359,8 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     const existingWorks = worksByCategory[categoryId] || [];
     const sortOrder = existingWorks.length;
     const slug = uniqueSlug(title, existingWorks.map((w) => w.slug).filter(Boolean));
-    let { error: insertErr } = await supabase
-      .from('works')
-      .insert({ category_id: categoryId, user_id: userId, title, slug, commentary, sort_order: sortOrder });
+    const row = { category_id: categoryId, user_id: userId, title, slug, commentary, sort_order: sortOrder, is_draft: !!isDraft };
+    let { error: insertErr } = await supabase.from('works').insert(row);
     if (insertErr?.code === '23505') {
       // Slug collision (stale local state, e.g. a second tab): regenerate
       // against the slugs actually in the database and retry once.
@@ -322,9 +369,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
         .select('slug')
         .eq('category_id', categoryId);
       const retrySlug = uniqueSlug(title, (existing || []).map((w) => w.slug).filter(Boolean));
-      ({ error: insertErr } = await supabase
-        .from('works')
-        .insert({ category_id: categoryId, user_id: userId, title, slug: retrySlug, commentary, sort_order: sortOrder }));
+      ({ error: insertErr } = await supabase.from('works').insert({ ...row, slug: retrySlug }));
     }
     if (insertErr) { logWriteFailure({ action: 'add_work', error: insertErr }); setError(insertErr.message); return; }
 
@@ -342,22 +387,39 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     setAddingWorkToCategoryId(null);
   }
 
-  async function updateWork(categoryId, workId, { title, commentary }) {
+  async function updateWork(categoryId, workId, { title, commentary, isDraft }) {
     setError('');
     const mod = await moderateFields({ title, commentary });
     if (!mod.allowed) { setError(mod.reason); return; }
     const { error: err } = await supabase
       .from('works')
-      .update({ title, commentary })
+      .update({ title, commentary, is_draft: !!isDraft })
       .eq('id', workId);
     if (err) { logWriteFailure({ action: 'update_work', error: err }); setError(err.message); return; }
     setWorksByCategory({
       ...worksByCategory,
       [categoryId]: worksByCategory[categoryId].map((w) =>
-        w.id === workId ? { ...w, title, commentary } : w
+        w.id === workId ? { ...w, title, commentary, is_draft: !!isDraft } : w
       ),
     });
     setEditingWorkId(null);
+  }
+
+  // Flip a draft live from its row button — content was already moderated
+  // when the draft was saved.
+  async function publishWork(categoryId, workId) {
+    setError('');
+    const { error: err } = await supabase
+      .from('works')
+      .update({ is_draft: false })
+      .eq('id', workId);
+    if (err) { logWriteFailure({ action: 'publish_work', error: err }); setError(err.message); return; }
+    setWorksByCategory({
+      ...worksByCategory,
+      [categoryId]: worksByCategory[categoryId].map((w) =>
+        w.id === workId ? { ...w, is_draft: false } : w
+      ),
+    });
   }
 
   async function deleteWork(categoryId, workId) {
@@ -499,7 +561,15 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                     />
                   ) : (
                     <div className={styles.workLayout}>
-                      <p className={styles.workTitle}>{work.title}</p>
+                      <p className={`${styles.workTitle} ${work.is_draft ? styles.workTitleDraft : ''}`}>
+                        {work.title}
+                        {work.is_draft && (
+                          <span className={styles.draftChip}>
+                            <Leaf className={styles.draftChipLeaf} />
+                            Draft
+                          </span>
+                        )}
+                      </p>
                       <div className={styles.workActions}>
                         {!isOwner && (
                           <>
@@ -517,7 +587,18 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
                             sourcePath={workPath(profileHandle, category.slug, work.slug, work.id)}
                           />
                         )}
-                        <ShareButton tab="garden" itemId={work.id} handle={profileHandle} path={workPath(profileHandle, category.slug, work.slug, work.id)} />
+                        {!work.is_draft && (
+                          <ShareButton tab="garden" itemId={work.id} handle={profileHandle} path={workPath(profileHandle, category.slug, work.slug, work.id)} />
+                        )}
+                        {isOwner && work.is_draft && (
+                          <button
+                            className={`${styles.iconBtn} ${styles.publishBtn}`}
+                            onClick={() => publishWork(category.id, work.id)}
+                            title="Publish this work"
+                          >
+                            Publish
+                          </button>
+                        )}
                         {isOwner && (
                           <>
                             <div className={styles.reorderGroup}>

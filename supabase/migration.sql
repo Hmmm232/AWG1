@@ -32,6 +32,7 @@ create table works (
   title text not null,
   slug text,
   commentary text not null default '',
+  is_draft boolean not null default false,
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
@@ -118,9 +119,9 @@ create policy "Users can update their own categories"
 create policy "Users can delete their own categories"
   on categories for delete using (auth.uid() = user_id);
 
--- Works: anyone can read, only the owner can modify
-create policy "Works are publicly readable"
-  on works for select using (true);
+-- Works: published works are public, drafts only for their owner
+create policy "Published works are publicly readable"
+  on works for select using (is_draft = false or auth.uid() = user_id);
 
 create policy "Users can insert their own works"
   on works for insert with check (auth.uid() = user_id);
