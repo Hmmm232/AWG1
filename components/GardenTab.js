@@ -76,13 +76,16 @@ function CategoryForm({ initial, onSave, onCancel }) {
   const [name, setName] = useState(initial?.name || '');
   const [introduction, setIntroduction] = useState(initial?.introduction || '');
   const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (!name.trim()) return;
     setSaving(true);
+    setFormError('');
     try {
-      await onSave({ name: name.trim(), introduction: introduction.trim() });
+      const err = await onSave({ name: name.trim(), introduction: introduction.trim() });
+      if (err) setFormError(err);
     } finally {
       setSaving(false);
     }
@@ -114,6 +117,7 @@ function CategoryForm({ initial, onSave, onCancel }) {
           maxLength={2000}
         />
       </div>
+      {formError && <p className={styles.error}>{formError}</p>}
       <div className={styles.formActions}>
         <button type="submit" className="btn btn-primary btn-small" disabled={saving}>
           {saving ? 'Saving...' : initial ? 'Save' : 'Add category'}
@@ -131,6 +135,7 @@ function WorkForm({ initial, onSave, onCancel }) {
   const [title, setTitle] = useState(initial?.title || '');
   const [commentary, setCommentary] = useState(initial?.commentary || '');
   const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState('');
 
   // Editing an already-published work only offers Save; new works and
   // drafts offer Publish (primary) or Save draft (secondary).
@@ -139,8 +144,12 @@ function WorkForm({ initial, onSave, onCancel }) {
   async function submitWith(isDraft) {
     if (!title.trim()) return;
     setSaving(true);
+    setFormError('');
     try {
-      await onSave({ title: title.trim(), commentary: commentary.trim(), isDraft });
+      // onSave resolves to null on success, or a message explaining the
+      // failure — shown here, beside the buttons, not at the top of the tab.
+      const err = await onSave({ title: title.trim(), commentary: commentary.trim(), isDraft });
+      if (err) setFormError(err);
     } finally {
       setSaving(false);
     }
@@ -177,6 +186,7 @@ function WorkForm({ initial, onSave, onCancel }) {
           maxLength={5000}
         />
       </div>
+      {formError && <p className={styles.error}>{formError}</p>}
       <div className={styles.formActions}>
         <button type="submit" className="btn btn-primary btn-small" disabled={saving}>
           {saving ? 'Saving...' : isEditingPublished ? 'Save' : 'Publish'}
@@ -250,12 +260,14 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
 
   // ─── Category CRUD ──────────────────────────────────────────
 
+  // Form-backed mutations resolve to null on success or a message string on
+  // failure, which the form displays inline beside its buttons — a message
+  // set at the top of the tab is invisible when the form is scrolled down.
   async function addCategory({ name, introduction }) {
-    setError('');
     const limit = await checkDailyLimit(userId, 'categories');
-    if (!limit.allowed) { setError(limit.message); return; }
+    if (!limit.allowed) { return limit.message; }
     const mod = await moderateFields({ name, introduction });
-    if (!mod.allowed) { setError(mod.reason); return; }
+    if (!mod.allowed) { return mod.reason; }
     const sortOrder = categories.length;
     const slug = uniqueSlug(name, categories.map((c) => c.slug).filter(Boolean));
     let { error: insertErr } = await supabase
@@ -273,7 +285,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
         .from('categories')
         .insert({ user_id: userId, name, slug: retrySlug, introduction, sort_order: sortOrder }));
     }
-    if (insertErr) { logWriteFailure({ action: 'add_category', error: insertErr }); setError(insertErr.message); return; }
+    if (insertErr) { logWriteFailure({ action: 'add_category', error: insertErr }); return insertErr.message; }
 
     // Fetch fresh categories after successful insert
     const { data: freshCategories } = await supabase
@@ -291,19 +303,20 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
     }
     setWorksByCategory(newWorksByCategory);
     setShowNewCategory(false);
+    return null;
   }
 
   async function updateCategory(id, { name, introduction }) {
-    setError('');
     const mod = await moderateFields({ name, introduction });
-    if (!mod.allowed) { setError(mod.reason); return; }
+    if (!mod.allowed) { return mod.reason; }
     const { error: err } = await supabase
       .from('categories')
       .update({ name, introduction })
       .eq('id', id);
-    if (err) { logWriteFailure({ action: 'update_category', error: err }); setError(err.message); return; }
+    if (err) { logWriteFailure({ action: 'update_category', error: err }); return err.message; }
     setCategories(categories.map((c) => c.id === id ? { ...c, name, introduction } : c));
     setEditingCategoryId(null);
+    return null;
   }
 
   async function deleteCategory(id) {
@@ -351,11 +364,10 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
   // ─── Work CRUD ────────────────────────────────────────────────
 
   async function addWork(categoryId, { title, commentary, isDraft }) {
-    setError('');
     const limit = await checkDailyLimit(userId, 'works');
-    if (!limit.allowed) { setError(limit.message); return; }
+    if (!limit.allowed) { return limit.message; }
     const mod = await moderateFields({ title, commentary });
-    if (!mod.allowed) { setError(mod.reason); return; }
+    if (!mod.allowed) { return mod.reason; }
     const existingWorks = worksByCategory[categoryId] || [];
     const sortOrder = existingWorks.length;
     const slug = uniqueSlug(title, existingWorks.map((w) => w.slug).filter(Boolean));
@@ -371,7 +383,7 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
       const retrySlug = uniqueSlug(title, (existing || []).map((w) => w.slug).filter(Boolean));
       ({ error: insertErr } = await supabase.from('works').insert({ ...row, slug: retrySlug }));
     }
-    if (insertErr) { logWriteFailure({ action: 'add_work', error: insertErr }); setError(insertErr.message); return; }
+    if (insertErr) { logWriteFailure({ action: 'add_work', error: insertErr }); return insertErr.message; }
 
     // Fetch fresh works for this category after successful insert
     const { data: freshWorks } = await supabase
@@ -385,24 +397,25 @@ export default function GardenTab({ userId, isOwner, profileHandle, profileName,
       [categoryId]: freshWorks || [],
     });
     setAddingWorkToCategoryId(null);
+    return null;
   }
 
   async function updateWork(categoryId, workId, { title, commentary, isDraft }) {
-    setError('');
     const mod = await moderateFields({ title, commentary });
-    if (!mod.allowed) { setError(mod.reason); return; }
+    if (!mod.allowed) { return mod.reason; }
     const { error: err } = await supabase
       .from('works')
       .update({ title, commentary, is_draft: !!isDraft })
       .eq('id', workId);
-    if (err) { logWriteFailure({ action: 'update_work', error: err }); setError(err.message); return; }
+    if (err) { logWriteFailure({ action: 'update_work', error: err }); return err.message; }
     setWorksByCategory({
       ...worksByCategory,
-      [categoryId]: worksByCategory[categoryId].map((w) =>
+      [categoryId]: (worksByCategory[categoryId] || []).map((w) =>
         w.id === workId ? { ...w, title, commentary, is_draft: !!isDraft } : w
       ),
     });
     setEditingWorkId(null);
+    return null;
   }
 
   // Flip a draft live from its row button — content was already moderated

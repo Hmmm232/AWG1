@@ -56,6 +56,7 @@ ALLOW (this is the vast majority of content):
 - Category names like "Favourite Novels", "Poetry", "Essays I Love", etc.
 - Strong opinions, criticism, profanity in literary context
 - Short entries, single words, titles, names
+- Test entries, placeholder text, or harmless nonsense (e.g. "asdf", keyboard mashing) — users testing their own garden
 - Anything that a thoughtful reader might plausibly add to a literary collection
 
 REJECT only content that is clearly and obviously:
